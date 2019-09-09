@@ -7,25 +7,26 @@ import flask_login
 @app.route('/users')
 def all_users():
     return esw.get_all_users()
-@app.route('/all')
+
+@app.route('/all_articles')
 def all():
     return esw.get_all()
 
 
 @app.route('/<id>')
 def article_by_id(id):
-    article = esw.get_content_by_id(id)
+    article = esw.get_article_by_id(id)
     if article is None:
         abort(404)
     return article
 
 @app.route('/article/<name>')
 def article_by_title(name):
-    return esw.get_content_by_title(name)
+    return esw.get_article_by_title(name)
 
 @app.route('/search')
 def search_articles():
-    return esw.search(request.args.get('query'))
+    return esw.search_articles(request.args.get('query'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
