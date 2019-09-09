@@ -26,14 +26,15 @@ def get_article_by_title(title):
                     _source_excludes=["access"])
     return res
 
-def search_articles(query):
-    body =  {   
-        "_source": {"excludes": ["access"]},
-        "query": { 
-            "match": {
-                "body" : {"query": query}
-            }
+def search_articles(query, access_groups):
+    body =  {"query": 
+        {"bool": {
+            "must": {"match": {"body" : query}}}
         }
-    }
+    }  
+    body["query"]["bool"]["filter"] = {"bool" : {"should": []}}
+    should_include = body["query"]["bool"]["filter"]["bool"]["should"]
+    for access_group in access_groups:
+        should_include.append({ "term": { "access": access_group }})
     res = es.search(index="wiki", body=body)
     return res
