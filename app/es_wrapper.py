@@ -2,12 +2,15 @@ from elasticsearch import Elasticsearch, exceptions
 
 es = Elasticsearch('localhost', port=9200)
 
+
 def get_all_users():
-    res =  es.search(index="users", body={"_source": {"excludes": ["access"]}, "query": {"match_all": {}}})
+    res =  es.search(index="users", body={"query": {"match_all": {}}})
     return res
 
 def get_all_articles():
-    res =  es.search(index="wiki", body={"_source": {"excludes": ["access"]}, "query": {"match_all": {}}})
+    res =  es.search(index="wiki", 
+                    body={"query": {"match_all": {}}},
+                    _source_excludes=["access"])
     return res
 
 def get_article_by_id(id):
@@ -18,7 +21,9 @@ def get_article_by_id(id):
     return res
 
 def get_article_by_title(title):
-    res = es.search(index="wiki", body={"query": {"term": {"title.raw": title}}})
+    res = es.search(index="wiki", 
+                    body={"query": {"term": {"title.raw": title}}},
+                    _source_excludes=["access"])
     return res
 
 def search_articles(query):
