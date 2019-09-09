@@ -56,7 +56,7 @@ class User():
         body = {
             "username": self.username,
             "password_hash": self.password_hash,
-            "access_groups": list(self.access_groups)
+            "access_groups": list(self.access_groups) + [self.username]
         }
         try:
             self.es.create(index="users", id=self.username, body=body)
