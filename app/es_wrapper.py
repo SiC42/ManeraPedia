@@ -2,6 +2,10 @@ from elasticsearch import Elasticsearch, exceptions
 
 es = Elasticsearch('localhost', port=9200)
 
+def get_all_users():
+    res =  es.search(index="users", body={"_source": {"excludes": ["access"]}, "query": {"match_all": {}}})
+    return res
+
 def get_all():
     res =  es.search(index="wiki", body={"_source": {"excludes": ["access"]}, "query": {"match_all": {}}})
     return res
