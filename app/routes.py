@@ -9,8 +9,8 @@ def all_users():
     return esw.get_all_users()
 
 @app.route('/all_articles')
-def all():
-    return esw.get_all()
+def all_articles():
+    return esw.get_all_articles()
 
 
 @app.route('/<id>')
@@ -25,8 +25,9 @@ def article_by_title(name):
     return esw.get_article_by_title(name)
 
 @app.route('/search')
+@flask_login.login_required
 def search_articles():
-    return esw.search_articles(request.args.get('query'))
+    return esw.search_articles(request.args.get('query'), flask_login.current_user.access_groups)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
