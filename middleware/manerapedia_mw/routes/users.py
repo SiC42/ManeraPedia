@@ -1,14 +1,14 @@
-import app.es_wrapper as esw
-from app.user import User
-from app import app
+import manerapedia_mw.es_wrapper as esw
+from manerapedia_mw.user import User
+from manerapedia_mw import web_api
 from flask import request, redirect, url_for
 import flask_login
 
-@app.route('/users')
+@web_api.route('/users')
 def all_users():
     return esw.users.get_all_users()
 
-@app.route('/login', methods=['GET', 'POST'])
+@web_api.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
         return '''
@@ -30,7 +30,7 @@ def login():
             return redirect(url_for('protected'))
     return 'Bad login'
 
-@app.route('/register', methods=['GET','POST'])
+@web_api.route('/register', methods=['GET','POST'])
 #@flask_login.login_required
 def register():
     if request.method == 'GET':
@@ -58,12 +58,12 @@ def register():
     user.save_into_db()
     return redirect(url_for('all_users'))
 
-@app.route('/protected')
+@web_api.route('/protected')
 @flask_login.login_required
 def protected():
     return 'Logged in as: ' + flask_login.current_user.username
 
-@app.route('/logout')
+@web_api.route('/logout')
 def logout():
     flask_login.logout_user()
     return 'Logged out'

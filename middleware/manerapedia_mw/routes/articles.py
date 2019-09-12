@@ -1,17 +1,17 @@
-import app.es_wrapper as esw
-from app.exceptions import *
-from app import app
+import manerapedia_mw.es_wrapper as esw
+from manerapedia_mw.exceptions import *
+from manerapedia_mw import web_api
 from flask import request, abort, redirect, url_for, jsonify
 import flask
 import flask_login
 
 
-@app.route('/all_articles')
+@web_api.route('/all_articles')
 def get_all_articles():
     return esw.articles.get_all()
 
 
-@app.route('/article/<id>', methods=['GET'])
+@web_api.route('/article/<id>', methods=['GET'])
 @flask_login.login_required
 def get_article_by_id(id):
     print("test")
@@ -20,17 +20,17 @@ def get_article_by_id(id):
         abort(404)
     return article
 
-@app.route('/search')
+@web_api.route('/search')
 @flask_login.login_required
 def search_article():
     return esw.articles.search(request.args.get('query'), flask_login.current_user.access_groups)
 
-@app.route('/test')
+@web_api.route('/test')
 def test():
     return str(esw.articles.title_is_unique("01. April 2019", id="IZhRJm0BY3eCqh1MtDze"))
 
 # ============== (POST) ==============================
-@app.route('/article', methods=['POST'])
+@web_api.route('/article', methods=['POST'])
 @flask_login.login_required
 def create_article():
     article = request.json
@@ -42,7 +42,7 @@ def create_article():
     return redirect(url_for('get_article_by_id', id=res["_id"]))
 
 # ============== Update stuff (PUT) ==============================
-@app.route('/article/<id>', methods=['PUT'])
+@web_api.route('/article/<id>', methods=['PUT'])
 @flask_login.login_required
 def update_article(id):
     if not user_is_privilged(id):
@@ -54,7 +54,7 @@ def update_article(id):
     return esw.articles.get_by_id(id)
 
 # ============== Delete stuff (DELETE) ==============================
-@app.route('/article/<id>', methods=['DELETE'])
+@web_api.route('/article/<id>', methods=['DELETE'])
 @flask_login.login_required
 def delete_article(id):
     if not user_is_privilged(id):

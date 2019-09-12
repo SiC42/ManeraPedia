@@ -1,9 +1,9 @@
-from app import app
-from app.user import User
+from manerapedia_mw import web_api
+from manerapedia_mw.user import User
 from flask_login import LoginManager
 
 login_manager = LoginManager()
-login_manager.init_app(app)
+login_manager.init_app(web_api)
 
 @login_manager.user_loader
 def user_loader(username):

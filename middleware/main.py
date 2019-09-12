@@ -1,0 +1,1 @@
+from manerapedia_mw import web_api
