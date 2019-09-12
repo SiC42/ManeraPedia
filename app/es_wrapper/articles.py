@@ -54,3 +54,6 @@ def create(body):
 
 def update(id, body):
     return es.update(index=wiki_index_name, id=id, body=body) 
+
+def delete(id):
+    return es.delete(index=wiki_index_name, id=id) 
