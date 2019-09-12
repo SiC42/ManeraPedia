@@ -6,28 +6,28 @@ import flask_login
 
 @app.route('/users')
 def all_users():
-    return esw.get_all_users()
+    return esw.users.get_all_users()
 
 @app.route('/all_articles')
 def all_articles():
-    return esw.get_all_articles()
+    return esw.articles.get_all_articles()
 
 
 @app.route('/<id>')
 def article_by_id(id):
-    article = esw.get_article_by_id(id)
+    article = esw.articles.get_article_by_id(id)
     if article is None:
         abort(404)
     return article
 
 @app.route('/article/<name>')
 def article_by_title(name):
-    return esw.get_article_by_title(name)
+    return esw.articles.get_article_by_title(name)
 
 @app.route('/search')
 @flask_login.login_required
 def search_articles():
-    return esw.search_articles(request.args.get('query'), flask_login.current_user.access_groups)
+    return esw.articles.search_articles(request.args.get('query'), flask_login.current_user.access_groups)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -60,6 +60,8 @@ def register():
             <input type='text' name='username' id='username' placeholder='username'/>
             <input type='password' name='password' id='password' placeholder='password'/>
             <fieldset>
+                <input type="checkbox" name="access_groups[]" value="general">
+                General
                 <input type="checkbox" name="access_groups[]" value="gm">
                 GM
                 <input type="checkbox" name="access_groups[]" value="dw">
