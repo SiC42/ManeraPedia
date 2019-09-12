@@ -39,11 +39,11 @@ def search(query, access_groups):
 def title_is_unique(title, id=None):
     body =  {"query": 
         {"bool": {
-            "must": {"match": {"title" : title}}}
+            "must": {"term": {"title.raw" : title}}}
         }
     }
     if title is not None:
-        body["query"]["bool"]["filter"] = {"term": {"_id": id}}
+        body["query"]["bool"]["must_not"] = {"term": {"_id": id}}
     res = es.search(index=wiki_index_name, body=body, _source=False)
     return res["hits"]["total"]["value"] == 0
     
