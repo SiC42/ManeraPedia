@@ -51,7 +51,7 @@ def update_article(id):
 
 # ============== Delete stuff (DELETE) ==============================
 @app.route('/article/<id>', methods=['DELETE'])
-def update_article(id):
+def delete_article(id):
     article = request.json
     if not esw.articles.title_is_unique(article["title"], id):
         raise TitleAlreadyExistsEx()
