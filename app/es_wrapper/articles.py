@@ -9,29 +9,36 @@ def get_all():
                     _source_excludes=[])
     return res
 
-def get_by_id(id):
+def get_by_id(id, access_groups):
+    body =  {"query": 
+        {"bool": {
+            "must": {"ids": {"values" : id}}}
+        }
+    }
+    body = add_access_filter(body, access_groups)
+    res = es.search(index=wiki_index_name,
+                    body=body,
+                    _source_excludes="access")
+    if res["hits"]["total"]["value"] != 1:
+        return None
+    return res["hits"]["hits"][0]
+
+def get_access_rights(id):
     try:
         res = es.get(index=wiki_index_name, id=id)
     except exceptions.NotFoundError:
         return None
-    return res
+    access_rights = res["_source"]["access"]
+    return access_rights
 
 def get_by_title(title):
     res = es.search(index=wiki_index_name, 
-                    body={"query": {"term": {"title.raw": title}}},
-                    _source_excludes=["access"])
+                    body={"query": {"term": {"title.raw": title}}})
     return res
 
 def search(query, access_groups):
-    body =  {"query": 
-        {"bool": {
-            "must": {"match": {"body" : query}}}
-        }
-    }  
-    body["query"]["bool"]["filter"] = {"bool" : {"should": []}}
-    should_include = body["query"]["bool"]["filter"]["bool"]["should"]
-    for access_group in access_groups:
-        should_include.append({ "term": { "access.read": access_group }})
+    body =  {"query":{"bool": {"must": {"match": {"body" : query}}}}}  
+    body = add_access_filter(body, access_groups)
     res = es.search(index=wiki_index_name, body=body)
     return res
 
@@ -53,7 +60,16 @@ def create(body):
 
 
 def update(id, body):
-    return es.update(index=wiki_index_name, id=id, body=body) 
+    return es.update(index=wiki_index_name, id=id, body=body)
 
 def delete(id):
     return es.delete(index=wiki_index_name, id=id) 
+
+
+# ======================= Helper functions =======================
+def add_access_filter(body, access_groups):
+    body["query"]["bool"]["filter"] = {"bool" : {"should": []}}
+    should_include = body["query"]["bool"]["filter"]["bool"]["should"]
+    for access_group in access_groups:
+        should_include.append({ "term": { "access.read": access_group }})
+    return body
