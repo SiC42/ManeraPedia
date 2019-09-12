@@ -53,10 +53,11 @@ class User():
         self.access_groups.add(access_groups)
     
     def save_into_db(self):
+        self.access_groups.add(self.username)
         body = {
             "username": self.username,
             "password_hash": self.password_hash,
-            "access_groups": list(self.access_groups) + [self.username]
+            "access_groups": list(self.access_groups)
         }
         try:
             self.es.create(index="users", id=self.username, body=body)
