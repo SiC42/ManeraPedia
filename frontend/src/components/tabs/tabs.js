@@ -23,7 +23,8 @@ const useStyles = makeStyles(theme => ({
   drawer: {
     [theme.breakpoints.up("sm")]: {
       width: drawerWidth,
-      flexShrink: 0
+
+      flexShrink: 0,
     }
   },
   menuButton: {
@@ -34,7 +35,7 @@ const useStyles = makeStyles(theme => ({
   },
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
-    width: drawerWidth
+    width: drawerWidth,
   }
 }));
 
@@ -84,7 +85,6 @@ export default function Tabs(props) {
       </div>
     );
   };
-  
   return (
     <nav className={classes.drawer} aria-label="mailbox folders">
       <Hidden smUp implementation="css">
