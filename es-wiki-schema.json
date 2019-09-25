@@ -1,0 +1,57 @@
+{
+  "mappings": {
+    "properties": { 
+      "created": {
+        "type": "date"
+      },
+      "modified": {
+        "type": "date"
+      },
+      "modifier": {
+        "type": "text",
+        "fields": {
+            "raw": { 
+              "type":  "keyword"
+            }
+        }
+    },
+      "creator": {
+        "type": "text",
+        "fields": {
+            "raw": { 
+              "type":  "keyword"
+            }
+        }
+    },
+      "title": {
+        "type": "text",
+        "copy_to": "body",
+        "fields": {
+            "raw": { 
+              "type":  "keyword"
+            }
+        }
+      },
+      "text": {
+        "type": "text",
+        "copy_to": "body"
+      },
+      "tags": {
+        "type": "keyword",
+        "copy_to": "body"
+      },
+      "type": {
+        "type": "keyword"
+      },
+      "access": {
+        "properties": {
+        	"read": {"type": "keyword"},
+        	"write": {"type": "keyword"}
+        }
+      },
+      "body": {
+        "type": "text"
+      }
+    }
+  }
+}
