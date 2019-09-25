@@ -16,8 +16,7 @@ const useStyles = makeStyles(theme => ({
     display: "flex"
   },
   tabs: {
-    borderRight: `1px solid ${theme.palette.divider}`,
-    backgroundColor: theme.palette.grey[200]
+    borderRight: `1px solid ${theme.palette.divider}`
   },
   content: {
     padding: theme.spacing(3, 0, 6)
@@ -69,7 +68,7 @@ export default function Tabs(props) {
     }
 
     return (
-      <div className={classes.list} onClick={eventDummy} onKeyDown={eventDummy}>
+      <div className={classes.tabs} onClick={eventDummy} onKeyDown={eventDummy}>
         <div className={classes.toolbar} />
         <List>
           {articles.map((text, index) => (
@@ -101,7 +100,8 @@ export default function Tabs(props) {
             paper: classes.drawerPaper
           }}
           ModalProps={{
-            keepMounted: true // Better open performance on mobile.
+            keepMounted: true, // Better open performance on mobile.
+            style: { zIndex: 1} // Get it behind the Nav Bar
           }}
         >
           {setDrawer(true)}
