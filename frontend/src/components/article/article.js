@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Article(props) {
-  const { children, value, index, ...other } = props;
+  const { value, index, text, title, ...other } = props;
   const classes = useStyles();
   return (
     <Paper 
@@ -21,10 +21,10 @@ export default function Article(props) {
       className={classes.root}
       {...other}>
         <Typography variant="h5" component="h3" >
-          This is a sheet of Article {value}.
+          {title}
         </Typography>
         <Typography component="p">
-          This is an article about the stuff. You know? Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+          {text}
         </Typography>
     </Paper>
   );
