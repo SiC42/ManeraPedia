@@ -30,7 +30,7 @@ export default function Wiki() {
   }
 
   let articles = [];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 40; i++) {
     articles.push(<Article key={i} index={i} value={tabId} />);
   }
   return (
