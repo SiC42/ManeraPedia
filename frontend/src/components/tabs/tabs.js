@@ -6,6 +6,8 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
+import CloseIcon from '@material-ui/icons/Close';
+
 const drawerWidth = 240;
 const useStyles = makeStyles(theme => ({
   root: {
@@ -79,6 +81,7 @@ export default function Tabs(props) {
               {...a11yProps(index)}
             >
               <ListItemText primary={"Article " + index} />
+              <CloseIcon/>
             </ListItem>
           ))}
         </List>
