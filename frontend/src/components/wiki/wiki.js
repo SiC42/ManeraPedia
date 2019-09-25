@@ -6,6 +6,8 @@ import Header from 'components/menues/header.js'
 import Tabs from "components/tabs";
 import Article from "components/article";
 
+//import fetchData from "wiki_fetch";
+
 const useStyles = makeStyles(theme => ({
   root: {
     height: "100vh",
@@ -22,32 +24,60 @@ const useStyles = makeStyles(theme => ({
 
 export default function Wiki() {
   const classes = useStyles();
-  const [tabId, setTabId] = React.useState(0);
+  const [tabId, setActiveTabById] = React.useState(0);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [articlesJson, setArticlesJson] = React.useState([])
 
   function toggleDrawer() {
     setDrawerOpen(!drawerOpen);
   }
-
-  let articles = [];
-  for (let i = 0; i < 40; i++) {
-    articles.push(<Article key={i} index={i} value={tabId} />);
+  function setActiveTab(id){
+    setActiveTabById(id);
   }
+
+  const url = "https://jsonplaceholder.typicode.com/users/2/posts";
+   React.useEffect(() => {
+    const loadData = async url => {
+      const response = await fetch(url);
+      const json = await response.json();
+      console.log("Updating Articles")
+      setArticlesJson(json)
+    }
+    loadData(url);
+  }, [url]);
+
+  const buildArticles = (articlesJson) =>
+    articlesJson.map( article =><Article
+      key={article.id}
+      index={article.id}
+      value={tabId}
+      title={article.title}
+      text={article.body} />);
+
+  const removeArticle = (id) => {
+    const newArticlesJson = articlesJson.filter(article => article.id !== id);
+    console.log(tabId)
+    setArticlesJson(newArticlesJson);
+    console.log(tabId)
+  }
+
+  
   return (
     <div className={classes.root}>
       <Header toggleDrawer={toggleDrawer}/>
       <Tabs
-        articles={articles}
-        setTabId={setTabId}
+        articles={articlesJson}
+        setActiveTab={setActiveTab}
         tabId={tabId}
         toggleDrawer={toggleDrawer}
         drawerOpen={drawerOpen}
+        removeArticle={removeArticle}
       />
       <main className={classes.content}>
-      <div className={classes.toolbar}/>
-      <Container maxWidth="md">
-      {articles}
-      </Container>
+        <div className={classes.toolbar}/>
+        <Container maxWidth="md">
+         {buildArticles(articlesJson)}
+        </Container>
       </main>
     </div>
   );

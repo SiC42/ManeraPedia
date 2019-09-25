@@ -1,31 +1,35 @@
 import React from "react";
+import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
-import CloseIcon from '@material-ui/icons/Close';
+import Tab from "./tab"
 
-const drawerWidth = 240;
+
+
+const maxDrawerWidth = 450;
 const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
-    display: "flex"
+  itemWrapper: {
+    display: "flex",
+    width: "100%",
+    justifyContent: "space-between",
+    placeContent: "end space-between"
+  },
+  closeButton: {},
+  listItem: {
+    flexShrink: 1,
+    overflow: "hidden",
+    borderRight: "line"
   },
   tabs: {
     borderRight: `1px solid ${theme.palette.divider}`
   },
-  content: {
-    padding: theme.spacing(3, 0, 6)
-  },
   drawer: {
     [theme.breakpoints.up("sm")]: {
-      width: drawerWidth,
-
-      flexShrink: 0,
+      width: maxDrawerWidth,
+      flexShrink: 0
     }
   },
   menuButton: {
@@ -36,24 +40,18 @@ const useStyles = makeStyles(theme => ({
   },
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
-    width: drawerWidth,
+    maxWidth: maxDrawerWidth
   }
 }));
-
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`
-  };
-}
 
 export default function Tabs(props) {
   const {
     articles,
     container,
-    setTabId,
-    tabId,
     drawerOpen,
+    removeArticle,
+    setActiveTab,
+    tabId,
     toggleDrawer
   } = props;
   const classes = useStyles();
@@ -71,22 +69,21 @@ export default function Tabs(props) {
       <div className={classes.tabs} onClick={eventDummy} onKeyDown={eventDummy}>
         <div className={classes.toolbar} />
         <List>
-          {articles.map((text, index) => (
-            <ListItem
-              button
-              selected={index === tabId}
-              key={index}
-              onClick={() => setTabId(index)}
-              {...a11yProps(index)}
-            >
-              <ListItemText primary={"Article " + index} />
-              <CloseIcon/>
-            </ListItem>
+          {articles.map(article => (
+            <div>
+              <Tab 
+               article={article}
+               removeArticle={removeArticle}
+               setActiveTab={setActiveTab}
+               tabId={tabId}/>
+              <Divider />
+            </div>
           ))}
         </List>
       </div>
     );
   };
+
   return (
     <nav className={classes.drawer} aria-label="mailbox folders">
       <Hidden smUp implementation="css">
@@ -101,7 +98,7 @@ export default function Tabs(props) {
           }}
           ModalProps={{
             keepMounted: true, // Better open performance on mobile.
-            style: { zIndex: 1} // Get it behind the Nav Bar
+            style: { zIndex: 1 } // Get it behind the Nav Bar
           }}
         >
           {setDrawer(true)}
