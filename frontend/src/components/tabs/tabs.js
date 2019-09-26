@@ -5,9 +5,7 @@ import Hidden from "@material-ui/core/Hidden";
 import List from "@material-ui/core/List";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
-import Tab from "./tab"
-
-
+import Tab from "./tab";
 
 const maxDrawerWidth = 450;
 const useStyles = makeStyles(theme => ({
@@ -49,13 +47,20 @@ export default function Tabs(props) {
     articles,
     container,
     drawerOpen,
-    removeArticle,
     setActiveTab,
+    setArticlesJson,
     tabId,
     toggleDrawer
   } = props;
   const classes = useStyles();
   const theme = useTheme();
+
+  const removeArticle = id => {
+    const newArticlesJson = articles.filter(article => article.id !== id);
+    console.log(tabId);
+    setArticlesJson(newArticlesJson);
+    console.log(tabId);
+  };
 
   const setDrawer = mobile => {
     let eventDummy;
@@ -71,11 +76,12 @@ export default function Tabs(props) {
         <List>
           {articles.map(article => (
             <div>
-              <Tab 
-               article={article}
-               removeArticle={removeArticle}
-               setActiveTab={setActiveTab}
-               tabId={tabId}/>
+              <Tab
+                article={article}
+                removeArticle={removeArticle}
+                setActiveTab={setActiveTab}
+                tabId={tabId}
+              />
               <Divider />
             </div>
           ))}
