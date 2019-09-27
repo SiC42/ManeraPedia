@@ -75,7 +75,7 @@ export default function Tabs(props) {
         <div className={classes.toolbar} />
         <List>
           {articles.map(article => (
-            <div>
+            <div key={article.id}>
               <Tab
                 article={article}
                 removeArticle={removeArticle}
