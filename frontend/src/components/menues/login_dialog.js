@@ -84,7 +84,7 @@ export default function LoginDialog(props) {
             autoComplete="current-password"
           />
           <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
+            control={<Checkbox name="remember" value="remember" color="primary" />}
             label="Remember me"
           />
           <Button
