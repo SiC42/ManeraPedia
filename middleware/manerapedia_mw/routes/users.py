@@ -15,6 +15,7 @@ def login():
             <form action='login' method='POST'>
             <input type='text' name='username' id='username' placeholder='username'/>
             <input type='password' name='password' id='password' placeholder='password'/>
+            <input type="checkbox" name="remember" value="remember">
             <input type='submit' name='submit'/>
             </form>
             '''
@@ -26,7 +27,7 @@ def login():
         user = User.generate_from_obj(user_obj)
         print("password_check = ", user.check_password(request.form['password']))
         if user.check_password(request.form['password']):
-            flask_login.login_user(user)
+            flask_login.login_user(user, remember="remember" in request.form)
             return redirect(url_for('protected'))
     return 'Bad login'
 
