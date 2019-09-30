@@ -7,6 +7,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
 
 import Search from "./search";
+import LoginDialog from "./login_dialog"
+import { Button } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -30,7 +32,16 @@ const useStyles = makeStyles(theme => ({
 
 export default function Header(props) {
   const classes = useStyles();
+  const [openLogin, setOpenLogin] = React.useState(false);
   const { toggleDrawer } = props;
+
+  const handleClickOpenLogin = () => {
+    setOpenLogin(true);
+  };
+
+  const handleCloseLogin = () => {
+    setOpenLogin(false);
+  };
   return (
     <div>
       <AppBar position="fixed" className={classes.appBar}>
@@ -48,6 +59,8 @@ export default function Header(props) {
             ManeraPedia
           </Typography>
           <Search />
+          <Button color="inherit" onClick={handleClickOpenLogin}>Login</Button>
+          <LoginDialog open={openLogin} handleClose={handleCloseLogin}/>
         </Toolbar>
       </AppBar>
     </div>
