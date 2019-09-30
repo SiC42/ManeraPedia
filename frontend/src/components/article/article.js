@@ -6,26 +6,25 @@ import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    padding: theme.spacing(3, 2),
-  },
+    padding: theme.spacing(3, 2)
+  }
 }));
 
 export default function Article(props) {
   const { value, index, text, title, ...other } = props;
   const classes = useStyles();
   return (
-    <Paper 
+    <Paper
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
       hidden={value !== index}
       className={classes.root}
-      {...other}>
-        <Typography variant="h5" component="h3" >
-          {title}
-        </Typography>
-        <Typography component="p">
-          {text}
-        </Typography>
+      {...other}
+    >
+      <Typography variant="h5" component="h3">
+        {title}
+      </Typography>
+      <Typography component="p">{text}</Typography>
     </Paper>
   );
 }
