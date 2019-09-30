@@ -5,6 +5,7 @@ import Paper from "@material-ui/core/Paper";
 import SearchIcon from "@material-ui/icons/Search";
 import Downshift from "downshift";
 import { fade, makeStyles } from "@material-ui/core/styles";
+import { Popper } from "@material-ui/core";
 
 const suggestions = [
   { value: "ananas" },
@@ -54,22 +55,20 @@ const useStyles = makeStyles(theme => ({
     }
   },
   paper: {
-    //position: "absolute",
-    zIndex: 1,
-    width: "auto",
-    maxWidth: 400,
-    //marginLeft: theme.spacing(3),
+    zIndex: 1202,
+    width: 200,
     left: 0,
-    right: 0
+    right: 0,
+    marginLeft: theme.spacing(4),
   }
 }));
 
 function renderInput(props) {
-  const { classes, inputRef, inputProps } = props;
+  const { classes, ref, inputProps } = props;
 
   return (
     <InputBase
-      inputRef={inputRef}
+      inputRef={ref}
       inputProps={inputProps}
       classes={{
         root: classes.inputRoot,
@@ -87,7 +86,7 @@ function renderSuggestion(suggestionProps) {
     highlightedIndex,
     selectedItem
   } = suggestionProps;
-  console.log(suggestionProps)
+  console.log(suggestionProps);
   const isHighlighted = highlightedIndex === index;
   const isSelected = (selectedItem || "").indexOf(suggestion.label) > -1;
 
@@ -127,18 +126,12 @@ function getSuggestions(value, { showEmpty = false } = {}) {
       });
 }
 
+let popperNode;
+
 export default function Search() {
   const classes = useStyles();
-  const inputRef = React.useRef(null)
   return (
-    <Downshift
-      onChange={selection =>
-        alert(
-          selection ? `You selected ${selection.label}` : "Selection Cleared"
-        )
-      }
-      itemToString={item => (item ? item.label : "")}
-    >
+    <Downshift>
       {({
         getInputProps,
         getItemProps,
@@ -153,7 +146,7 @@ export default function Search() {
           placeholder: "Search..."
         });
         return (
-          <ul>
+          <div>
             <div className={classes.search}>
               <div className={classes.searchIcon}>
                 <SearchIcon />
@@ -165,12 +158,22 @@ export default function Search() {
                 InputLabelProps: getLabelProps({ shrink: true }),
                 InputProps: { onBlur, onFocus },
                 inputProps,
-                inputRef
+                ref: node => {
+                  popperNode = node;
+                },
               })}
             </div>
-            <div >
-            {isOpen ? (
-                <Paper className={classes.paper} square>
+            <Popper open={isOpen} anchorEl={popperNode} style={{ zIndex: 1300,}}>
+              <div
+                {...(isOpen
+                  ? getMenuProps({}, { suppressRefError: true })
+                  : {})}
+              >
+                <Paper 
+                  className={classes.paper}
+                  square
+                  style={{ width: popperNode ? popperNode.clientWidth : undefined }}
+                  >
                   {getSuggestions(inputValue).map((suggestion, index) =>
                     renderSuggestion({
                       suggestion,
@@ -181,9 +184,9 @@ export default function Search() {
                     })
                   )}
                 </Paper>
-            ) : null}
-            </div>
-          </ul>
+              </div>
+            </Popper>
+          </div>
         );
       }}
     </Downshift>
