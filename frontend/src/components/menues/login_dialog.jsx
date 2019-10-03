@@ -43,6 +43,9 @@ const useStyles = makeStyles(theme => ({
 export default function LoginDialog(props) {
   const {handleClose, open} = props
   const classes = useStyles();
+  const [userName, setUserName] = React.useState("");
+  const [userPassword, setUserPassword] = React.useState("");
+  const [rememberMe, setRememberMe] = React.useState(false);
 
   return (
     <div>
@@ -60,15 +63,16 @@ export default function LoginDialog(props) {
         <Typography component="h1" variant="h5">
           Login
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={e => e.preventDefault()}>
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            id="username"
             label="User Name"
             name="username"
+            value={userName}
+            onChange={e=> setUserName(e.target.value)}
             autoComplete="username"
             autoFocus
           />
@@ -80,11 +84,16 @@ export default function LoginDialog(props) {
             name="password"
             label="Password"
             type="password"
-            id="password"
+            value={userPassword}
+            onChange={e=> setUserPassword(e.target.value)}
             autoComplete="current-password"
           />
           <FormControlLabel
-            control={<Checkbox name="remember" value="remember" color="primary" />}
+            control={<Checkbox 
+              name="remember" 
+              checked={rememberMe} 
+              onChange={e=> setRememberMe(e.target.checked)}
+              color="primary" />}
             label="Remember me"
           />
           <Button

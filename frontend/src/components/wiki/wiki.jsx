@@ -2,7 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
-import Header from "components/menues/header.js";
+import Header from "components/menues/header";
 import Tabs from "components/tabs";
 import Article from "components/article";
 

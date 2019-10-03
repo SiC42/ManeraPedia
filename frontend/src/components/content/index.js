@@ -1,1 +1,1 @@
-export { default } from './content.js';
+export { default } from './content';

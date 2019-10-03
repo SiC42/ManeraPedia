@@ -1,1 +1,1 @@
-export { default } from './wiki.js';
+export { default } from './wiki';
