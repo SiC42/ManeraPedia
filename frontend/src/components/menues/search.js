@@ -56,7 +56,6 @@ const useStyles = makeStyles(theme => ({
   },
   paper: {
     zIndex: 1202,
-    width: 200,
     left: 0,
     right: 0,
     marginLeft: theme.spacing(4),
@@ -143,7 +142,6 @@ export default function Search() {
         selectedItem
       }) => {
         const { onBlur, onFocus, ...inputProps } = getInputProps({
-          placeholder: "Search..."
         });
         return (
           <div>
