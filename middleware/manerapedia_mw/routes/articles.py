@@ -3,8 +3,9 @@ from manerapedia_mw.exceptions import *
 from manerapedia_mw import web_api
 from flask import request, abort, redirect, url_for, jsonify
 import flask
-import flask_login
-
+from flask_jwt_extended import (
+    jwt_required, get_jwt_claims as claims
+)
 
 @web_api.route('/all_articles')
 def get_all_articles():
@@ -12,18 +13,18 @@ def get_all_articles():
 
 
 @web_api.route('/article/<id>', methods=['GET'])
-@flask_login.login_required
+@jwt_required
 def get_article_by_id(id):
     print("test")
-    article = esw.articles.get_by_id(id, flask_login.current_user.access_groups)
+    article = esw.articles.get_by_id(id, claims.access_groups)
     if article is None:
         abort(404)
     return article
 
 @web_api.route('/search')
-@flask_login.login_required
+@jwt_required
 def search_article():
-    return esw.articles.search(request.args.get('query'), flask_login.current_user.access_groups)
+    return esw.articles.search(request.args.get('query'), claims.access_groups)
 
 @web_api.route('/test')
 def test():
@@ -31,7 +32,7 @@ def test():
 
 # ============== (POST) ==============================
 @web_api.route('/article', methods=['POST'])
-@flask_login.login_required
+@jwt_required
 def create_article():
     article = request.json
     if "_id" in article.keys():
@@ -43,7 +44,7 @@ def create_article():
 
 # ============== Update stuff (PUT) ==============================
 @web_api.route('/article/<id>', methods=['PUT'])
-@flask_login.login_required
+@jwt_required
 def update_article(id):
     if not user_is_privilged(id):
         abort(403)
@@ -55,7 +56,7 @@ def update_article(id):
 
 # ============== Delete stuff (DELETE) ==============================
 @web_api.route('/article/<id>', methods=['DELETE'])
-@flask_login.login_required
+@jwt_required
 def delete_article(id):
     if not user_is_privilged(id):
         abort(403)
@@ -65,6 +66,6 @@ def delete_article(id):
 
 # ============== Helper functions ===================================
 def user_is_privilged(id):
-    user_access_groups = flask_login.current_user.access_groups
+    user_access_groups = claims.access_groups
     article_rights = esw.articles.get_access_rights(id)
     return any(group in article_rights["write"] for group in user_access_groups)

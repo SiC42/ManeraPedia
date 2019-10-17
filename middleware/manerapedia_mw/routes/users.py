@@ -1,8 +1,18 @@
 import manerapedia_mw.es_wrapper as esw
 from manerapedia_mw.user import User
 from manerapedia_mw import web_api
-from flask import request, redirect, url_for
-import flask_login
+from flask import request, redirect, url_for, jsonify
+from flask_jwt_extended import (
+    JWTManager, jwt_required, create_access_token, create_refresh_token, get_jwt_claims
+)
+
+jwt = JWTManager(web_api)
+@jwt.user_claims_loader
+def add_claims_to_access_token(identity):
+    user_obj = User.get(identity)
+    return {
+        'access-groups': user_obj["access_groups"]
+    }
 
 @web_api.route('/users')
 def all_users():
@@ -10,61 +20,55 @@ def all_users():
 
 @web_api.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'GET':
-        return '''
-            <form action='login' method='POST'>
-            <input type='text' name='username' id='username' placeholder='username'/>
-            <input type='password' name='password' id='password' placeholder='password'/>
-            <input type="checkbox" name="remember" value="remember">
-            <input type='submit' name='submit'/>
-            </form>
-            '''
-    username = request.form['username']
-    print("username =", username)
+    if not request.is_json:
+        return jsonify({"msg": "Missing JSON in request"}), 400
+    
+    username = request.json.get('username', None)
+    password = request.json.get('password', None)
+
+    if not username:
+        return jsonify({"msg": "Missing username parameter"}), 400
+    if not password:
+        return jsonify({"msg": "Missing password parameter"}), 400
+
     user_obj = User.get(username)
-    print("object =", user_obj)
-    if user_obj is not None:
-        user = User.generate_from_obj(user_obj)
-        print("password_check = ", user.check_password(request.form['password']))
-        if user.check_password(request.form['password']):
-            flask_login.login_user(user, remember="remember" in request.form)
-            return redirect(url_for('protected'))
-    return 'Bad login'
+    print(user_obj)
+    if user_obj is None:
+        return jsonify({"msg": "Bad username or password"}), 401
+    user = User.generate_from_obj(user_obj)
+    if not user.check_password(password):
+        return jsonify({"msg": "Bad username or password"}), 401
+
+    access_token = create_access_token(identity=user_obj["username"])
+    refresh_token = create_refresh_token(identity=user_obj["username"])
+    return jsonify(access_token=access_token, refresh_token=refresh_token), 200
 
 @web_api.route('/register', methods=['GET','POST'])
-#@flask_login.login_required
+#@jwt_required
 def register():
-    if request.method == 'GET':
-        return '''
-            <form action='register' method='POST'>
-            <input type='text' name='username' id='username' placeholder='username'/>
-            <input type='password' name='password' id='password' placeholder='password'/>
-            <fieldset>
-                <input type="checkbox" name="access_groups[]" value="general">
-                General
-                <input type="checkbox" name="access_groups[]" value="gm">
-                GM
-                <input type="checkbox" name="access_groups[]" value="dw">
-                Dungeon World
-                <input type="checkbox" name="access_groups[]" value="bw">
-                Burning Wheel
-            </fieldset>
-            <input type='submit' name='submit'/>
-            </form>
-            '''
-    print(request.form)
-    user = User(username=request.form["username"])
-    user.set_password(request.form["password"])
-    user.set_access_groups(request.form.getlist('access_groups[]'))
+    if not request.is_json:
+        return jsonify({"msg": "Missing JSON in request"}), 400
+    
+    username = request.json.get('username', None)
+    password = request.json.get('password', None)
+    access_group = request.json.get('access_group', None)
+    user = User(
+        username=request.form["username"], 
+        access_group = request.form.getlist('access_groups')
+        )
+    user.set_password(password)
     user.save_into_db()
-    return redirect(url_for('all_users'))
+    access_token = create_access_token(identity = username)
+    refresh_token = create_refresh_token(identity = username)
+    return {
+                'message': 'User {} was created'.format(username),
+                'access_token': access_token,
+                'refresh_token': refresh_token
+            }
 
 @web_api.route('/protected')
-@flask_login.login_required
+@jwt_required
 def protected():
-    return 'Logged in as: ' + flask_login.current_user.username
-
-@web_api.route('/logout')
-def logout():
-    flask_login.logout_user()
-    return 'Logged out'
+    claims = get_jwt_claims()
+    print(claims)
+    return claims, 200

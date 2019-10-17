@@ -10,7 +10,7 @@ rope = "*"
 flask = "*"
 python-dotenv = "*"
 elasticsearch = "*"
-flask-login = "*"
+flask-jwt-extended = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"

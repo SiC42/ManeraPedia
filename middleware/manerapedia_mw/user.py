@@ -1,11 +1,10 @@
 from elasticsearch import Elasticsearch, exceptions
-from flask_login import UserMixin
 from werkzeug.security import check_password_hash, generate_password_hash
 
 class User():
     es = Elasticsearch('localhost', port=9200)
 
-    def __init__(self, username, access_groups=set(), password_hash=None, ):
+    def __init__(self, username, password_hash=None, access_groups=set()):
         self.username = username
         self.password_hash = password_hash
         self.access_groups = access_groups
@@ -14,16 +13,19 @@ class User():
     def generate_from_obj(cls, user_obj):
         user = User(
         username = user_obj["username"],
-        password_hash = user_obj["password_hash"])
-        user.set_access_groups(user_obj["access_groups"])
+        password_hash = user_obj["password_hash"],
+        access_groups = user_obj["access_groups"])
         return user
 
     def is_active(self):
         return True
 
-    def get_id(self):
+    def get_username(self):
         return self.username
 
+    def get_access_groups(self):
+        return self.access_groups
+   
     def is_authenticated(self):
         return self.authenticated
 
