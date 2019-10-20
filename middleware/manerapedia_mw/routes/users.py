@@ -20,11 +20,12 @@ def add_claims_to_access_token(identity):
 def all_users():
     return esw.users.get_all_users()
 
-@web_api.route('/login', methods=['GET', 'POST'])
+
+@web_api.route('/login', methods=['POST'])
 def login():
     if not request.is_json:
         return jsonify({"msg": "Missing JSON in request"}), 400
-    
+
     username = request.json.get('username', None)
     password = request.json.get('password', None)
 
@@ -48,23 +49,23 @@ def login():
                    info={"username": user_obj["username"], "access_groups": user_obj["access_groups"]}), 200
 
 
-@web_api.route('/register', methods=['GET','POST'])
-#@jwt_required
+@web_api.route('/register', methods=['POST'])
+# @jwt_required
 def register():
     if not request.is_json:
         return jsonify({"msg": "Missing JSON in request"}), 400
-    
+
     username = request.json.get('username', None)
     password = request.json.get('password', None)
     access_group = request.json.get('access_group', None)
     user = User(
-        username=request.form["username"], 
-        access_group = request.form.getlist('access_groups')
-        )
+        username=request.form["username"],
+        access_group=request.form.getlist('access_groups')
+    )
     user.set_password(password)
     user.save_into_db()
-    access_token = create_access_token(identity = username)
-    refresh_token = create_refresh_token(identity = username)
+    access_token = create_access_token(identity=username)
+    refresh_token = create_refresh_token(identity=username)
     return {
         'message': 'User {} was created'.format(username),
         'access_token': access_token,
