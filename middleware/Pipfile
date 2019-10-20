@@ -5,12 +5,14 @@ verify_ssl = true
 
 [dev-packages]
 rope = "*"
+autopep8 = "*"
 
 [packages]
 flask = "*"
 python-dotenv = "*"
 elasticsearch = "*"
 flask-jwt-extended = "*"
+flask-cors = "*"
 
 [requires]
 python_version = "3.8"
