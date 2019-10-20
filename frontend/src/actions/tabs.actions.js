@@ -6,7 +6,7 @@ export const tabActions = {
 }
 
 function add(tab) {
-  return { type: "TERST", tab }
+  return { type: ADD_TAB, tab }
 }
 
 function remove(index) {
