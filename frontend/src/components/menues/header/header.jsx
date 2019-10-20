@@ -7,10 +7,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
 
 import Search from "./search";
-import LoginDialog from "./login_dialog"
+import LoginDialog from "../login_dialog";
 import { Button } from "@material-ui/core";
 import { tabActions } from "actions";
-import { useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
