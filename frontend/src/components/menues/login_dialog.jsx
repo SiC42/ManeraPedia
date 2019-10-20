@@ -3,16 +3,13 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { Dialog } from '@material-ui/core';
+import {loginActions} from "actions"
+import { useDispatch } from "react-redux";
 
 
 const useStyles = makeStyles(theme => ({
@@ -43,9 +40,14 @@ const useStyles = makeStyles(theme => ({
 export default function LoginDialog(props) {
   const {handleClose, open} = props
   const classes = useStyles();
-  const [userName, setUserName] = React.useState("");
-  const [userPassword, setUserPassword] = React.useState("");
-  const [rememberMe, setRememberMe] = React.useState(false);
+  const [username, setUserName] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
+  const dispatch = useDispatch();
+  const login = () => {
+    dispatch(loginActions.login(username, password));
+  }
+
 
   return (
     <div>
@@ -71,7 +73,7 @@ export default function LoginDialog(props) {
             fullWidth
             label="User Name"
             name="username"
-            value={userName}
+            value={username}
             onChange={e=> setUserName(e.target.value)}
             autoComplete="username"
             autoFocus
@@ -84,17 +86,9 @@ export default function LoginDialog(props) {
             name="password"
             label="Password"
             type="password"
-            value={userPassword}
-            onChange={e=> setUserPassword(e.target.value)}
+            value={password}
+            onChange={e=> setPassword(e.target.value)}
             autoComplete="current-password"
-          />
-          <FormControlLabel
-            control={<Checkbox 
-              name="remember" 
-              checked={rememberMe} 
-              onChange={e=> setRememberMe(e.target.checked)}
-              color="primary" />}
-            label="Remember me"
           />
           <Button
             type="submit"
@@ -102,6 +96,7 @@ export default function LoginDialog(props) {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={() => login()}
           >
             LogIn
           </Button>

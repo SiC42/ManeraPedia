@@ -1,11 +1,15 @@
-import React from "react";
+import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
-import Button from "@material-ui/core/Button";
 import ListItemText from "@material-ui/core/ListItemText";
 import { makeStyles } from "@material-ui/core/styles";
-
 import CloseIcon from "@material-ui/icons/Close";
+import { tabActions } from "actions";
+import React from "react";
+import { useDispatch } from "react-redux";
+
+
+
 
 const useStyles = makeStyles(theme => ({
   itemWrapper: {
@@ -40,21 +44,27 @@ function a11yProps(index) {
 }
 
 export default function Tab(props) {
-  const { article, removeArticle, setActiveTab, tabId } = props;
+  const { title, tabId, setActiveTab, activeTabId } = props;
   const classes = useStyles();
+
+  const dispatch = useDispatch();
+  const removeTab = id => {
+    dispatch(tabActions.remove(id));
+  };
+
   return (
     <div className={classes.itemWrapper} size="small">
       <ListItem
         className={classes.listItem}
         button
-        selected={article.id === tabId}
-        key={article.id}
-        onClick={() => setActiveTab(article.id)}
-        {...a11yProps(article.id)}
+        selected={tabId === activeTabId}
+        key={tabId}
+        onClick={() => setActiveTab(tabId)}
+        {...a11yProps(tabId)}
       >
         <ListItemText
           className={classes.articleSummary}
-          primary={article.title}
+          primary={title}
         />
       </ListItem>
       <Divider className={classes.divider} orientation="vertical" />
@@ -62,7 +72,7 @@ export default function Tab(props) {
         className={classes.closeButton}
         aria-label="delete"
         size="small"
-        onClick={() => removeArticle(article.id)}
+        onClick={() => removeTab(tabId)}
       >
         <CloseIcon className={classes.closeIcon} />
       </Button>

@@ -5,6 +5,7 @@ import Container from "@material-ui/core/Container";
 import Header from "components/menues/header";
 import Tabs from "components/tabs";
 import Article from "components/article";
+import { useSelector } from 'react-redux'
 
 //import fetchData from "wiki_fetch";
 
@@ -24,36 +25,22 @@ const useStyles = makeStyles(theme => ({
 
 export default function Wiki() {
   const classes = useStyles();
-  const [tabId, setActiveTabById] = React.useState(0);
+  const [activeTabId, setActiveTab] = React.useState(0);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
-  const [articlesJson, setArticlesJson] = React.useState([]);
 
   function toggleDrawer() {
     setDrawerOpen(!drawerOpen);
   }
-  function setActiveTab(id) {
-    setActiveTabById(id);
-  }
-
-  const url = "https://jsonplaceholder.typicode.com/users/2/posts";
-  React.useEffect(() => {
-    const loadData = async url => {
-      const response = await fetch(url);
-      const json = await response.json();
-      console.log("Updating Articles");
-      setArticlesJson(json);
-    };
-    loadData(url);
-  }, [url]);
-
-  const buildArticles = articlesJson =>
-    articlesJson.map(article => (
+  
+  const articlesJson = useSelector(state => state.tabs)
+  const buildArticles = (articleList) =>
+    articleList.map((article, index) => (
       <Article
-        key={article.id}
-        index={article.id}
-        value={tabId}
+        key={index}
+        index={index}
+        activeTabId={activeTabId}
         title={article.title}
-        text={article.body}
+        text={article.text}
       />
     ));
 
@@ -63,10 +50,9 @@ export default function Wiki() {
       <Tabs
         articles={articlesJson}
         setActiveTab={setActiveTab}
-        tabId={tabId}
+        activeTabId={activeTabId}
         toggleDrawer={toggleDrawer}
         drawerOpen={drawerOpen}
-        setArticlesJson={setArticlesJson}
       />
       <main className={classes.content}>
         <div className={classes.toolbar} />

@@ -3,7 +3,6 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
-import Article from "components/article";
 import ArticleTabs from "./article_tabs";
 
 const drawerWidth = 240;
@@ -57,10 +56,7 @@ export default function Content(props) {
     setMobileOpen(!mobileOpen);
   }
 
-  let articles = [];
-  for (let i = 0; i < 10; i++) {
-    articles.push(<Article key={i} index={i} value={value} />);
-  }
+  const articles = useSelector(state => state.tabs)
 
   return (
     <div className={classes.root}>

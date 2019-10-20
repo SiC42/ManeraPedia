@@ -11,13 +11,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Article(props) {
-  const { value, index, text, title, ...other } = props;
+  const { activeTabId, index, text, title, ...other } = props;
   const classes = useStyles();
   return (
     <Paper
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
-      hidden={value !== index}
+      hidden={index !== activeTabId}
       className={classes.root}
       {...other}
     >

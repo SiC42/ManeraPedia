@@ -1,10 +1,9 @@
-import React from "react";
 import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 import List from "@material-ui/core/List";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-
+import React from "react";
 import Tab from "./tab";
 
 const maxDrawerWidth = 450;
@@ -48,19 +47,12 @@ export default function Tabs(props) {
     container,
     drawerOpen,
     setActiveTab,
-    setArticlesJson,
-    tabId,
+    activeTabId,
     toggleDrawer
   } = props;
   const classes = useStyles();
   const theme = useTheme();
 
-  const removeArticle = id => {
-    const newArticlesJson = articles.filter(article => article.id !== id);
-    console.log(tabId);
-    setArticlesJson(newArticlesJson);
-    console.log(tabId);
-  };
 
   const setDrawer = mobile => {
     let eventDummy;
@@ -74,13 +66,13 @@ export default function Tabs(props) {
       <div className={classes.tabs} onClick={eventDummy} onKeyDown={eventDummy}>
         <div className={classes.toolbar} />
         <List>
-          {articles.map(article => (
-            <div key={article.id}>
+          {articles.map((article, index) => (
+            <div key={index}>
               <Tab
-                article={article}
-                removeArticle={removeArticle}
+                title={article.title}
+                tabId={index}
                 setActiveTab={setActiveTab}
-                tabId={tabId}
+                activeTabId={activeTabId}
               />
               <Divider />
             </div>
