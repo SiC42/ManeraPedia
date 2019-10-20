@@ -18,7 +18,7 @@ module.exports = {
                 use: ['style-loader', 'css-loader'],
             },
             {
-                test: /\.(png|svg|jpg|jpeg|gif|ico)$/,
+                test: /\.(png|svg|jpe?g|gif|ico)$/i,
                 exclude: /node_modules/,
                 use: ['file-loader?name=[name].[ext]'] // ?name=[name].[ext] is only necessary to preserve the original file name
             }
