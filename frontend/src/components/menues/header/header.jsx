@@ -1,16 +1,16 @@
-import React from "react";
+import { Button } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
 import MenuIcon from "@material-ui/icons/Menu";
-
-import Search from "./search.header";
-import LoginDialog from "../login_dialog";
-import { Button } from "@material-ui/core";
 import { tabActions } from "actions";
-import { useDispatch } from "react-redux";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import LoginDialog from "../login_dialog";
+import LoginHeader from "./login.header";
+import Search from "./search.header";
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -53,6 +53,8 @@ export default function Header(props) {
   const [openLogin, setOpenLogin] = React.useState(false);
   const { toggleDrawer } = props;
 
+  const loggedIn = useSelector(state => state.login.loggedIn);
+
   const handleClickOpenLogin = () => {
     setOpenLogin(true);
   };
@@ -85,10 +87,11 @@ export default function Header(props) {
           <Button color="inherit" onClick={addArticle}>
             Add
           </Button>
-          <Button color="inherit" onClick={handleClickOpenLogin}>
-            Login
-          </Button>
-          <LoginDialog open={openLogin} handleClose={handleCloseLogin} />
+          <LoginHeader handleClickOpenLogin={handleClickOpenLogin} />
+          <LoginDialog
+            open={openLogin && !loggedIn}
+            handleClose={handleCloseLogin}
+          />
         </Toolbar>
       </AppBar>
     </>
