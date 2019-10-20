@@ -11,8 +11,10 @@ jwt = JWTManager(web_api)
 def add_claims_to_access_token(identity):
     user_obj = User.get(identity)
     return {
+        'username': user_obj["username"],
         'access-groups': user_obj["access_groups"]
     }
+
 
 @web_api.route('/users')
 def all_users():
@@ -41,7 +43,10 @@ def login():
 
     access_token = create_access_token(identity=user_obj["username"])
     refresh_token = create_refresh_token(identity=user_obj["username"])
-    return jsonify(access_token=access_token, refresh_token=refresh_token), 200
+    return jsonify(access_token=access_token,
+                   refresh_token=refresh_token,
+                   info={"username": user_obj["username"], "access_groups": user_obj["access_groups"]}), 200
+
 
 @web_api.route('/register', methods=['GET','POST'])
 #@jwt_required
@@ -61,10 +66,11 @@ def register():
     access_token = create_access_token(identity = username)
     refresh_token = create_refresh_token(identity = username)
     return {
-                'message': 'User {} was created'.format(username),
-                'access_token': access_token,
-                'refresh_token': refresh_token
-            }
+        'message': 'User {} was created'.format(username),
+        'access_token': access_token,
+        'refresh_token': refresh_token
+    }
+
 
 @web_api.route('/protected')
 @jwt_required
