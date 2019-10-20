@@ -8,10 +8,7 @@ import { tabActions } from "actions";
 import React from "react";
 import { useDispatch } from "react-redux";
 
-
-
-
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   itemWrapper: {
     display: "flex",
     alignItems: "stretch",
@@ -31,8 +28,8 @@ const useStyles = makeStyles(theme => ({
     whiteSpace: "nowrap"
   },
   divider: {
-      height: "38px",
-      alignSelf: "center"
+    height: "38px",
+    alignSelf: "center"
   }
 }));
 
@@ -62,10 +59,7 @@ export default function Tab(props) {
         onClick={() => setActiveTab(tabId)}
         {...a11yProps(tabId)}
       >
-        <ListItemText
-          className={classes.articleSummary}
-          primary={title}
-        />
+        <ListItemText className={classes.articleSummary} primary={title} />
       </ListItem>
       <Divider className={classes.divider} orientation="vertical" />
       <Button
