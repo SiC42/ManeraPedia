@@ -1,6 +1,11 @@
-import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE } from '../constants';
+import {
+  LOGIN_FAILURE,
+  LOGIN_REQUEST,
+  LOGIN_SUCCESS,
+  LOGOUT
+} from "../constants";
 
-let user = JSON.parse(localStorage.getItem('user'));
+let user = JSON.parse(localStorage.getItem("user"));
 const initialState = user ? { loggedIn: true, user } : {};
 
 export function login(state = initialState, action) {
@@ -17,7 +22,9 @@ export function login(state = initialState, action) {
       };
     case LOGIN_FAILURE:
       return {};
+    case LOGOUT:
+      return {};
     default:
-      return state
+      return state;
   }
 }
