@@ -1,11 +1,11 @@
-import React from "react";
+import { Popper } from "@material-ui/core";
 import InputBase from "@material-ui/core/InputBase";
 import MenuItem from "@material-ui/core/MenuItem";
 import Paper from "@material-ui/core/Paper";
+import { fade, makeStyles } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
 import Downshift from "downshift";
-import { fade, makeStyles } from "@material-ui/core/styles";
-import { Popper } from "@material-ui/core";
+import React from "react";
 
 const suggestions = [
   { value: "ananas" },
