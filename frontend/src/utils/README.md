@@ -1,1 +1,0 @@
-This is where global helper functions go
