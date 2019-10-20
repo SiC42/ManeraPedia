@@ -58,7 +58,7 @@ const useStyles = makeStyles(theme => ({
     zIndex: 1202,
     left: 0,
     right: 0,
-    marginLeft: theme.spacing(4),
+    marginLeft: theme.spacing(4)
   }
 }));
 
@@ -141,8 +141,7 @@ export default function Search() {
         highlightedIndex,
         selectedItem
       }) => {
-        const { onBlur, onFocus, ...inputProps } = getInputProps({
-        });
+        const { onBlur, onFocus, ...inputProps } = getInputProps({});
         return (
           <div>
             <div className={classes.search}>
@@ -158,20 +157,26 @@ export default function Search() {
                 inputProps,
                 ref: node => {
                   popperNode = node;
-                },
+                }
               })}
             </div>
-            <Popper open={isOpen} anchorEl={popperNode} style={{ zIndex: 1300,}}>
+            <Popper
+              open={isOpen}
+              anchorEl={popperNode}
+              style={{ zIndex: 1300 }}
+            >
               <div
                 {...(isOpen
                   ? getMenuProps({}, { suppressRefError: true })
                   : {})}
               >
-                <Paper 
+                <Paper
                   className={classes.paper}
                   square
-                  style={{ width: popperNode ? popperNode.clientWidth : undefined }}
-                  >
+                  style={{
+                    width: popperNode ? popperNode.clientWidth : undefined
+                  }}
+                >
                   {getSuggestions(inputValue).map((suggestion, index) =>
                     renderSuggestion({
                       suggestion,
