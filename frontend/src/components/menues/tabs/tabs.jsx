@@ -53,7 +53,6 @@ export default function Tabs(props) {
   const classes = useStyles();
   const theme = useTheme();
 
-
   const setDrawer = mobile => {
     let eventDummy;
     if (mobile) {
