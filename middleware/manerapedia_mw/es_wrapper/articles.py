@@ -47,7 +47,11 @@ def autosuggester(phrase, access_groups):
     s = s.query(q)
     s = s.source(includes=["title"])
     res = s.execute()
-    return res.to_dict()
+    hits = []
+    for hit in res:
+        hits.append(
+            {"id": hit.meta.id, "score": hit.meta.score, "title": hit.title})
+    return {"suggestions": hits}
 
 
 def search(query, access_groups):
