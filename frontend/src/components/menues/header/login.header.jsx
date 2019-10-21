@@ -5,13 +5,13 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import { loginActions } from "actions";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(theme => ({
   button: {
     margin: theme.spacing(0),
     padding: theme.spacing(0)
-  },
+  }
 }));
 
 export default function LoginHeader(props) {
@@ -51,7 +51,7 @@ export default function LoginHeader(props) {
             color="inherit"
             endIcon={<AccountCircle />}
           >
-              {username}
+            {username}
           </Button>
           <Menu
             id="menu-login"
