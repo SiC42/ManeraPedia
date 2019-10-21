@@ -25,8 +25,10 @@ def get_article_by_id(id):
 @web_api.route('/search')
 @jwt_required
 def search_article():
+    if not request.args.get('query'):
+        return jsonify({"msg": "Missing query parameter"}), 400
     if request.args.get('autosuggest'):
-        esw.articles.autosuggester(
+        return esw.articles.autosuggester(
             request.args.get('query'), claims()["access_groups"])
     return esw.articles.search(request.args.get('query'), claims()["access_groups"])
 
