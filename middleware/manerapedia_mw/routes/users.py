@@ -12,7 +12,7 @@ def add_claims_to_access_token(identity):
     user_obj = User.get(identity)
     return {
         'username': user_obj["username"],
-        'access-groups': user_obj["access_groups"]
+        'access_groups': user_obj["access_groups"]
     }
 
 
