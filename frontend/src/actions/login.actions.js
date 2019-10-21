@@ -26,13 +26,13 @@ function login(username, password) {
   };
 
   function request(user) {
-    return { type: LOGIN_REQUEST, user };
+    return { type: LOGIN_REQUEST, payload: user };
   }
   function success(user) {
-    return { type: LOGIN_SUCCESS, user };
+    return { type: LOGIN_SUCCESS, payload: user };
   }
   function failure(error) {
-    return { type: LOGIN_FAILURE, error };
+    return { type: LOGIN_FAILURE, payload: error };
   }
 }
 
