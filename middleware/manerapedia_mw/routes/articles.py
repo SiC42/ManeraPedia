@@ -15,8 +15,7 @@ def get_all_articles():
 @web_api.route('/article/<id>', methods=['GET'])
 @jwt_required
 def get_article_by_id(id):
-    print("test")
-    article = esw.articles.get_by_id(id, claims.access_groups)
+    article = esw.articles.get_by_id(id, claims()["access_groups"])
     if article is None:
         abort(404)
     return article
@@ -25,6 +24,7 @@ def get_article_by_id(id):
 @jwt_required
 def search_article():
     return esw.articles.search(request.args.get('query'), claims.access_groups)
+    return esw.articles.search(request.args.get('query'), claims()["access_groups"])
 
 @web_api.route('/test')
 def test():
@@ -66,6 +66,6 @@ def delete_article(id):
 
 # ============== Helper functions ===================================
 def user_is_privilged(id):
-    user_access_groups = claims.access_groups
+    user_access_groups = claims()["access_groups"]
     article_rights = esw.articles.get_access_rights(id)
     return any(group in article_rights["write"] for group in user_access_groups)
