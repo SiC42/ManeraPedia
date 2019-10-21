@@ -1,5 +1,6 @@
 from elasticsearch import Elasticsearch, exceptions
-from elasticsearch_dsl import Search, Q, MultiMatch
+from elasticsearch_dsl import Search, Q
+from elasticsearch_dsl.query import MultiMatch
 
 client = Elasticsearch('localhost', port=9200)
 wiki_index_name = "wiki"
