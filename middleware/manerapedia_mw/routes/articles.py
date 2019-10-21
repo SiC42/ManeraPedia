@@ -7,6 +7,7 @@ from flask_jwt_extended import (
     jwt_required, get_jwt_claims as claims
 )
 
+
 @web_api.route('/all_articles')
 def get_all_articles():
     return esw.articles.get_all()
@@ -20,10 +21,13 @@ def get_article_by_id(id):
         abort(404)
     return article
 
+
 @web_api.route('/search')
 @jwt_required
 def search_article():
-    return esw.articles.search(request.args.get('query'), claims.access_groups)
+    if request.args.get('autosuggest'):
+        esw.articles.autosuggester(
+            request.args.get('query'), claims()["access_groups"])
     return esw.articles.search(request.args.get('query'), claims()["access_groups"])
 
 
