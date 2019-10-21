@@ -1,7 +1,12 @@
 from elasticsearch import Elasticsearch, exceptions
+from elasticsearch_dsl import Search
 
-es = Elasticsearch('localhost', port=9200)
+client = Elasticsearch('localhost', port=9200)
+user_index_name = "users"
+
 
 def get_all_users():
-    res =  es.search(index="users", body={"query": {"match_all": {}}})
-    return res
+    s = Search(using=client, index=user_index_name) \
+        .query("match_all")
+    res = s.execute()
+    return res.to_dict()

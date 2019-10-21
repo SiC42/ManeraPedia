@@ -10,9 +10,10 @@ autopep8 = "*"
 [packages]
 flask = "*"
 python-dotenv = "*"
-elasticsearch = "*"
 flask-jwt-extended = "*"
 flask-cors = "*"
+elasticsearch-dsl = "*"
+elasticsearch = "*"
 
 [requires]
 python_version = "3.8"

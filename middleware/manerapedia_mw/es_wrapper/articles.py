@@ -1,75 +1,91 @@
 from elasticsearch import Elasticsearch, exceptions
+from elasticsearch_dsl import Search, Q, MultiMatch
 
-es = Elasticsearch('localhost', port=9200)
+client = Elasticsearch('localhost', port=9200)
 wiki_index_name = "wiki"
 
+
 def get_all():
-    res =  es.search(index=wiki_index_name, 
-                    body={"query": {"match_all": {}}},
-                    _source_excludes=[])
-    return res
+    s = Search(using=client, index=wiki_index_name) \
+        .query("match_all")
+    res = s.execute()
+    return res.to_dict()
+
 
 def get_by_id(id, access_groups):
-    body =  {"query": 
-        {"bool": {
-            "must": {"ids": {"values" : id}}}
-        }
-    }
-    body = add_access_filter(body, access_groups)
-    res = es.search(index=wiki_index_name,
-                    body=body,
-                    _source_excludes="access")
-    if res["hits"]["total"]["value"] != 1:
+    s = Search(using=client, index=wiki_index_name)
+    s = s.filter(access_filter(access_groups))
+    s = s.query("match", _id=id)
+    s = s.source(excludes=["access"])
+
+    res = s.execute()
+    if res.hits.total.value != 1:
         return None
-    return res["hits"]["hits"][0]
+    print("response =", res.hits[0])
+    return res.hits[0].to_dict()
+
 
 def get_access_rights(id):
     try:
-        res = es.get(index=wiki_index_name, id=id)
+        res = client.get(index=wiki_index_name, id=id)
     except exceptions.NotFoundError:
         return None
     access_rights = res["_source"]["access"]
     return access_rights
 
-def get_by_title(title):
-    res = es.search(index=wiki_index_name, 
-                    body={"query": {"term": {"title.raw": title}}})
-    return res
+
+def autosuggester(phrase, access_groups):
+    """Autosuggest article based on title"""
+    s = Search(using=client, index=wiki_index_name)
+    s = s.filter(access_filter(access_groups))
+    multi_match = MultiMatch(
+        query=phrase,
+        type="bool_prefix",
+        fields=["title.completion", "title.completion._2gram", "title.completion._3gram"])
+    q = Q("bool", must=multi_match)
+    s = s.query(q)
+    s = s.source(includes=["title"])
+    res = s.execute()
+    return res.to_dict()
+
 
 def search(query, access_groups):
-    body =  {"query":{"bool": {"must": {"match": {"body" : query}}}}}  
-    body = add_access_filter(body, access_groups)
-    res = es.search(index=wiki_index_name, body=body)
-    return res
+    s = Search(using=client, index=wiki_index_name)
+    s = s.filter(access_filter(access_groups))
+    q = Q("bool", must=Q("match", body=query))
+    s = s.query(q)
+    res = s.execute()
+    return res.to_dict()
 
 
 def title_is_unique(title, id=None):
-    body =  {"query": 
-        {"bool": {
-            "must": {"term": {"title.raw" : title}}}
-        }
-    }
-    if title is not None:
-        body["query"]["bool"]["must_not"] = {"term": {"_id": id}}
-    res = es.search(index=wiki_index_name, body=body, _source=False)
-    return res["hits"]["total"]["value"] == 0
-    
+    s = Search(using=client, index=wiki_index_name)
+    if id is None:
+        q = Q("bool", must=Q("term", title__raw=title))
+    else:
+        q = Q("bool", must=Q("term", title__raw=title),
+              must_not=Q("term", _id=id))
+    s = s.query(q)
+    s = s.source(False)
+    res = s.execute()
+    return res.hits.total.value == 0
+
 
 def create(body):
-    return es.index(index=wiki_index_name, body=body)
+    return client.index(index=wiki_index_name, body=body)
 
 
 def update(id, body):
-    return es.update(index=wiki_index_name, id=id, body=body)
+    return client.update(index=wiki_index_name, id=id, body=body)
+
 
 def delete(id):
-    return es.delete(index=wiki_index_name, id=id) 
+    return client.delete(index=wiki_index_name, id=id)
 
 
 # ======================= Helper functions =======================
-def add_access_filter(body, access_groups):
-    body["query"]["bool"]["filter"] = {"bool" : {"should": []}}
-    should_include = body["query"]["bool"]["filter"]["bool"]["should"]
-    for access_group in access_groups:
-        should_include.append({ "term": { "access.read": access_group }})
-    return body
+def access_filter(access_groups):
+    should = (Q("term", access__read=access_group)
+              for access_group in access_groups)
+    filter_q = Q("bool", should=list(should))
+    return filter_q
