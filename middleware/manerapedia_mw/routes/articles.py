@@ -26,9 +26,14 @@ def search_article():
     return esw.articles.search(request.args.get('query'), claims.access_groups)
     return esw.articles.search(request.args.get('query'), claims()["access_groups"])
 
-@web_api.route('/test')
+
+@web_api.route('/test_unique')
 def test():
-    return str(esw.articles.title_is_unique("01. April 2019", id="IZhRJm0BY3eCqh1MtDze"))
+    title = request.args.get('title')
+    id = request.args.get('id')
+    if id is None or title is None:
+        return "Make sure to provide a title and an id"
+    return "title={}<br>id={}<br>IsUnqiue={}".format(title, id, str(esw.articles.title_is_unique("22.01.2019 - Ein neuer Gefährte", id="Tevv7W0BbIDzQhiPeGZx")))
 
 # ============== (POST) ==============================
 @web_api.route('/article', methods=['POST'])
