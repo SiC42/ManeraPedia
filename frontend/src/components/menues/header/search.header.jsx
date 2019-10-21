@@ -6,15 +6,8 @@ import { fade, makeStyles } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
 import Downshift from "downshift";
 import React from "react";
-
-const suggestions = [
-  { value: "ananas" },
-  { value: "apple" },
-  { value: "pear" },
-  { value: "orange" },
-  { value: "grape" },
-  { value: "banana" }
-];
+import { searchActions } from "../../../actions/search.actions";
+import { useDispatch, useSelector } from "react-redux";
 
 const useStyles = makeStyles(theme => ({
   search: {
@@ -62,21 +55,6 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function renderInput(props) {
-  const { classes, ref, inputProps } = props;
-
-  return (
-    <InputBase
-      inputRef={ref}
-      inputProps={inputProps}
-      classes={{
-        root: classes.inputRoot,
-        input: classes.inputInput
-      }}
-    />
-  );
-}
-
 function renderSuggestion(suggestionProps) {
   const {
     suggestion,
@@ -87,78 +65,67 @@ function renderSuggestion(suggestionProps) {
   } = suggestionProps;
   console.log(suggestionProps);
   const isHighlighted = highlightedIndex === index;
-  const isSelected = (selectedItem || "").indexOf(suggestion.label) > -1;
+  const isSelected = (selectedItem || "").indexOf(suggestion.title) > -1;
 
   return (
     <MenuItem
       {...itemProps}
-      key={suggestion.value}
+      key={suggestion.id}
       selected={isHighlighted}
       component="div"
       style={{
         fontWeight: isSelected ? 500 : 400
       }}
     >
-      {suggestion.value}
+      {suggestion.title}
     </MenuItem>
   );
-}
-
-function getSuggestions(value, { showEmpty = false } = {}) {
-  console.log("Getting suggestions");
-  const inputValue = value;
-  const inputLength = inputValue.length;
-  let count = 0;
-
-  return inputLength === 0 && !showEmpty
-    ? []
-    : suggestions.filter(suggestion => {
-        const keep =
-          count < 5 &&
-          suggestion.value.slice(0, inputLength).toLowerCase() === inputValue;
-
-        if (keep) {
-          count += 1;
-        }
-
-        return keep;
-      });
 }
 
 let popperNode;
 
 export default function Search() {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const fetchSuggestions = event => {
+    console.log("Fetching " + event.target.value);
+    if (!event.target.value) {
+      return;
+    }
+    dispatch(searchActions.autocomplete(event.target.value));
+  };
+  const suggestions = useSelector(state =>
+    state.search.suggestions ? state.search.suggestions : []
+  );
+
   return (
     <Downshift>
       {({
         getInputProps,
         getItemProps,
-        getLabelProps,
         getMenuProps,
         isOpen,
-        inputValue,
         highlightedIndex,
         selectedItem
       }) => {
-        const { onBlur, onFocus, ...inputProps } = getInputProps({});
         return (
           <div>
             <div className={classes.search}>
               <div className={classes.searchIcon}>
                 <SearchIcon />
               </div>
-              {renderInput({
-                fullWidth: true,
-                classes,
-                label: "Country",
-                InputLabelProps: getLabelProps({ shrink: true }),
-                InputProps: { onBlur, onFocus },
-                inputProps,
-                ref: node => {
+              <InputBase
+                onChange={fetchSuggestions}
+                inputRef={node => {
                   popperNode = node;
-                }
-              })}
+                }}
+                inputProps={getInputProps({ onChange: fetchSuggestions })}
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput
+                }}
+              />
             </div>
             <Popper
               open={isOpen}
@@ -177,11 +144,11 @@ export default function Search() {
                     width: popperNode ? popperNode.clientWidth : undefined
                   }}
                 >
-                  {getSuggestions(inputValue).map((suggestion, index) =>
+                  {suggestions.map((suggestion, index) =>
                     renderSuggestion({
                       suggestion,
                       index,
-                      itemProps: getItemProps({ item: suggestion.value }),
+                      itemProps: getItemProps({ item: suggestion.title }),
                       highlightedIndex,
                       selectedItem
                     })
