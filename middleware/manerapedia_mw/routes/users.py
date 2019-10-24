@@ -1,9 +1,13 @@
 import manerapedia_mw.es_wrapper as esw
+import datetime
 from manerapedia_mw.user import User
 from manerapedia_mw import web_api
 from flask import request, redirect, url_for, jsonify
 from flask_jwt_extended import (
-    JWTManager, jwt_required, create_access_token, create_refresh_token, get_jwt_claims
+    JWTManager,
+    create_access_token, create_refresh_token,
+    get_jwt_claims, get_jwt_identity,
+    fresh_jwt_required, jwt_refresh_token_required, jwt_required
 )
 
 jwt = JWTManager(web_api)
@@ -42,11 +46,26 @@ def login():
     if not user.check_password(password):
         return jsonify({"msg": "Bad username or password"}), 401
 
-    access_token = create_access_token(identity=user_obj["username"])
+    access_token = create_access_token(
+        identity=user_obj["username"], fresh=True)
     refresh_token = create_refresh_token(identity=user_obj["username"])
     return jsonify(access_token=access_token,
                    refresh_token=refresh_token,
                    info={"username": user_obj["username"], "access_groups": user_obj["access_groups"]}), 200
+
+
+# Refresh token endpoint. This will generate a new access token from
+# the refresh token, but will mark that access token as non-fresh,
+# as we do not actually verify a password in this endpoint.
+@web_api.route('/refresh', methods=['POST'])
+@jwt_refresh_token_required
+def refresh():
+    current_user = get_jwt_identity()
+    user_obj = User.get(current_user)
+    if user_obj is None:
+        return jsonify({"msg": "User no longer exists"}), 401
+    new_token = create_access_token(identity=current_user, fresh=False)
+    return jsonify(access_token=new_token), 200
 
 
 @web_api.route('/register', methods=['POST'])
