@@ -3,7 +3,8 @@ import config from "config";
 
 export const loginService = {
   login,
-  logout
+  logout,
+  refreshToken
   //TODO: register,
 };
 
@@ -29,6 +30,27 @@ function logout() {
   localStorage.removeItem("user");
 }
 
+function refreshToken(refreshToken) {
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: refreshToken
+    }
+  };
+  return axios(`${config.apiUrl}/refresh`, requestOptions)
+    .then(handleResponse)
+    .then(data => {
+      // store user details and jwt token in local storage to keep user logged in between page refreshes
+      let user = JSON.parse(localStorage.getItem("user"));
+      user.access_token = data.access_token;
+      localStorage.setItem("user", JSON.stringify(user));
+      return data.access_token;
+    })
+    .catch(handleError);
+}
+
 function handleError(error) {
   if (error.response) {
     console.log(error.toJSON());
@@ -37,5 +59,6 @@ function handleError(error) {
 }
 
 function handleResponse(response) {
+  console.log(response);
   return response.data;
 }

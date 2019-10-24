@@ -20,7 +20,7 @@ export default function LoginHeader(props) {
 
   const loggedIn = useSelector(state => state.login.loggedIn);
   const username = useSelector(state =>
-    state.login.user ? state.login.user.info.username : ""
+    state.login.info ? state.login.info.username : ""
   );
 
   const [anchorEl, setAnchorEl] = React.useState(null);

@@ -11,7 +11,7 @@ import Container from "@material-ui/core/Container";
 import { Dialog } from "@material-ui/core";
 import { loginActions } from "actions";
 import { useDispatch, useSelector } from "react-redux";
-import { green } from '@material-ui/core/colors';
+import { green } from "@material-ui/core/colors";
 
 const useStyles = makeStyles(theme => ({
   "@global": {
@@ -21,15 +21,15 @@ const useStyles = makeStyles(theme => ({
   },
   wrapper: {
     margin: theme.spacing(1),
-    position: 'relative',
+    position: "relative"
   },
   buttonProgress: {
     color: green[500],
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
+    position: "absolute",
+    top: "50%",
+    left: "50%",
     marginTop: -12,
-    marginLeft: -12,
+    marginLeft: -12
   },
   paper: {
     marginTop: theme.spacing(2),
@@ -55,12 +55,12 @@ export default function LoginDialog(props) {
   const classes = useStyles();
   const [username, setUserName] = React.useState("");
   const [password, setPassword] = React.useState("");
-  
+
   const loggingIn = useSelector(state => state.login.loggingIn);
 
   const dispatch = useDispatch();
   const login = () => {
-    dispatch(loginActions.login(username, password));
+    dispatch(loginActions.loginRequest(username, password));
   };
 
   return (
@@ -120,13 +120,12 @@ export default function LoginDialog(props) {
                 >
                   Login
                 </Button>
-                {
-                  loggingIn &&
+                {loggingIn && (
                   <CircularProgress
                     size={24}
                     className={classes.buttonProgress}
                   />
-                }
+                )}
               </div>
             </form>
           </div>

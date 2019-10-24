@@ -3,21 +3,25 @@ import { render } from "react-dom";
 import "./index.css";
 import Wiki from "components/wiki";
 import * as serviceWorker from "serviceWorker";
-import {  } from "redux";
 import { Provider } from "react-redux";
 import { applyMiddleware, createStore, combineReducers, compose } from "redux";
 import * as reducers from "reducers";
-import thunkMiddleware from 'redux-thunk';
+import createSagaMiddleware from "redux-saga";
+import { authMiddleware } from "middleware";
+import { rootSaga } from "sagas";
 
-console.log(reducers);
 const rootReducer = combineReducers(reducers);
+const sagaMiddleware = createSagaMiddleware();
+const composeEnhancers =
+  (typeof window !== "undefined" &&
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
+  compose;
+const store = createStore(
+  rootReducer,
+  composeEnhancers(applyMiddleware(authMiddleware, sagaMiddleware))
+);
 
-const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
-const store = createStore(rootReducer,
-  composeEnhancers(
-    applyMiddleware(
-      thunkMiddleware
-    )));
+sagaMiddleware.run(rootSaga);
 
 render(
   <Provider store={store}>
