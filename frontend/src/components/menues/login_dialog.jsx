@@ -1,17 +1,18 @@
-import React from "react";
+import { Dialog } from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import { Dialog } from "@material-ui/core";
-import { loginActions } from "actions";
-import { useDispatch, useSelector } from "react-redux";
 import { green } from "@material-ui/core/colors";
+import Container from "@material-ui/core/Container";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import { makeStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import { loginActions } from "actions";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Snackbar from "./snackbar";
 
 const useStyles = makeStyles(theme => ({
   "@global": {
@@ -50,21 +51,31 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(2, 0, 2)
   }
 }));
+
 export default function LoginDialog(props) {
   const { handleClose, open } = props;
   const classes = useStyles();
   const [username, setUserName] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [snackbarOpen, setsnackbarOpen] = React.useState(true);
+  const message = "bla";
 
   const loggingIn = useSelector(state => state.login.loggingIn);
 
   const dispatch = useDispatch();
-  const login = () => {
-    dispatch(loginActions.loginRequest(username, password));
+  const login = e => {
+    if (e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        dispatch(loginActions.loginRequest(username, password));
+      }
+    } else {
+      dispatch(loginActions.loginRequest(username, password));
+    }
   };
 
   return (
-    <div>
+    <>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -93,6 +104,7 @@ export default function LoginDialog(props) {
                 name="username"
                 value={username}
                 onChange={e => setUserName(e.target.value)}
+                onKeyPress={e => login(e)}
                 autoComplete="username"
                 autoFocus
               />
@@ -106,6 +118,7 @@ export default function LoginDialog(props) {
                 type="password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
+                onKeyPress={e => login(e)}
                 autoComplete="current-password"
               />
               <div className={classes.wrapper}>
@@ -130,7 +143,13 @@ export default function LoginDialog(props) {
             </form>
           </div>
         </Container>
+        <Snackbar
+          open={snackbarOpen}
+          setOpen={setsnackbarOpen}
+          variant="error"
+          message={message}
+        />
       </Dialog>
-    </div>
+    </>
   );
 }
