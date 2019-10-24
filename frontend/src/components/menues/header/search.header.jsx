@@ -6,7 +6,7 @@ import { fade, makeStyles } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
 import Downshift from "downshift";
 import React from "react";
-import { searchActions } from "../../../actions/search.actions";
+import { searchOperations } from "ducks/search/";
 import { useDispatch, useSelector } from "react-redux";
 
 const useStyles = makeStyles(theme => ({
@@ -91,7 +91,7 @@ export default function Search() {
     if (!event.target.value) {
       return;
     }
-    dispatch(searchActions.autocompleteRequest(event.target.value));
+    dispatch(searchOperations.autocompleteRequest(event.target.value));
   };
   const suggestions = useSelector(state =>
     state.search.suggestions ? state.search.suggestions : []

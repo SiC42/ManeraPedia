@@ -1,14 +1,13 @@
+import Wiki from "components/wiki";
+import { default as reducers, rootSaga } from "ducks";
+import { authMiddleware } from "middleware";
 import React from "react";
 import { render } from "react-dom";
-import "./index.css";
-import Wiki from "components/wiki";
-import * as serviceWorker from "serviceWorker";
 import { Provider } from "react-redux";
-import { applyMiddleware, createStore, combineReducers, compose } from "redux";
-import * as reducers from "reducers";
+import { applyMiddleware, combineReducers, compose, createStore } from "redux";
 import createSagaMiddleware from "redux-saga";
-import { authMiddleware } from "middleware";
-import { rootSaga } from "sagas";
+import * as serviceWorker from "serviceWorker";
+import "./index.css";
 
 const rootReducer = combineReducers(reducers);
 const sagaMiddleware = createSagaMiddleware();

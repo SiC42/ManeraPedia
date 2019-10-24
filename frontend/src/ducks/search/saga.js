@@ -1,12 +1,10 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { searchActions } from "../actions/search.actions";
-import { AUTOCOMPLETE_REQUEST } from "../constants";
-import { searchService } from "../services";
+import * as searchActions from "./actions";
+import * as types from "./types";
+import { searchService } from "services";
 
 function* autocompleteTitle(action) {
   try {
-    console.log("saga");
-    console.log(action);
     const suggestions = yield call(
       searchService.autocomplete,
       action.payload.phrase,
@@ -18,6 +16,6 @@ function* autocompleteTitle(action) {
   }
 }
 
-export function* searchSaga() {
-  yield takeEvery(AUTOCOMPLETE_REQUEST, autocompleteTitle);
+export default function* searchSaga() {
+  yield takeEvery(types.AUTOCOMPLETE_REQUEST, autocompleteTitle);
 }

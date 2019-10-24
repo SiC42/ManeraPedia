@@ -2,7 +2,7 @@ import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import { loginActions } from "actions";
+import { authOperations } from "ducks/auth";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
@@ -18,16 +18,16 @@ export default function LoginHeader(props) {
   const { handleClickOpenLogin } = props;
   const classes = useStyles();
 
-  const loggedIn = useSelector(state => state.login.loggedIn);
+  const loggedIn = useSelector(state => state.auth.loggedIn);
   const username = useSelector(state =>
-    state.login.info ? state.login.info.username : ""
+    state.auth.info ? state.auth.info.username : ""
   );
 
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const dispatch = useDispatch();
   const handleLogout = () => {
-    dispatch(loginActions.logout());
+    dispatch(authOperations.logout());
     handleClose();
   };
   const handleMenu = event => {

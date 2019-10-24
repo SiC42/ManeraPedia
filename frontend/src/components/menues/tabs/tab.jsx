@@ -4,7 +4,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import { makeStyles } from "@material-ui/core/styles";
 import CloseIcon from "@material-ui/icons/Close";
-import { tabActions } from "actions";
+import { tabOperations } from "ducks/tab";
 import React from "react";
 import { useDispatch } from "react-redux";
 
@@ -46,7 +46,7 @@ export default function Tab(props) {
 
   const dispatch = useDispatch();
   const removeTab = id => {
-    dispatch(tabActions.remove(id));
+    dispatch(tabOperations.remove(id));
   };
 
   return (

@@ -1,10 +1,10 @@
-import { ADD_TAB, REMOVE_TAB } from "../constants";
+import * as types from "./types";
 
 export default function tabs(state = [], action) {
   switch (action.type) {
-    case ADD_TAB:
+    case types.ADD_TAB:
       return [...state, action.payload];
-    case REMOVE_TAB:
+    case types.REMOVE_TAB:
       console.log(action.index);
       return state.filter((e, i) => i !== action.payload);
     default:
