@@ -14,6 +14,7 @@ function login(username, password) {
     headers: { "Content-Type": "application/json" }
   };
   const body = JSON.stringify({ username, password });
+  console.log("Trying to log in");
   return axios
     .post(`${config.apiUrl}/login`, body, requestOptions)
     .then(handleResponse)
@@ -22,7 +23,7 @@ function login(username, password) {
       localStorage.setItem("user", JSON.stringify(user));
       return user;
     })
-    .catch(handleError);
+    .catch(handleHttpErrors);
 }
 
 function logout() {
@@ -48,14 +49,26 @@ function refreshToken(refreshToken) {
       localStorage.setItem("user", JSON.stringify(user));
       return data.access_token;
     })
-    .catch(handleError);
+    .catch(handleHttpErrors);
 }
 
-function handleError(error) {
+function handleHttpErrors(error) {
+  console.log(error);
+  console.log(error.request);
   if (error.response) {
-    console.log(error.toJSON());
-    return Promise.reject(error.toJSON());
+    // The request was made and the server responded with a status code
+    // that falls out of the range of 2xx
+    console.log(error.response);
+  } else if (error.request) {
+    // The request was made but no response was received
+    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+    // http.ClientRequest in node.js
+    console.log(error.request);
+  } else {
+    // Something happened in setting up the request that triggered an Error
+    console.log("Error", error.message);
   }
+  return Promise.reject(error.toJSON());
 }
 
 function handleResponse(response) {
