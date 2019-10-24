@@ -3,32 +3,19 @@ import {
   AUTOCOMPLETE_SUCCESS,
   AUTOCOMPLETE_FAILURE
 } from "../constants";
-import { searchService } from "../services";
 
 export const searchActions = {
-  autocomplete
+  autocompleteRequest,
+  autocompleteFailure,
+  autocompleteSuccess
 };
 
-function autocomplete(phrase) {
-  return dispatch => {
-    dispatch(request(phrase));
-    searchService.autocomplete(phrase).then(
-      suggestions => {
-        dispatch(success(suggestions));
-      },
-      error => {
-        dispatch(failure(error));
-      }
-    );
-  };
-
-  function request(phrase) {
-    return { type: AUTOCOMPLETE_REQUEST, payload: phrase };
-  }
-  function success(suggestions) {
-    return { type: AUTOCOMPLETE_SUCCESS, payload: suggestions };
-  }
-  function failure(error) {
-    return { type: AUTOCOMPLETE_FAILURE, payload: error };
-  }
+function autocompleteRequest(phrase) {
+  return { type: AUTOCOMPLETE_REQUEST, payload: { phrase } };
+}
+function autocompleteSuccess(suggestions) {
+  return { type: AUTOCOMPLETE_SUCCESS, payload: suggestions };
+}
+function autocompleteFailure(error) {
+  return { type: AUTOCOMPLETE_FAILURE, payload: error };
 }

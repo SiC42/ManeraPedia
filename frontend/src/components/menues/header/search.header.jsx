@@ -63,7 +63,6 @@ function renderSuggestion(suggestionProps) {
     highlightedIndex,
     selectedItem
   } = suggestionProps;
-  console.log(suggestionProps);
   const isHighlighted = highlightedIndex === index;
   const isSelected = (selectedItem || "").indexOf(suggestion.title) > -1;
 
@@ -89,18 +88,22 @@ export default function Search() {
   const dispatch = useDispatch();
 
   const fetchSuggestions = event => {
-    console.log("Fetching " + event.target.value);
     if (!event.target.value) {
       return;
     }
-    dispatch(searchActions.autocomplete(event.target.value));
+    dispatch(searchActions.autocompleteRequest(event.target.value));
   };
   const suggestions = useSelector(state =>
     state.search.suggestions ? state.search.suggestions : []
   );
 
+  const fetchSelectedArticle = selection => {
+    console.log(selection);
+    //dispatch(searchActions.getArticle(selection));
+  };
+
   return (
-    <Downshift>
+    <Downshift onchange={fetchSelectedArticle}>
       {({
         getInputProps,
         getItemProps,
