@@ -7,7 +7,7 @@ import {
   logout,
   refreshToken,
   refreshTokenFailure,
-  //TODO: register,
+  // TODO: register,
   refreshTokenSuccess
 } from "./actions";
 
@@ -21,5 +21,5 @@ export {
   refreshToken,
   refreshTokenSuccess,
   refreshTokenFailure
-  //TODO: register,
+  // TODO: register,
 };

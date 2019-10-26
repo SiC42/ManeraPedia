@@ -1,9 +1,7 @@
-import reducer from "./reducers";
-
-import * as searchSelectors from "./selectors";
 import * as searchOperations from "./operations";
-import * as searchTypes from "./types";
+import reducer from "./reducers";
 import searchSaga from "./saga";
+import * as searchTypes from "./types";
 
-export { searchSelectors, searchOperations, searchTypes, searchSaga };
+export { searchOperations, searchTypes, searchSaga };
 export default reducer;

@@ -1,9 +1,9 @@
 import { call, put, takeEvery } from "redux-saga/effects";
+import NotLoggedInException from "helpers/auth";
+import { authOperations } from "ducks/auth";
 import * as searchActions from "./actions";
 import * as types from "./types";
-import { searchService } from "./services";
-import { NotLoggedInException } from "helpers/auth";
-import { authOperations } from "ducks/auth";
+import searchService from "./services";
 
 function* autocompleteTitle(action) {
   try {

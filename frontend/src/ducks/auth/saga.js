@@ -1,6 +1,6 @@
-import * as types from "./types";
-import { loginService } from "./services";
 import { put, call, takeEvery, takeLeading } from "redux-saga/effects";
+import * as types from "./types";
+import loginService from "./services";
 import * as authActions from "./actions";
 
 function* loginUser(action) {

@@ -25,6 +25,10 @@ export default function LoginHeader(props) {
 
   const [anchorEl, setAnchorEl] = React.useState(null);
 
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const dispatch = useDispatch();
   const handleLogout = () => {
     dispatch(authOperations.logout());
@@ -32,10 +36,6 @@ export default function LoginHeader(props) {
   };
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
   };
 
   return (

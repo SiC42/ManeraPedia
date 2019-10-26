@@ -65,6 +65,7 @@ function renderSuggestion(suggestionProps) {
   } = suggestionProps;
   const isHighlighted = highlightedIndex === index;
   const isSelected = (selectedItem || "").indexOf(suggestion.title) > -1;
+  console.log(itemProps);
 
   return (
     <MenuItem
@@ -99,7 +100,7 @@ export default function Search() {
 
   const fetchSelectedArticle = selection => {
     console.log(selection);
-    //dispatch(searchActions.getArticle(selection));
+    // dispatch(searchActions.getArticle(selection));
   };
 
   return (

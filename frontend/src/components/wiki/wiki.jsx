@@ -2,14 +2,14 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
+import { useSelector, useDispatch } from "react-redux";
+import { authOperations } from "ducks/auth";
 import Header from "../menues/header";
 import Tabs from "../menues/tabs";
 import Article from "../article";
-import { useSelector, useDispatch } from "react-redux";
 import Snackbar from "../menues/snackbar";
-import { authOperations } from "ducks/auth";
 
-//import fetchData from "wiki_fetch";
+// import fetchData from "wiki_fetch";
 
 const useStyles = makeStyles(theme => ({
   root: {

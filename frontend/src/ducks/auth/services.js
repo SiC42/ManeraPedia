@@ -1,12 +1,29 @@
 import axios from "axios";
 import config from "config";
 
-export const loginService = {
-  login,
-  logout,
-  refreshToken
-  //TODO: register,
-};
+function handleHttpErrors(error) {
+  console.log(error);
+  console.log(error.request);
+  if (error.response) {
+    // The request was made and the server responded with a status code
+    // that falls out of the range of 2xx
+    console.log(error.response);
+  } else if (error.request) {
+    // The request was made but no response was received
+    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+    // http.ClientRequest in node.js
+    console.log(error.request);
+  } else {
+    // Something happened in setting up the request that triggered an Error
+    console.log("Error", error.message);
+  }
+  return Promise.reject(error.toJSON());
+}
+
+function handleResponse(response) {
+  console.log(response);
+  return response.data;
+}
 
 function login(username, password) {
   const requestOptions = {
@@ -31,20 +48,20 @@ function logout() {
   localStorage.removeItem("user");
 }
 
-function refreshToken(refreshToken) {
+function refreshToken(token) {
   const requestOptions = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      Authorization: refreshToken
+      Authorization: token
     }
   };
   return axios(`${config.apiUrl}/refresh`, requestOptions)
     .then(handleResponse)
     .then(data => {
       // store user details and jwt token in local storage to keep user logged in between page refreshes
-      let user = JSON.parse(localStorage.getItem("user"));
+      const user = JSON.parse(localStorage.getItem("user"));
       user.access_token = data.access_token;
       localStorage.setItem("user", JSON.stringify(user));
       return data.access_token;
@@ -52,26 +69,9 @@ function refreshToken(refreshToken) {
     .catch(handleHttpErrors);
 }
 
-function handleHttpErrors(error) {
-  console.log(error);
-  console.log(error.request);
-  if (error.response) {
-    // The request was made and the server responded with a status code
-    // that falls out of the range of 2xx
-    console.log(error.response);
-  } else if (error.request) {
-    // The request was made but no response was received
-    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-    // http.ClientRequest in node.js
-    console.log(error.request);
-  } else {
-    // Something happened in setting up the request that triggered an Error
-    console.log("Error", error.message);
-  }
-  return Promise.reject(error.toJSON());
-}
-
-function handleResponse(response) {
-  console.log(response);
-  return response.data;
-}
+export {
+  login,
+  logout,
+  refreshToken
+  // TODO: register,
+};

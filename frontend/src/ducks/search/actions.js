@@ -1,7 +1,5 @@
-import * as types from "./types";
 import { ACCESS_TOKEN, addAuthNeededMeta } from "helpers/auth";
-
-export { autocompleteRequest, autocompleteFailure, autocompleteSuccess };
+import * as types from "./types";
 
 function autocompleteRequest(phrase) {
   return {
@@ -16,3 +14,5 @@ function autocompleteSuccess(suggestions) {
 function autocompleteFailure(error) {
   return { type: types.AUTOCOMPLETE_FAILURE, payload: error };
 }
+
+export { autocompleteRequest, autocompleteFailure, autocompleteSuccess };

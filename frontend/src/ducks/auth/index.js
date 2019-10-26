@@ -1,10 +1,8 @@
-import reducer from "./reducers";
-
-import * as authSelectors from "./selectors";
 import * as authOperations from "./operations";
-import * as authTypes from "./types";
+import reducer from "./reducers";
 import authSaga from "./saga";
+import * as authTypes from "./types";
 
-export { authSelectors, authOperations, authTypes, authSaga };
+export { authOperations, authTypes, authSaga };
 
 export default reducer;

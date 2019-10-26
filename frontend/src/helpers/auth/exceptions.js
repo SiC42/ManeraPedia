@@ -1,4 +1,4 @@
-export class NotLoggedInException extends Error {
+export default class NotLoggedInException extends Error {
   constructor(message = "You need to be logged in!", ...params) {
     super(...params);
 

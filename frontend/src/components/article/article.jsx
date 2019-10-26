@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Article(props) {
-  const { activeTabId, index, text, title, ...other } = props;
+  const { activeTabId, index, text, title } = props;
   const classes = useStyles();
   return (
     <Paper
@@ -19,7 +19,6 @@ export default function Article(props) {
       aria-labelledby={`simple-tab-${index}`}
       hidden={index !== activeTabId}
       className={classes.root}
-      {...other}
     >
       <Typography variant="h5" component="h3">
         {title}

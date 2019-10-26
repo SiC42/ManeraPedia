@@ -1,18 +1,5 @@
-import * as types from "./types";
 import { REFRESH_TOKEN, addAuthNeededMeta } from "helpers/auth";
-
-export {
-  loginNeeded,
-  loginRequest,
-  loginSuccess,
-  loginFailure,
-  clearLoginError,
-  logout,
-  refreshToken,
-  refreshTokenSuccess,
-  refreshTokenFailure
-  //TODO: register,
-};
+import * as types from "./types";
 
 function loginNeeded(error) {
   return { type: types.LOGIN_NEEDED, payload: error };
@@ -36,10 +23,10 @@ function logout() {
   return { type: types.LOGOUT };
 }
 
-function refreshToken(refreshToken) {
+function refreshToken(token) {
   return {
     type: types.REFRESH_TOKEN,
-    payload: refreshToken,
+    payload: token,
     meta: addAuthNeededMeta(REFRESH_TOKEN)
   };
 }
@@ -49,3 +36,16 @@ function refreshTokenSuccess(accessToken) {
 function refreshTokenFailure(accessToken) {
   return { type: types.REFRESH_TOKEN_FAILURE, payload: accessToken };
 }
+
+export {
+  loginNeeded,
+  loginRequest,
+  loginSuccess,
+  loginFailure,
+  clearLoginError,
+  logout,
+  refreshToken,
+  refreshTokenSuccess,
+  refreshTokenFailure
+  // TODO: register,
+};

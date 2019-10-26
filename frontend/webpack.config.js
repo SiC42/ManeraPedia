@@ -12,7 +12,15 @@ module.exports = {
     rules: [
       {
         test: /\.(jsx|js)$/,
-        loader: ["babel-loader", "eslint-loader"]
+        exclude: /node_modules/,
+        use: [
+          { loader: "babel-loader" },
+
+          {
+            loader: "eslint-loader",
+            options: { failOnError: false, fix: true }
+          }
+        ]
       },
       {
         test: /\.css$/,

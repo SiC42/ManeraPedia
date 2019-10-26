@@ -18,7 +18,7 @@ const useStyles = makeStyles(() => ({
   },
   closeButton: {},
   listItem: {
-    //flexShrink: 1,
+    // flexShrink: 1,
     overflow: "hidden",
     borderRight: "line"
   },

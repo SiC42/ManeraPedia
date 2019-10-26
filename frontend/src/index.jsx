@@ -1,6 +1,6 @@
 import Wiki from "components/wiki";
-import { default as reducers, rootSaga } from "ducks";
-import { authMiddleware } from "middleware";
+import reducers, { rootSaga } from "ducks";
+import authMiddleware from "middleware";
 import React from "react";
 import { render } from "react-dom";
 import { Provider } from "react-redux";
