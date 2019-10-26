@@ -5,7 +5,9 @@ import Container from "@material-ui/core/Container";
 import Header from "../menues/header";
 import Tabs from "../menues/tabs";
 import Article from "../article";
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from "react-redux";
+import Snackbar from "../menues/snackbar";
+import { authOperations } from "ducks/auth";
 
 //import fetchData from "wiki_fetch";
 
@@ -31,9 +33,15 @@ export default function Wiki() {
   function toggleDrawer() {
     setDrawerOpen(!drawerOpen);
   }
-  
-  const articlesJson = useSelector(state => state.tabs)
-  const buildArticles = (articleList) =>
+  const open = useSelector(state => state.auth && state.auth.loginError);
+  const message = useSelector(state => state.auth && state.auth.message);
+  const dispatch = useDispatch();
+  const clearError = () => {
+    dispatch(authOperations.clearLoginError());
+  };
+
+  const articlesJson = useSelector(state => state.tabs);
+  const buildArticles = articleList =>
     articleList.map((article, index) => (
       <Article
         key={index}
@@ -57,6 +65,12 @@ export default function Wiki() {
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <Container maxWidth="md">{buildArticles(articlesJson)}</Container>
+        <Snackbar
+          open={open}
+          setOpen={clearError}
+          variant="error"
+          message={message}
+        />
       </main>
     </div>
   );
