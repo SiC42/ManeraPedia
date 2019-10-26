@@ -1,7 +1,7 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import * as searchActions from "./actions";
 import * as types from "./types";
-import { searchService } from "services";
+import { searchService } from "./services";
 
 function* autocompleteTitle(action) {
   try {
