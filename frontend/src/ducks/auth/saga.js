@@ -16,6 +16,14 @@ function* loginUser(action) {
   }
 }
 
+function logoutUser() {
+  try {
+    loginService.logout();
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 function* refreshToken(action) {
   try {
     const token = yield call(loginService.refreshToken, action.payload);
@@ -26,6 +34,7 @@ function* refreshToken(action) {
 }
 
 export default function* authSaga() {
+  yield takeEvery(types.LOGOUT, logoutUser);
   yield takeEvery(types.LOGIN_REQUEST, loginUser);
   yield takeLeading(types.REFRESH_TOKEN, refreshToken);
 }

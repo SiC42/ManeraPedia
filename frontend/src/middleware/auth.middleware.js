@@ -1,5 +1,4 @@
 import { authOperations, authTypes } from "ducks/auth";
-import { loginService } from "../services/auth.service";
 import {
   ACCESS_TOKEN,
   authNeeded,
@@ -17,8 +16,6 @@ export const authMiddleware = ({ dispatch, getState }) => next => action => {
     buffer.forEach(a => next(actionWithAuthHeader(a, action.payload)));
     buffer = [];
   }
-  if (action.type === authTypes.LOGOUT) {
-    loginService.logout();
 
   // Pass on actions that do not need any kind of authentication(-header)
   if (!authNeeded(action)) {
