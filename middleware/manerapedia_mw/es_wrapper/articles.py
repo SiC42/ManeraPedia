@@ -16,7 +16,7 @@ def get_all():
 def get_article_by_id(id, access_groups):
     s = Search(using=client, index=wiki_index_name)
     s = s.filter(access_filter(access_groups))
-    s = s.query("match", _id=id)
+    s = s.query("term", _id=id)
     s = s.source(excludes=["access"])
 
     res = s.execute()
@@ -26,9 +26,9 @@ def get_article_by_id(id, access_groups):
 def get_article_by_title(title, access_groups):
     s = Search(using=client, index=wiki_index_name)
     s = s.filter(access_filter(access_groups))
-    s = s.query("match", title=title)
+    s = s.query("term", title__raw=title)
     s = s.source(excludes=["access"])
-
+    print(s.to_dict())
     res = s.execute()
     return format_article(res)
 
