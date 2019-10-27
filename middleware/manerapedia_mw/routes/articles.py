@@ -13,20 +13,17 @@ def get_all_articles():
     return esw.articles.get_all()
 
 
-@web_api.route('/article/id/<id>', methods=['GET'])
+@web_api.route('/article', methods=['GET'])
 @jwt_required
-def get_article_by_id(id):
-    article = esw.articles.get_article_by_id(id, claims()["access_groups"])
-    if article is None:
-        abort(404)
-    return article
-
-
-@web_api.route('/article/title/<title>', methods=['GET'])
-@jwt_required
-def get_article_by_title(title):
-    article = esw.articles.get_article_by_title(
-        title, claims()["access_groups"])
+def get_article():
+    article = None
+    if request.args.get('id'):
+        article = esw.articles.get_article_by_id(
+            request.args.get('id'), claims()["access_groups"])
+    if request.args.get('title'):
+        print(request.args.get('title'))
+        article = esw.articles.get_article_by_title(
+            request.args.get('title'), claims()["access_groups"])
     if article is None:
         abort(404)
     return article
