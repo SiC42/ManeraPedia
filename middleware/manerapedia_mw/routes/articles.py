@@ -13,10 +13,20 @@ def get_all_articles():
     return esw.articles.get_all()
 
 
-@web_api.route('/article/<id>', methods=['GET'])
+@web_api.route('/article/id/<id>', methods=['GET'])
 @jwt_required
 def get_article_by_id(id):
-    article = esw.articles.get_by_id(id, claims()["access_groups"])
+    article = esw.articles.get_article_by_id(id, claims()["access_groups"])
+    if article is None:
+        abort(404)
+    return article
+
+
+@web_api.route('/article/title/<title>', methods=['GET'])
+@jwt_required
+def get_article_by_title(title):
+    article = esw.articles.get_article_by_title(
+        title, claims()["access_groups"])
     if article is None:
         abort(404)
     return article
@@ -63,7 +73,7 @@ def update_article(id):
     if not esw.articles.title_is_unique(article["title"], id):
         raise TitleAlreadyExistsEx()
     esw.articles.update(id, request.json)
-    return esw.articles.get_by_id(id)
+    return esw.articles.get_article_by_id(id)
 
 # ============== Delete stuff (DELETE) ==============================
 @web_api.route('/article/<id>', methods=['DELETE'])

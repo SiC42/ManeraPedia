@@ -13,17 +13,24 @@ def get_all():
     return res.to_dict()
 
 
-def get_by_id(id, access_groups):
+def get_article_by_id(id, access_groups):
     s = Search(using=client, index=wiki_index_name)
     s = s.filter(access_filter(access_groups))
     s = s.query("match", _id=id)
     s = s.source(excludes=["access"])
 
     res = s.execute()
-    if res.hits.total.value != 1:
-        return None
-    print("response =", res.hits[0])
-    return res.hits[0].to_dict()
+    return format_article(res)
+
+
+def get_article_by_title(title, access_groups):
+    s = Search(using=client, index=wiki_index_name)
+    s = s.filter(access_filter(access_groups))
+    s = s.query("match", title=title)
+    s = s.source(excludes=["access"])
+
+    res = s.execute()
+    return format_article(res)
 
 
 def get_access_rights(id):
@@ -94,3 +101,11 @@ def access_filter(access_groups):
               for access_group in access_groups)
     filter_q = Q("bool", should=list(should))
     return filter_q
+
+
+def format_article(response):
+    if response.hits.total.value != 1:
+        return None
+    article = response.hits[0].to_dict()
+    article["id"] = response.hits[0].meta.id
+    return article
