@@ -10,7 +10,7 @@ import jwtDecode from "jwt-decode";
 
 function tokenExpired(state) {
   // decode jwt so that we know if and when it expires
-  const tokenExpiration = jwtDecode(state.login.access_token).exp;
+  const tokenExpiration = jwtDecode(state.auth.access_token).exp;
   const nowInSeconds = Math.floor(Date.now() / 1000);
   return tokenExpiration && tokenExpiration - nowInSeconds < 10;
 }
@@ -38,20 +38,20 @@ export default ({ dispatch, getState }) => next => action => {
 
   // Catch actions which need the refresh token
   if (getAuthMetaType(action) === REFRESH_TOKEN) {
-    next(getActionWithAuthHeader(action, state.login.refresh_token));
+    next(getActionWithAuthHeader(action, state.auth.refresh_token));
   }
 
   // Catch actions which need the access token
   if (getAuthMetaType(action) === ACCESS_TOKEN) {
-    if (!state.login) {
+    if (!state.auth) {
       // We are not logged in
       return next(action);
     }
     if (tokenExpired(state)) {
       buffer.push(action);
-      dispatch(authOperations.refreshToken(state.login.refresh_token));
+      dispatch(authOperations.refreshToken(state.auth.refresh_token));
     } else {
-      return next(getActionWithAuthHeader(action, state.login.access_token));
+      return next(getActionWithAuthHeader(action, state.auth.access_token));
     }
   }
   return next(action);
