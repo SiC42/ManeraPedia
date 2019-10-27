@@ -30,8 +30,6 @@ export default function Wiki() {
   const tabs = useSelector(state => state.tabs);
   const dispatch = useDispatch();
   const changeTabs = (event, newActiveTabId) => {
-    console.log(event.target.id);
-    console.log(newActiveTabId);
     if (event.target.id === "closeTab") {
       if (activeTabId >= tabs.length - 1) {
         setActiveTab(activeTabId - 1);
