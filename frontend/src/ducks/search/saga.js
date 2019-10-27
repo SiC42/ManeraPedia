@@ -24,6 +24,26 @@ function* autocompleteTitle(action) {
   }
 }
 
+function* getArticle(action) {
+  try {
+    if (!action.payload.Authorization) {
+      throw new NotLoggedInException();
+    }
+    const article = yield call(
+      searchService.getArticle,
+      action.payload.title,
+      action.payload.Authorization
+    );
+    yield put(searchActions.getArticleSuccess(article));
+  } catch (e) {
+    if (e instanceof NotLoggedInException) {
+      yield put(authOperations.loginNeeded(e));
+    }
+    yield put(searchActions.getArticleFailure(e));
+  }
+}
+
 export default function* searchSaga() {
   yield takeEvery(types.AUTOCOMPLETE_REQUEST, autocompleteTitle);
+  yield takeEvery(types.GET_ARTICLE_REQUEST, getArticle);
 }

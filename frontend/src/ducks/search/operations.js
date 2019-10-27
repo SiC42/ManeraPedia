@@ -1,7 +1,17 @@
 import {
   autocompleteRequest,
   autocompleteFailure,
-  autocompleteSuccess
+  autocompleteSuccess,
+  getArticleRequest,
+  getArticleSuccess,
+  getArticleFailure
 } from "./actions";
 
-export { autocompleteRequest, autocompleteFailure, autocompleteSuccess };
+export {
+  autocompleteRequest,
+  autocompleteFailure,
+  autocompleteSuccess,
+  getArticleRequest,
+  getArticleSuccess,
+  getArticleFailure
+};

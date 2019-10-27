@@ -32,6 +32,26 @@ function autocomplete(phrase, accessToken) {
     .catch(handleError);
 }
 
+function getArticle(title, accessToken) {
+  const headers = {
+    Accept: "application/json",
+    Authorization: accessToken
+  };
+  return axios
+    .create({
+      headers
+    })
+    .get(`${config.apiUrl}/article`, {
+      params: { title }
+    })
+    .then(handleResponse)
+    .then(suggestions => {
+      return suggestions;
+    })
+    .catch(handleError);
+}
+
 export default {
-  autocomplete
+  autocomplete,
+  getArticle
 };

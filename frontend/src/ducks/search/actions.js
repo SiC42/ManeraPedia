@@ -15,4 +15,25 @@ function autocompleteFailure(error) {
   return { type: types.AUTOCOMPLETE_FAILURE, payload: error };
 }
 
-export { autocompleteRequest, autocompleteFailure, autocompleteSuccess };
+function getArticleRequest(title) {
+  return {
+    type: types.GET_ARTICLE_REQUEST,
+    payload: { title },
+    meta: addAuthNeededMeta(ACCESS_TOKEN)
+  };
+}
+function getArticleSuccess(article) {
+  return { type: types.GET_ARTICLE_SUCCESS, payload: article };
+}
+function getArticleFailure(error) {
+  return { type: types.GET_ARTICLE_FAILURE, payload: error };
+}
+
+export {
+  autocompleteRequest,
+  autocompleteFailure,
+  autocompleteSuccess,
+  getArticleRequest,
+  getArticleSuccess,
+  getArticleFailure
+};

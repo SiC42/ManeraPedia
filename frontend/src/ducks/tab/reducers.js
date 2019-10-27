@@ -1,3 +1,4 @@
+import { searchTypes } from "ducks/search";
 import * as types from "./types";
 
 export default function tabs(state = [], action) {
@@ -6,6 +7,8 @@ export default function tabs(state = [], action) {
       return [...state, action.payload];
     case types.REMOVE_TAB:
       return state.filter((e, i) => i !== action.payload);
+    case searchTypes.GET_ARTICLE_SUCCESS:
+      return [...state, action.payload];
     default:
       return state;
   }
