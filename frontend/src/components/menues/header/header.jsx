@@ -31,21 +31,21 @@ const useStyles = makeStyles(theme => ({
     }
   }
 }));
-
-const tab = {
-  text:
-    "Allgemeines:\n\n* [[Die Sprengung]]\n* [[Götter der Welt]]\n\nGruppe 1 (Dungeon World):\n\n* [[Übersicht über alle Artikel in Noranta|Noranta]]\n* [[Tagebücher der Gruppe 1]]\n\nGruppe 2 (Burning Wheel):\n\n* [[Allgemeine Übersicht über alle Burning Wheel Artikel|Burning Wheel]]\n* [[Geschichte von Drost und den Kolonien]]\n* [[Beispiel für Zuweisungen im Charakter Stats/Wounds|CharacterTemplate]]\n* [[Tagebücher der Gruppe 2]]",
-  type: "text/vnd.tiddlywiki",
-  title: "Übersicht für Manera",
-  tags: ["overview"],
-  modifier: "SiC",
-  modified: "2019-01-31T12:07:52",
-  creator: "SiC",
-  created: "2018-11-06T11:55:13",
-  access: {
-    write: ["gm"],
-    read: ["gm"]
-  }
+let tabCount = 0;
+const tab = () => {
+  tabCount += 1;
+  return {
+    created: "2019-01-31T11:50:58",
+    creator: "sascha",
+    id: `Tevv7W0BbIDzQhiPeGZx${tabCount}`,
+    modified: "2019-01-31T11:59:51",
+    modifier: "SiC",
+    tags: ["Journal", "[[Gruppe 1]]"],
+    text:
+      "* Sara, Helena und Kayne begraben Shank, sie wissen nicht wohin es als nächstes geht\n* Hassan stößt zufällig zu ihnen und legt Sara und Helena Taro Karten\n* Die Gruppe beschließt zu Rasten und sich danach auf den Weg zu den Orks zu machen\n* Hektor trifft auf die Gruppe, aber wird gerade von soldaten verfolgt\n* die helden schaffen es die Soldaten zu überwältigen\n*  Hektor und die gruppe lernen sich kennen, sie beschließen Gemeinsam zu den Zwergen zu reisen, weil ihre ziele überlappen\n* Bei der Rast auf dem Weg hat Helena einen Alptraum/Vision über die Verbrennung ihres Bruders\n* Kurz darauf erscheint eine seltsame gestalt und ein schwarzer Panther",
+    title: `!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!22.01.2019 - Ein neuer Gefährte${tabCount}`,
+    type: "text/vnd.tiddlywiki"
+  };
 };
 
 export default function Header(props) {
@@ -65,7 +65,7 @@ export default function Header(props) {
   const dispatch = useDispatch();
 
   const addArticle = () => {
-    dispatch(tabOperations.add(tab));
+    dispatch(tabOperations.add(tab()));
   };
   return (
     <>

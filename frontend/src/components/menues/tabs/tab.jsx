@@ -1,75 +1,47 @@
-import Button from "@material-ui/core/Button";
-import Divider from "@material-ui/core/Divider";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import { makeStyles } from "@material-ui/core/styles";
 import CloseIcon from "@material-ui/icons/Close";
-import { tabOperations } from "ducks/tab";
+import { makeStyles } from "@material-ui/core/styles";
 import React from "react";
-import { useDispatch } from "react-redux";
 
-const useStyles = makeStyles(() => ({
-  itemWrapper: {
-    display: "flex",
-    alignItems: "stretch",
-    width: "100%",
-    justifyContent: "space-between",
-    placeContent: "end space-between"
-  },
-  closeButton: {},
-  listItem: {
-    // flexShrink: 1,
-    overflow: "hidden",
-    borderRight: "line"
-  },
+const useStyles = makeStyles(theme => ({
   articleSummary: {
     textOverflow: "ellipsis",
     overflow: "hidden",
-    whiteSpace: "nowrap"
+    whiteSpace: "nowrap",
+    height: "auto"
+  },
+  close: {
+    height: "100%",
+    paddingLeft: theme.spacing(1),
+    paddingRight: theme.spacing(1),
+    "& :hover": {
+      background: theme.palette.action.selected
+    }
   },
   divider: {
     height: "38px",
     alignSelf: "center"
+  },
+  listItem: {
+    display: "inherit",
+    width: "inherit",
+    // flexShrink: 1,
+    overflow: "hidden",
+    borderRight: "line"
   }
 }));
 
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`
-  };
-}
-
-export default function Tab(props) {
-  const { title, tabId, setActiveTab, activeTabId } = props;
+export default function TabContent(props) {
+  const { title } = props;
   const classes = useStyles();
 
-  const dispatch = useDispatch();
-  const removeTab = id => {
-    dispatch(tabOperations.remove(id));
-  };
-
   return (
-    <div className={classes.itemWrapper} size="small">
-      <ListItem
-        className={classes.listItem}
-        button
-        selected={tabId === activeTabId}
-        key={tabId}
-        onClick={() => setActiveTab(tabId)}
-        {...a11yProps(tabId)}
-      >
-        <ListItemText className={classes.articleSummary} primary={title} />
-      </ListItem>
-      <Divider className={classes.divider} orientation="vertical" />
-      <Button
-        className={classes.closeButton}
-        aria-label="delete"
-        size="small"
-        onClick={() => removeTab(tabId)}
-      >
-        <CloseIcon className={classes.closeIcon} />
-      </Button>
+    <div id="tab" className={classes.listItem}>
+      <div id="content" className={classes.articleSummary}>
+        {title}
+      </div>
+      <div className={classes.close} id="closeTab">
+        <CloseIcon id="closeTab" />
+      </div>
     </div>
   );
 }

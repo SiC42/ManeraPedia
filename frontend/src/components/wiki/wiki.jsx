@@ -1,15 +1,13 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-
-import { useSelector, useDispatch } from "react-redux";
+import { makeStyles } from "@material-ui/core/styles";
 import { authOperations } from "ducks/auth";
+import { tabOperations } from "ducks/tab";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Content from "../content";
 import Header from "../menues/header";
-import Tabs from "../menues/tabs";
-import Article from "../article";
 import Snackbar from "../menues/snackbar";
-
-// import fetchData from "wiki_fetch";
+import Tabs from "../menues/tabs";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -29,22 +27,33 @@ export default function Wiki() {
   const classes = useStyles();
   const [activeTabId, setActiveTab] = React.useState(0);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const tabs = useSelector(state => state.tabs);
+  const dispatch = useDispatch();
+  const changeTabs = (event, newActiveTabId) => {
+    console.log(event.target.id);
+    console.log(newActiveTabId);
+    if (event.target.id === "closeTab") {
+      if (activeTabId >= tabs.length - 1) {
+        setActiveTab(activeTabId - 1);
+      }
+      dispatch(tabOperations.remove(newActiveTabId));
+    } else {
+      setActiveTab(newActiveTabId);
+    }
+  };
 
   function toggleDrawer() {
     setDrawerOpen(!drawerOpen);
   }
   const open = useSelector(state => state.auth && state.auth.loginError);
   const message = useSelector(state => state.auth && state.auth.message);
-  const dispatch = useDispatch();
   const clearError = () => {
     dispatch(authOperations.clearLoginError());
   };
-
-  const articlesJson = useSelector(state => state.tabs);
   const buildArticles = articleList =>
     articleList.map((article, index) => (
-      <Article
-        key={index}
+      <Content
+        key={article.id}
         index={index}
         activeTabId={activeTabId}
         title={article.title}
@@ -56,15 +65,15 @@ export default function Wiki() {
     <div className={classes.root}>
       <Header toggleDrawer={toggleDrawer} />
       <Tabs
-        articles={articlesJson}
-        setActiveTab={setActiveTab}
+        articles={tabs}
+        changeActiveTab={changeTabs}
         activeTabId={activeTabId}
         toggleDrawer={toggleDrawer}
         drawerOpen={drawerOpen}
       />
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Container maxWidth="md">{buildArticles(articlesJson)}</Container>
+        <Container maxWidth="md">{buildArticles(tabs)}</Container>
         <Snackbar
           open={open}
           setOpen={clearError}

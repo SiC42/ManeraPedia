@@ -1,24 +1,21 @@
-import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
-import List from "@material-ui/core/List";
+import MaterialTabs from "@material-ui/core/Tabs";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import React from "react";
-import Tab from "./tab";
+import Tab from "@material-ui/core/Tab";
+import TabContent from "./tab";
 
 const maxDrawerWidth = 450;
 const useStyles = makeStyles(theme => ({
   itemWrapper: {
     display: "flex",
+    alignItems: "stretch",
     width: "100%",
+    height: "100%",
     justifyContent: "space-between",
-    placeContent: "end space-between"
-  },
-  closeButton: {},
-  listItem: {
-    flexShrink: 1,
-    overflow: "hidden",
-    borderRight: "line"
+    placeContent: "end space-between",
+    paddingRight: 0
   },
   tabs: {
     borderRight: `1px solid ${theme.palette.divider}`
@@ -46,38 +43,36 @@ export default function Tabs(props) {
     articles,
     container,
     drawerOpen,
-    setActiveTab,
+    changeActiveTab,
     activeTabId,
     toggleDrawer
   } = props;
   const classes = useStyles();
   const theme = useTheme();
 
-  const setDrawer = mobile => {
-    let eventDummy;
-    if (mobile) {
-      eventDummy = toggleDrawer;
-    } else {
-      eventDummy = () => {};
-    }
-
+  const setDrawer = () => {
     return (
-      <div className={classes.tabs} onClick={eventDummy} onKeyDown={eventDummy}>
+      <>
         <div className={classes.toolbar} />
-        <List>
+        <MaterialTabs
+          orientation="vertical"
+          variant="scrollable"
+          value={activeTabId}
+          onChange={changeActiveTab}
+          aria-label="Vertical menu tabs"
+          className={classes.tabs}
+        >
           {articles.map((article, index) => (
-            <div key={index}>
-              <Tab
-                title={article.title}
-                tabId={index}
-                setActiveTab={setActiveTab}
-                activeTabId={activeTabId}
-              />
-              <Divider />
-            </div>
+            <Tab
+              label={<TabContent title={article.title} />}
+              key={article.id}
+              title={article.title}
+              index={index}
+              className={classes.itemWrapper}
+            />
           ))}
-        </List>
-      </div>
+        </MaterialTabs>
+      </>
     );
   };
 
