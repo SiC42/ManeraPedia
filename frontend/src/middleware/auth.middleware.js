@@ -17,7 +17,12 @@ function tokenExpired(state) {
 
 function getActionWithAuthHeader(action, token) {
   const actionWithAuthHeader = { ...action };
-  actionWithAuthHeader.payload.Authorization = getAuthHeader(token);
+  if (actionWithAuthHeader.payload) {
+    actionWithAuthHeader.payload.Authorization = getAuthHeader(token);
+  } else {
+    actionWithAuthHeader.payload = { Authorization: getAuthHeader(token) };
+  }
+
   return actionWithAuthHeader;
 }
 
@@ -49,7 +54,7 @@ export default ({ dispatch, getState }) => next => action => {
     }
     if (tokenExpired(state)) {
       buffer.push(action);
-      dispatch(authOperations.refreshToken(state.auth.refresh_token));
+      dispatch(authOperations.refreshToken());
     } else {
       return next(getActionWithAuthHeader(action, state.auth.access_token));
     }

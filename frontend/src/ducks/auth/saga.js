@@ -26,7 +26,7 @@ function logoutUser() {
 
 function* tryRefreshToken(action) {
   try {
-    const token = yield call(refreshToken, action.payload);
+    const token = yield call(refreshToken, action.payload.Authorization);
     yield put(authActions.refreshTokenSuccess(token));
   } catch (e) {
     yield put(authActions.refreshTokenFailure(e));

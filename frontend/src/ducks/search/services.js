@@ -3,7 +3,7 @@ import config from "config";
 
 function handleError(error) {
   if (error.response) {
-    console.log(error.toJSON());
+    console.error(error.toJSON());
     return Promise.reject(error.toJSON());
   }
   return error;
@@ -14,8 +14,6 @@ function handleResponse(response) {
 }
 
 function autocomplete(phrase, accessToken) {
-  console.log("search service");
-  console.log(accessToken);
   const headers = {
     Accept: "application/json",
     Authorization: accessToken

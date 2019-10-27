@@ -23,10 +23,9 @@ function logout() {
   return { type: types.LOGOUT };
 }
 
-function refreshToken(token) {
+function refreshToken() {
   return {
     type: types.REFRESH_TOKEN,
-    payload: token,
     meta: addAuthNeededMeta(REFRESH_TOKEN)
   };
 }
