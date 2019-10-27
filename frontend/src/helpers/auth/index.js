@@ -1,4 +1,4 @@
-export { getAuthHeader } from "./header";
+export { default as getAuthHeader } from "./header";
 export {
   ACCESS_TOKEN,
   addAuthNeededMeta,
@@ -7,4 +7,4 @@ export {
   REFRESH_TOKEN
 } from "./meta";
 
-export { NotLoggedInException } from "./exceptions";
+export { default as NotLoggedInException } from "./exceptions";

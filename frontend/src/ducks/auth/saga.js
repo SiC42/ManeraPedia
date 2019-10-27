@@ -1,12 +1,12 @@
 import { put, call, takeEvery, takeLeading } from "redux-saga/effects";
 import * as types from "./types";
-import loginService from "./services";
+import { login, logout, refreshToken } from "./services";
 import * as authActions from "./actions";
 
 function* loginUser(action) {
   try {
     const user = yield call(
-      loginService.login,
+      login,
       action.payload.username,
       action.payload.password
     );
@@ -18,15 +18,15 @@ function* loginUser(action) {
 
 function logoutUser() {
   try {
-    loginService.logout();
+    logout();
   } catch (e) {
     console.error(e);
   }
 }
 
-function* refreshToken(action) {
+function* tryRefreshToken(action) {
   try {
-    const token = yield call(loginService.refreshToken, action.payload);
+    const token = yield call(refreshToken, action.payload);
     yield put(authActions.refreshTokenSuccess(token));
   } catch (e) {
     yield put(authActions.refreshTokenFailure(e));
@@ -36,5 +36,5 @@ function* refreshToken(action) {
 export default function* authSaga() {
   yield takeEvery(types.LOGOUT, logoutUser);
   yield takeEvery(types.LOGIN_REQUEST, loginUser);
-  yield takeLeading(types.REFRESH_TOKEN, refreshToken);
+  yield takeLeading(types.REFRESH_TOKEN, tryRefreshToken);
 }

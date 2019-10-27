@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import NotLoggedInException from "helpers/auth";
+import { NotLoggedInException } from "helpers/auth";
 import { authOperations } from "ducks/auth";
 import * as searchActions from "./actions";
 import * as types from "./types";
