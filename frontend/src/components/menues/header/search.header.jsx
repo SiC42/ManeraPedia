@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable react/jsx-props-no-spreading */ // As it is a useful feature in Downshift
 import { Popper } from "@material-ui/core";
 import InputBase from "@material-ui/core/InputBase";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -56,32 +58,36 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function renderSuggestion(suggestionProps) {
-  const {
-    suggestion,
-    index,
-    itemProps,
-    highlightedIndex,
-    selectedItem
-  } = suggestionProps;
+  const { suggestion, index, itemProps, highlightedIndex } = suggestionProps;
   const isHighlighted = highlightedIndex === index;
-  const isSelected = (selectedItem || "").indexOf(suggestion.title) > -1;
   return (
     <MenuItem
       {...itemProps}
       key={suggestion.id}
       selected={isHighlighted}
       component="div"
-      style={{
-        fontWeight: isSelected ? 500 : 400
-      }}
     >
       {suggestion.title}
     </MenuItem>
   );
 }
 
-let popperNode;
+function stateReducer(state, changes) {
+  // this prevents the menu from being closed when the user
+  // selects an item with a keyboard or
+  switch (changes.type) {
+    case Downshift.stateChangeTypes.keyDownEnter:
+    case Downshift.stateChangeTypes.clickItem:
+      return {
+        ...changes,
+        inputValue: ""
+      };
+    default:
+      return changes;
+  }
+}
 
+let popperNode;
 export default function Search() {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -101,14 +107,13 @@ export default function Search() {
   };
 
   return (
-    <Downshift onChange={fetchSelectedArticle}>
+    <Downshift onChange={fetchSelectedArticle} stateReducer={stateReducer}>
       {({
         getInputProps,
         getItemProps,
         getMenuProps,
         isOpen,
-        highlightedIndex,
-        selectedItem
+        highlightedIndex
       }) => {
         return (
           <div>
@@ -121,7 +126,9 @@ export default function Search() {
                 inputRef={node => {
                   popperNode = node;
                 }}
-                inputProps={getInputProps({ onChange: fetchSuggestions })}
+                inputProps={getInputProps({
+                  onChange: fetchSuggestions
+                })}
                 classes={{
                   root: classes.inputRoot,
                   input: classes.inputInput
@@ -150,8 +157,7 @@ export default function Search() {
                       suggestion,
                       index,
                       itemProps: getItemProps({ item: suggestion.title }),
-                      highlightedIndex,
-                      selectedItem
+                      highlightedIndex
                     })
                   )}
                 </Paper>
