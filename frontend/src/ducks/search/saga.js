@@ -6,9 +6,10 @@ import * as types from "./types";
 import searchService from "./services";
 
 function* autocompleteTitle(action) {
+  console.log(action);
   try {
     if (!action.payload.Authorization) {
-      throw new NotLoggedInException();
+      throw new NotLoggedInException({ actionType: action.type });
     }
     const suggestions = yield call(
       searchService.autocomplete,

@@ -5,6 +5,9 @@ export default class NotLoggedInException extends Error {
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, NotLoggedInException);
     }
+    if (params.actionType) {
+      this.actionType = params.actionType;
+    }
     this.message = message;
   }
 }
