@@ -1,5 +1,5 @@
 export default class NotLoggedInException extends Error {
-  constructor(message = "You need to be logged in!", ...params) {
+  constructor(...params) {
     super(...params);
 
     if (Error.captureStackTrace) {
@@ -8,6 +8,6 @@ export default class NotLoggedInException extends Error {
     if (params.actionType) {
       this.actionType = params.actionType;
     }
-    this.message = message;
+    this.message = "You need to be logged in!";
   }
 }
