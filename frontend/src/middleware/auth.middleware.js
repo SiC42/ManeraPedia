@@ -43,7 +43,7 @@ export default ({ dispatch, getState }) => next => action => {
 
   // Catch actions which need the refresh token
   if (getAuthMetaType(action) === REFRESH_TOKEN) {
-    next(getActionWithAuthHeader(action, state.auth.refresh_token));
+    return next(getActionWithAuthHeader(action, state.auth.refresh_token));
   }
 
   // Catch actions which need the access token
@@ -59,5 +59,4 @@ export default ({ dispatch, getState }) => next => action => {
       return next(getActionWithAuthHeader(action, state.auth.access_token));
     }
   }
-  return next(action);
 };
