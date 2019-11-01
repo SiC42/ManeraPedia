@@ -20,7 +20,7 @@ export default function auth(state = initialState, action) {
     case types.LOGOUT:
       return {};
     case types.LOGIN_NEEDED:
-      return { ...state, ...action.payload, loginError: true };
+      return { ...state, message: action.payload, loginError: true };
     case types.LOGIN_ERROR_CLEARED:
       return { ...state, loginError: false };
     case types.REFRESH_TOKEN:

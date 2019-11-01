@@ -6,7 +6,6 @@ import * as types from "./types";
 import searchService from "./services";
 
 function* autocompleteTitle(action) {
-  console.log(action);
   try {
     if (!action.payload.Authorization) {
       throw new NotLoggedInException({ actionType: action.type });
@@ -19,7 +18,7 @@ function* autocompleteTitle(action) {
     yield put(searchActions.autocompleteSuccess(suggestions));
   } catch (e) {
     if (e instanceof NotLoggedInException) {
-      yield put(authOperations.loginNeeded(e));
+      yield put(authOperations.loginNeeded(e.message));
     }
     yield put(searchActions.autocompleteFailure(e));
   }
