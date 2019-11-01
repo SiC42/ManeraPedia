@@ -57,40 +57,55 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function renderSuggestion(suggestionProps) {
-  const { suggestion, index, itemProps, highlightedIndex } = suggestionProps;
-  const isHighlighted = highlightedIndex === index;
-  return (
-    <MenuItem
-      {...itemProps}
-      key={suggestion.id}
-      selected={isHighlighted}
-      component="div"
-    >
-      {suggestion.title}
-    </MenuItem>
-  );
-}
-
-function stateReducer(state, changes) {
-  // this prevents the menu from being closed when the user
-  // selects an item with a keyboard or
-  switch (changes.type) {
-    case Downshift.stateChangeTypes.keyDownEnter:
-    case Downshift.stateChangeTypes.clickItem:
-      return {
-        ...changes,
-        inputValue: ""
-      };
-    default:
-      return changes;
-  }
-}
-
 let popperNode;
 export default function Search() {
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  function renderSuggestion(suggestionProps) {
+    const { suggestion, index, itemProps, highlightedIndex } = suggestionProps;
+    const isHighlighted = highlightedIndex === index;
+    return (
+      <MenuItem
+        {...itemProps}
+        key={suggestion.id}
+        selected={isHighlighted}
+        component="div"
+      >
+        {suggestion.title}
+      </MenuItem>
+    );
+  }
+
+  const suggestions = useSelector(state =>
+    state.search.suggestions ? state.search.suggestions : []
+  );
+
+  function downshiftReducer(state, changes) {
+    console.log(state);
+    console.log(changes);
+    switch (changes.type) {
+      case Downshift.stateChangeTypes.keyDownArrowUp:
+        if (state.highlightedIndex === 0) {
+          return { ...changes, highlightedIndex: null };
+        }
+        return changes;
+      case Downshift.stateChangeTypes.keyDownArrowDown:
+        if (state.highlightedIndex === suggestions.length) {
+          return { ...changes, highlightedIndex: null };
+        }
+        return changes;
+
+      case Downshift.stateChangeTypes.keyDownEnter:
+      case Downshift.stateChangeTypes.clickItem:
+        return {
+          ...changes,
+          inputValue: ""
+        };
+      default:
+        return changes;
+    }
+  }
 
   const fetchSuggestions = event => {
     if (!event.target.value) {
@@ -98,22 +113,27 @@ export default function Search() {
     }
     dispatch(searchOperations.autocompleteRequest(event.target.value));
   };
-  const suggestions = useSelector(state =>
-    state.search.suggestions ? state.search.suggestions : []
-  );
 
   const fetchSelectedArticle = selection => {
     dispatch(searchOperations.getArticleRequest(selection));
   };
 
+  const handleEnter = reset => event => {
+    if (event.key === "Enter") {
+      console.log("Searching");
+      reset({ type: Downshift.stateChangeTypes.keyDownEnter });
+    }
+  };
+
   return (
-    <Downshift onChange={fetchSelectedArticle} stateReducer={stateReducer}>
+    <Downshift onChange={fetchSelectedArticle} stateReducer={downshiftReducer}>
       {({
         getInputProps,
         getItemProps,
         getMenuProps,
         isOpen,
-        highlightedIndex
+        highlightedIndex,
+        reset
       }) => {
         return (
           <div>
@@ -122,7 +142,7 @@ export default function Search() {
                 <SearchIcon />
               </div>
               <InputBase
-                onChange={fetchSuggestions}
+                onKeyPress={handleEnter(reset)}
                 inputRef={node => {
                   popperNode = node;
                 }}
@@ -156,7 +176,9 @@ export default function Search() {
                     renderSuggestion({
                       suggestion,
                       index,
-                      itemProps: getItemProps({ item: suggestion.title }),
+                      itemProps: getItemProps({
+                        item: suggestion.title
+                      }),
                       highlightedIndex
                     })
                   )}
