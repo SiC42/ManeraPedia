@@ -10,11 +10,14 @@ function* autocompleteTitle(action) {
     if (!action.payload.Authorization) {
       throw new NotLoggedInException({ actionType: action.type });
     }
-    const suggestions = yield call(
-      searchService.autocomplete,
-      action.payload.phrase,
-      action.payload.Authorization
-    );
+    let suggestions = [];
+    if (action.payload.phrase !== "") {
+      suggestions = yield call(
+        searchService.autocomplete,
+        action.payload.phrase,
+        action.payload.Authorization
+      );
+    }
     yield put(searchActions.autocompleteSuccess(suggestions));
   } catch (e) {
     if (e instanceof NotLoggedInException) {
