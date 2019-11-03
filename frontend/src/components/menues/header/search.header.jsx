@@ -70,8 +70,10 @@ export default function Search() {
     dispatch(searchOperations.autocompleteRequest(event.target.value));
   };
 
-  const fetchSelectedArticle = selection => {
-    dispatch(searchOperations.getArticleRequest(selection));
+  const fetchSelectedArticle = (title, tryExact) => {
+    dispatch(
+      searchOperations.getArticleRequest({ title, tryExact, focus: true })
+    );
   };
 
   const { input, inputProps, Popper, selectedItem } = useAutocomplete({

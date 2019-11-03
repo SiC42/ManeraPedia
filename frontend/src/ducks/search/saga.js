@@ -32,12 +32,11 @@ function* getArticle(action) {
     if (!action.payload.Authorization) {
       throw new NotLoggedInException();
     }
-    const article = yield call(
-      searchService.getArticle,
-      action.payload.title,
-      action.payload.Authorization
-    );
-    yield put(searchActions.getArticleSuccess(article));
+    const article = yield call(searchService.getArticle, {
+      title: action.payload.title,
+      tryExact: action.payload.tryExact,
+      Authorization: action.payload.Authorization
+    });
   } catch (e) {
     if (e instanceof NotLoggedInException) {
       yield put(authOperations.loginNeeded(e));

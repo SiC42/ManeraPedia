@@ -38,12 +38,13 @@ export default function useAutocomplete(props) {
 
   const handleEnter = event => {
     if (selectedItem === null) {
-      onEnterFunction(input);
+      onEnterFunction(input, true);
       event.target.blur();
       setInput("");
     } else if (selectedItem === suggestions.length) {
-      // we selected the last menu item (no actual article)
-      // TODO: immediately search instead trying to fetch first
+      onEnterFunction(input, false);
+      event.target.blur();
+      setInput("");
     } else {
       setInput(suggestions[selectedItem].title);
       setInputFocused(false);

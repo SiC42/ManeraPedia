@@ -32,17 +32,17 @@ function autocomplete(phrase, accessToken) {
     .catch(handleError);
 }
 
-function getArticle(title, accessToken) {
+function getArticle({ title, Authorization, tryExact }) {
   const headers = {
     Accept: "application/json",
-    Authorization: accessToken
+    Authorization
   };
   return axios
     .create({
       headers
     })
     .get(`${config.apiUrl}/article`, {
-      params: { title }
+      params: { title, tryExact }
     })
     .then(handleResponse)
     .then(suggestions => {
