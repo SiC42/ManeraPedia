@@ -1,7 +1,7 @@
 import * as types from "./types";
 
-function add(tab) {
-  return { type: types.ADD_TAB, payload: tab };
+function add(article, focus) {
+  return { type: types.ADD_TAB, payload: { article, focus } };
 }
 
 function remove(index) {

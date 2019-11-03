@@ -1,1 +1,4 @@
-export { default } from "./auth.middleware";
+import auth from "./auth.middleware";
+import tabs from "./tabs.middleware";
+
+export default [auth, tabs];

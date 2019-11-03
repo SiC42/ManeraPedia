@@ -15,15 +15,19 @@ function autocompleteFailure(error) {
   return { type: types.AUTOCOMPLETE_FAILURE, payload: error };
 }
 
-function getArticleRequest({ title, tryExact }) {
+function getArticleRequest({ title, tryExact, focus }) {
   return {
     type: types.GET_ARTICLE_REQUEST,
-    payload: { title, tryExact },
+    payload: { title, tryExact, focus },
     meta: addAuthNeededMeta(ACCESS_TOKEN)
   };
 }
-function getArticleSuccess(article) {
-  return { type: types.GET_ARTICLE_SUCCESS, payload: article };
+
+function getArticleSuccess(article, focus) {
+  return {
+    type: types.GET_ARTICLE_SUCCESS,
+    payload: { article, focus }
+  };
 }
 function getArticleFailure(error) {
   return { type: types.GET_ARTICLE_FAILURE, payload: error };

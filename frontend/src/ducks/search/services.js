@@ -32,7 +32,8 @@ function autocomplete(phrase, accessToken) {
     .catch(handleError);
 }
 
-function getArticle({ title, Authorization, tryExact }) {
+function getArticle(options) {
+  const { title, Authorization, tryExact } = options;
   const headers = {
     Accept: "application/json",
     Authorization

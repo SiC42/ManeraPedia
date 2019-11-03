@@ -1,6 +1,6 @@
 import Wiki from "components/wiki";
 import reducers, { rootSaga } from "ducks";
-import authMiddleware from "middleware";
+import middlewares from "middleware";
 import React from "react";
 import { render } from "react-dom";
 import { Provider } from "react-redux";
@@ -17,7 +17,7 @@ const composeEnhancers =
   compose;
 const store = createStore(
   rootReducer,
-  composeEnhancers(applyMiddleware(authMiddleware, sagaMiddleware))
+  composeEnhancers(applyMiddleware(...middlewares, sagaMiddleware))
 );
 
 sagaMiddleware.run(rootSaga);

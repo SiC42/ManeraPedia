@@ -1,7 +1,8 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { NotLoggedInException } from "helpers/auth";
 import { authOperations } from "ducks/auth";
-import * as searchActions from "./actions";
+import { changeActiveTab } from "ducks/tabs/operations";
+import * as searchOperations from "./operations";
 import * as types from "./types";
 import searchService from "./services";
 
@@ -18,12 +19,12 @@ function* autocompleteTitle(action) {
         action.payload.Authorization
       );
     }
-    yield put(searchActions.autocompleteSuccess(suggestions));
+    yield put(searchOperations.autocompleteSuccess(suggestions));
   } catch (e) {
     if (e instanceof NotLoggedInException) {
       yield put(authOperations.loginNeeded(e.message));
     }
-    yield put(searchActions.autocompleteFailure(e));
+    yield put(searchOperations.autocompleteFailure(e));
   }
 }
 
@@ -37,11 +38,15 @@ function* getArticle(action) {
       tryExact: action.payload.tryExact,
       Authorization: action.payload.Authorization
     });
+    yield put(searchOperations.getArticleSuccess(article));
+    if (action.payload.focus) {
+      yield put(changeActiveTab(-1));
+    }
   } catch (e) {
     if (e instanceof NotLoggedInException) {
       yield put(authOperations.loginNeeded(e));
     }
-    yield put(searchActions.getArticleFailure(e));
+    yield put(searchOperations.getArticleFailure(e.message));
   }
 }
 
