@@ -12,48 +12,53 @@ import { searchOperations } from "ducks/search/";
 import { useDispatch, useSelector } from "react-redux";
 
 const useStyles = makeStyles(theme => ({
-  search: {
-    position: "relative",
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    "&:hover": {
-      backgroundColor: fade(theme.palette.common.white, 0.25)
+  inputInput: {
+    [theme.breakpoints.up("sm")]: {
+      "&:focus": {
+        width: 200
+      },
+      width: 120
     },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: "100%",
+    height: "1.1875em",
+    padding: theme.spacing(1, 1, 1, 6),
+    transition: theme.transitions.create("width")
+  },
+  inputRoot: {
+    color: "inherit",
+    lineHeight: "1.1875em"
+  },
+  popper: {
+    left: 0,
+    marginLeft: theme.spacing(4),
+    maxHeight: 400,
+    overflowY: "scroll",
+    right: 0,
+    width: 200 + theme.spacing(7),
+    zIndex: theme.zIndex.modal
+  },
+  search: {
     [theme.breakpoints.up("sm")]: {
       marginLeft: theme.spacing(3),
       width: "auto"
-    }
+    },
+    "&:hover": {
+      backgroundColor: fade(theme.palette.common.white, 0.25)
+    },
+    backgroundColor: fade(theme.palette.common.white, 0.15),
+    borderRadius: theme.shape.borderRadius,
+    marginLeft: 0,
+    marginRight: theme.spacing(2),
+    position: "relative",
+    width: "100%"
   },
   searchIcon: {
-    width: theme.spacing(7),
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
     alignItems: "center",
-    justifyContent: "center"
-  },
-  inputRoot: {
-    color: "inherit"
-  },
-  inputInput: {
-    padding: theme.spacing(1, 1, 1, 7),
-    transition: theme.transitions.create("width"),
-    [theme.breakpoints.up("sm")]: {
-      width: 120,
-      "&:focus": {
-        width: 200
-      }
-    }
-  },
-  paper: {
-    zIndex: 1202,
-    left: 0,
-    right: 0,
-    marginLeft: theme.spacing(4)
+    display: "flex",
+    height: "100%",
+    justifyContent: "center",
+    pointerEvents: "none",
+    position: "absolute",
+    width: theme.spacing(7)
   }
 }));
 
