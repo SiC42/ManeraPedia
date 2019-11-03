@@ -1,7 +1,6 @@
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import { authOperations } from "ducks/auth";
-import { tabOperations } from "ducks/tab";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Content from "../content";
@@ -25,20 +24,12 @@ const useStyles = makeStyles(theme => ({
 
 export default function Wiki() {
   const classes = useStyles();
-  const [activeTabId, setActiveTab] = React.useState(0);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
-  const tabs = useSelector(state => state.tabs);
+  const tabs = useSelector(state => state.tabs.list);
+  const activeTabId = useSelector(state =>
+    state.tabs.activeTabId ? state.tabs.activeTabId : 0
+  );
   const dispatch = useDispatch();
-  const changeTabs = (event, newActiveTabId) => {
-    if (event.target.id === "closeTab") {
-      if (activeTabId >= tabs.length - 1) {
-        setActiveTab(activeTabId - 1);
-      }
-      dispatch(tabOperations.remove(newActiveTabId));
-    } else {
-      setActiveTab(newActiveTabId);
-    }
-  };
 
   function toggleDrawer() {
     setDrawerOpen(!drawerOpen);
@@ -62,13 +53,7 @@ export default function Wiki() {
   return (
     <div className={classes.root}>
       <Header toggleDrawer={toggleDrawer} />
-      <Tabs
-        articles={tabs}
-        changeActiveTab={changeTabs}
-        activeTabId={activeTabId}
-        toggleDrawer={toggleDrawer}
-        drawerOpen={drawerOpen}
-      />
+      <Tabs toggleDrawer={toggleDrawer} drawerOpen={drawerOpen} />
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <Container maxWidth="md">{buildArticles(tabs)}</Container>

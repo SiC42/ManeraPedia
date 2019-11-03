@@ -8,4 +8,8 @@ function remove(index) {
   return { type: types.REMOVE_TAB, payload: index };
 }
 
-export { add, remove };
+function changeActiveTab(index) {
+  return { type: types.CHANGE_ACTIVE_TAB, payload: index };
+}
+
+export { add, remove, changeActiveTab };

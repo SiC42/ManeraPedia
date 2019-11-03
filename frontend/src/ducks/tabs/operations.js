@@ -1,3 +1,3 @@
-import { add, remove } from "./actions";
+import { add, remove, changeActiveTab } from "./actions";
 
-export { add, remove };
+export { add, remove, changeActiveTab };

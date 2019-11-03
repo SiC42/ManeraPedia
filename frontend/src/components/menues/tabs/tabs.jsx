@@ -1,9 +1,11 @@
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
-import MaterialTabs from "@material-ui/core/Tabs";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import React from "react";
 import Tab from "@material-ui/core/Tab";
+import MaterialTabs from "@material-ui/core/Tabs";
+import { tabOperations } from "ducks/tabs";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import TabContent from "./tab";
 
 const maxDrawerWidth = 450;
@@ -39,42 +41,50 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Tabs(props) {
-  const {
-    articles,
-    container,
-    drawerOpen,
-    changeActiveTab,
-    activeTabId,
-    toggleDrawer
-  } = props;
+  const { container, drawerOpen, toggleDrawer } = props;
   const classes = useStyles();
   const theme = useTheme();
 
-  const setDrawer = () => {
-    return (
-      <>
-        <div className={classes.toolbar} />
-        <MaterialTabs
-          orientation="vertical"
-          variant="scrollable"
-          value={activeTabId}
-          onChange={changeActiveTab}
-          aria-label="Vertical menu tabs"
-          className={classes.tabs}
-        >
-          {articles.map((article, index) => (
-            <Tab
-              label={<TabContent title={article.title} />}
-              key={article.id}
-              title={article.title}
-              index={index}
-              className={classes.itemWrapper}
-            />
-          ))}
-        </MaterialTabs>
-      </>
-    );
+  const activeTabId = useSelector(state => state.tabs.activeTabId);
+  const tabs = useSelector(state => {
+    return state.tabs.list ? state.tabs.list : [];
+  });
+
+  const dispatch = useDispatch();
+  const changeActiveTab = (event, newActiveTab) => {
+    if (event.target.id === "closeTab") {
+      if (activeTabId >= tabs.length) {
+        dispatch(tabOperations.changeActiveTab(activeTabId - 1));
+      }
+      dispatch(tabOperations.remove(newActiveTab));
+    } else {
+      dispatch(tabOperations.changeActiveTab(newActiveTab));
+    }
   };
+
+  const getDrawer = () => (
+    <>
+      <div className={classes.toolbar} />
+      <MaterialTabs
+        orientation="vertical"
+        variant="scrollable"
+        value={activeTabId}
+        onChange={changeActiveTab}
+        aria-label="Vertical menu tabs"
+        className={classes.tabs}
+      >
+        {tabs.map((tab, index) => (
+          <Tab
+            label={<TabContent title={tab.title} />}
+            key={tab.id}
+            title={tab.title}
+            index={index}
+            className={classes.itemWrapper}
+          />
+        ))}
+      </MaterialTabs>
+    </>
+  );
 
   return (
     <nav className={classes.drawer} aria-label="mailbox folders">
@@ -93,7 +103,7 @@ export default function Tabs(props) {
             style: { zIndex: 1 } // Get it behind the Nav Bar
           }}
         >
-          {setDrawer(true)}
+          {getDrawer()}
         </Drawer>
       </Hidden>
       <Hidden xsDown implementation="css">
@@ -104,7 +114,7 @@ export default function Tabs(props) {
           variant="permanent"
           open
         >
-          {setDrawer(false)}
+          {getDrawer()}
         </Drawer>
       </Hidden>
     </nav>
