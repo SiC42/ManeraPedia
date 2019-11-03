@@ -52,6 +52,11 @@ export default function useAutocomplete(props) {
     }
   };
 
+  const handleClick = event => {
+    onEnterFunction(event.target.getAttribute("value"));
+    setInput("");
+  };
+
   const handleInputKeyPress = event => {
     switch (event.key) {
       case "Enter":
@@ -77,7 +82,9 @@ export default function useAutocomplete(props) {
 
   const inputProps = {
     inputRef,
-    onBlur: () => setInputFocused(false),
+    onBlur: e => {
+      setInputFocused(false);
+    },
     onChange: onInputChange,
     onFocus: () => setInputFocused(true),
     onKeyDown: handleInputKeyPress,
@@ -93,6 +100,8 @@ export default function useAutocomplete(props) {
         key={suggestion.title}
         selected={selected}
         component="div"
+        onMouseDown={handleClick}
+        value={suggestion.title}
       >
         {suggestion.title}
       </MenuItem>
