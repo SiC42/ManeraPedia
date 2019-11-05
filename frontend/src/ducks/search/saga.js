@@ -49,7 +49,12 @@ function* getArticle(action) {
       yield put(searchOperations.getArticleFailure(e.message));
     }
     if (e instanceof ArticleNotFoundException) {
-      yield put(searchOperations.searchRequest(action.payload.title));
+      yield put(
+        searchOperations.searchRequest({
+          query: action.payload.title,
+          focus: false
+        })
+      );
     } else {
       yield put(searchOperations.getArticleFailure(e.message));
     }
@@ -65,7 +70,10 @@ function* search(action) {
       query: action.payload.query,
       Authorization: action.payload.Authorization
     });
-    yield put(searchOperations.searchSuccess(results));
+    results.type = "search/results";
+    results.title = `Search results for ${action.payload.query}`;
+    yield put(searchOperations.searchSuccess());
+    yield put(add(results));
   } catch (e) {
     if (e instanceof NotLoggedInException) {
       yield put(authOperations.loginNeeded(e));

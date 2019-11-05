@@ -35,17 +35,16 @@ function getArticleFailure(error) {
 }
 
 // ============ SEARCH ============
-function searchRequest(query) {
+function searchRequest({ query, focus }) {
   return {
     type: types.SEARCH_REQUEST,
-    payload: { query },
+    payload: { query, focus },
     meta: addAuthNeededMeta(ACCESS_TOKEN)
   };
 }
-function searchSuccess(results) {
+function searchSuccess() {
   return {
-    type: types.SEARCH_SUCCESS,
-    payload: results
+    type: types.SEARCH_SUCCESS
   };
 }
 function searchFailure(error) {

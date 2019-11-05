@@ -85,7 +85,7 @@ export default function Search() {
   const searchForArticles = event => {
     dispatch(
       searchOperations.searchRequest({
-        title: event.target.getAttribute("value"),
+        query: event.target.getAttribute("value"),
         focus: true
       })
     );
