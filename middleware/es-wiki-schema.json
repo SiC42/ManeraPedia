@@ -1,0 +1,77 @@
+{
+  "settings": {
+    "analysis": {
+      "normalizer": {
+        "keyword_normalizer": {
+          "type": "custom",
+          "char_filter": [],
+          "filter": ["lowercase", "asciifolding"]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "created": {
+        "type": "date"
+      },
+      "modified": {
+        "type": "date"
+      },
+      "modifier": {
+        "type": "text",
+        "fields": {
+          "raw": {
+            "type": "keyword",
+            "normalizer": "keyword_normalizer"
+          }
+        }
+      },
+      "creator": {
+        "type": "text",
+        "fields": {
+          "raw": {
+            "type": "keyword",
+            "normalizer": "keyword_normalizer"
+          }
+        }
+      },
+      "title": {
+        "type": "text",
+        "copy_to": "body",
+        "fields": {
+          "raw": {
+            "type": "keyword",
+            "normalizer": "keyword_normalizer"
+          },
+          "completion": {
+            "type": "search_as_you_type"
+          }
+        },
+        "analyzer": "standard"
+      },
+      "text": {
+        "type": "text",
+        "copy_to": "body"
+      },
+      "tags": {
+        "type": "keyword",
+        "normalizer": "keyword_normalizer",
+        "copy_to": "body"
+      },
+      "type": {
+        "type": "keyword",
+        "normalizer": "keyword_normalizer"
+      },
+      "access": {
+        "properties": {
+          "read": { "type": "keyword", "normalizer": "keyword_normalizer" },
+          "write": { "type": "keyword", "normalizer": "keyword_normalizer" }
+        }
+      },
+      "body": {
+        "type": "text"
+      }
+    }
+  }
+}
