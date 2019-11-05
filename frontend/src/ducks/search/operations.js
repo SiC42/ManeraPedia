@@ -4,7 +4,10 @@ import {
   autocompleteSuccess,
   getArticleRequest,
   getArticleSuccess,
-  getArticleFailure
+  getArticleFailure,
+  searchRequest,
+  searchSuccess,
+  searchFailure
 } from "./actions";
 
 export {
@@ -13,5 +16,8 @@ export {
   autocompleteSuccess,
   getArticleRequest,
   getArticleSuccess,
-  getArticleFailure
+  getArticleFailure,
+  searchRequest,
+  searchSuccess,
+  searchFailure
 };
