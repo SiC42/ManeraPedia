@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { authOperations } from "ducks/auth";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Content from "../content";
+import Content, { Search } from "../content";
 import Header from "../menues/header";
 import Snackbar from "../menues/snackbar";
 import Tabs from "../menues/tabs";
@@ -54,18 +54,18 @@ export default function Wiki() {
       }
       if (tab.type === "search/results") {
         return (
-          <Content
-            key={tab.id}
+          <Search
+            key={`Search Results ${index}`}
             index={index}
             activeTabId={activeTabId}
             title="Search Results"
-            text={tab.hits}
+            results={tab.results}
           />
         );
       }
       return (
         <Content
-          key={tab.id}
+          key={`Error ${index}`}
           index={index}
           activeTabId={activeTabId}
           title="Woops"
