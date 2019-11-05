@@ -35,7 +35,6 @@ function* getArticle(action) {
     }
     const article = yield call(searchService.getArticle, {
       title: action.payload.title,
-      tryExact: action.payload.tryExact,
       Authorization: action.payload.Authorization
     });
     yield put(searchOperations.getArticleSuccess(article));

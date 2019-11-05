@@ -33,7 +33,7 @@ function autocomplete(phrase, accessToken) {
 }
 
 function getArticle(options) {
-  const { title, Authorization, tryExact } = options;
+  const { title, Authorization } = options;
   const headers = {
     Accept: "application/json",
     Authorization
@@ -43,7 +43,7 @@ function getArticle(options) {
       headers
     })
     .get(`${config.apiUrl}/article`, {
-      params: { title, tryExact }
+      params: { title }
     })
     .then(handleResponse)
     .then(suggestions => {

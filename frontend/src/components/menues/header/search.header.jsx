@@ -70,17 +70,22 @@ export default function Search() {
     dispatch(searchOperations.autocompleteRequest(event.target.value));
   };
 
-  const fetchSelectedArticle = (title, tryExact) => {
+  const fetchSelectedArticle = title => {
+    dispatch(searchOperations.getArticleRequest({ title, focus: true }));
+  };
+
+  const { input, setInput, inputProps, Popper, selectedItem } = useAutocomplete(
+    {
+      suggestions,
+      onEnterFunction: fetchSelectedArticle,
+      fetchSuggestionsFunction: fetchSuggestions
+    }
+  );
+
     dispatch(
       searchOperations.getArticleRequest({ title, tryExact, focus: true })
     );
   };
-
-  const { input, inputProps, Popper, selectedItem } = useAutocomplete({
-    suggestions,
-    onEnterFunction: fetchSelectedArticle,
-    fetchSuggestionsFunction: fetchSuggestions
-  });
 
   const renderInput = () => {
     return (

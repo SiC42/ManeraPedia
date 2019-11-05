@@ -15,10 +15,10 @@ function autocompleteFailure(error) {
   return { type: types.AUTOCOMPLETE_FAILURE, payload: error };
 }
 
-function getArticleRequest({ title, tryExact, focus }) {
+function getArticleRequest({ title, focus }) {
   return {
     type: types.GET_ARTICLE_REQUEST,
-    payload: { title, tryExact, focus },
+    payload: { title, focus },
     meta: addAuthNeededMeta(ACCESS_TOKEN)
   };
 }
