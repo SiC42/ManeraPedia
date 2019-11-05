@@ -39,16 +39,40 @@ export default function Wiki() {
   const clearError = () => {
     dispatch(authOperations.clearLoginError());
   };
-  const buildArticles = articleList =>
-    articleList.map((article, index) => (
-      <Content
-        key={article.id}
-        index={index}
-        activeTabId={activeTabId}
-        title={article.title}
-        text={article.text}
-      />
-    ));
+  const buildTabContent = () =>
+    tabs.map((tab, index) => {
+      if (tab.type === "text/article") {
+        return (
+          <Content
+            key={tab.id}
+            index={index}
+            activeTabId={activeTabId}
+            title={tab.title}
+            text={tab.text}
+          />
+        );
+      }
+      if (tab.type === "search/results") {
+        return (
+          <Content
+            key={tab.id}
+            index={index}
+            activeTabId={activeTabId}
+            title="Search Results"
+            text={tab.hits}
+          />
+        );
+      }
+      return (
+        <Content
+          key={tab.id}
+          index={index}
+          activeTabId={activeTabId}
+          title="Woops"
+          text={`Something went wrong. We are sorry. We couldn't recognize type ${tab.type}`}
+        />
+      );
+    });
 
   return (
     <div className={classes.root}>
@@ -56,7 +80,7 @@ export default function Wiki() {
       <Tabs toggleDrawer={toggleDrawer} drawerOpen={drawerOpen} />
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Container maxWidth="md">{buildArticles(tabs)}</Container>
+        <Container maxWidth="md">{buildTabContent()}</Container>
         <Snackbar
           open={open}
           setOpen={clearError}
