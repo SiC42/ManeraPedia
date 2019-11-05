@@ -10,10 +10,12 @@ function handleError(error) {
     console.log(error.response.status);
     console.log(error.response.headers);
     if (error.response.status === 404) {
-      throw new ArticleNotFoundException({
-        message: error.response.data,
-        request: error.request
-      });
+      return Promise.reject(
+        new ArticleNotFoundException({
+          message: error.response.data,
+          request: error.request
+        })
+      );
     }
   } else if (error.request) {
     // The request was made but no response was received
@@ -71,7 +73,28 @@ function getArticle(options) {
     .catch(handleError);
 }
 
+function search(options) {
+  const { query, Authorization } = options;
+  const headers = {
+    Accept: "application/json",
+    Authorization
+  };
+  return axios
+    .create({
+      headers
+    })
+    .get(`${config.apiUrl}/search`, {
+      params: { query }
+    })
+    .then(handleResponse)
+    .then(suggestions => {
+      return suggestions;
+    })
+    .catch(handleError);
+}
+
 export default {
   autocomplete,
-  getArticle
+  getArticle,
+  search
 };

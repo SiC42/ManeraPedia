@@ -55,12 +55,27 @@ function* getArticle(action) {
     }
   }
 }
+
+function* search(action) {
+  try {
+    if (!action.payload.Authorization) {
+      throw new NotLoggedInException();
     }
-    yield put(searchOperations.getArticleFailure(e.message));
+    const results = yield call(searchService.search, {
+      query: action.payload.query,
+      Authorization: action.payload.Authorization
+    });
+    yield put(searchOperations.searchSuccess(results));
+  } catch (e) {
+    if (e instanceof NotLoggedInException) {
+      yield put(authOperations.loginNeeded(e));
+      yield put(searchOperations.searchFailure(e.message));
+    }
   }
 }
 
 export default function* searchSaga() {
   yield takeEvery(types.AUTOCOMPLETE_REQUEST, autocompleteTitle);
   yield takeEvery(types.GET_ARTICLE_REQUEST, getArticle);
+  yield takeEvery(types.SEARCH_REQUEST, search);
 }
