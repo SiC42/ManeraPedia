@@ -36,8 +36,8 @@ function getArticleFailure(error) {
 }
 
 // ============ SEARCH ============
-function searchRequest(phrase) {
-  return { type: types.SEARCH_REQUEST, payload: phrase };
+function searchRequest(query) {
+  return { type: types.SEARCH_REQUEST, payload: { query } };
 }
 function searchSuccess(results) {
   return {
