@@ -25,7 +25,7 @@ def get_article():
         article = esw.articles.get_article_by_title(
             request.args.get('title'), claims()["access_groups"])
     if article is None:
-        abort(404)
+        return jsonify({"msg": "Artikle not found."}), 404
     return article
 
 
