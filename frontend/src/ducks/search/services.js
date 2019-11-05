@@ -1,12 +1,31 @@
 import axios from "axios";
 import config from "config";
+import { ArticleNotFoundException } from "helpers/search";
 
 function handleError(error) {
   if (error.response) {
-    console.error(error.toJSON());
-    return Promise.reject(error.toJSON());
+    // The request was made and the server responded with a status code
+    // that falls out of the range of 2xx
+    console.log(error.response.data);
+    console.log(error.response.status);
+    console.log(error.response.headers);
+    if (error.response.status === 404) {
+      throw new ArticleNotFoundException({
+        message: error.response.data,
+        request: error.request
+      });
+    }
+  } else if (error.request) {
+    // The request was made but no response was received
+    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+    // http.ClientRequest in node.js
+    console.log(error.request);
+  } else {
+    // Something happened in setting up the request that triggered an Error
+    console.log("Error", error.message);
   }
-  return error;
+  console.log(error.config);
+  return Promise.reject(error.toJSON());
 }
 
 function handleResponse(response) {
