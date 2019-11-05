@@ -28,7 +28,6 @@ def get_article_by_title(title, access_groups):
     s = s.filter(access_filter(access_groups))
     s = s.query("term", title__raw=title)
     s = s.source(excludes=["access"])
-    print(s.to_dict())
     res = s.execute()
     return format_article(res)
 
