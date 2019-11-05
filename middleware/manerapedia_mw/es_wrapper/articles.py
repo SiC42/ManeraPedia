@@ -66,7 +66,17 @@ def search(query, access_groups):
     q = Q("bool", must=Q("match", body=query))
     s = s.query(q)
     res = s.execute()
-    return {"results": res.to_dict()["hits"]["hits"]}
+    results = res.to_dict()["hits"]["hits"]
+    for result in results:
+        if "_index" in result:
+            del result["_index"]
+        if "_type" in result:
+            del result["_type"]
+        for key, value in result["_source"].items():
+            result[key] = value
+        del result["_source"]
+
+    return {"results": results}
 
 
 def title_is_unique(title, id=None):
