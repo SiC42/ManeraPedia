@@ -8,6 +8,8 @@ export default function search(state = {}, action) {
       };
     case types.AUTOCOMPLETE_FAILURE:
       return {};
+    case types.GET_ARTICLE_SUCCESS:
+      return {};
     default:
       return state;
   }
