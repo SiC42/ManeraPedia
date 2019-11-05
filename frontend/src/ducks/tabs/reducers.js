@@ -15,9 +15,6 @@ export default function tabs(state = initialState, action) {
     }
     case types.CHANGE_ACTIVE_TAB:
       return { ...state, activeTabId: action.payload };
-    case searchTypes.GET_ARTICLE_SUCCESS: {
-      return { ...state, list: [...state.list, action.payload.article] };
-    }
     default:
       return state;
   }

@@ -25,10 +25,9 @@ function getArticleRequest({ title, focus }) {
   };
 }
 
-function getArticleSuccess(article, focus) {
+function getArticleSuccess() {
   return {
-    type: types.GET_ARTICLE_SUCCESS,
-    payload: { article, focus }
+    type: types.GET_ARTICLE_SUCCESS
   };
 }
 function getArticleFailure(error) {
@@ -37,7 +36,11 @@ function getArticleFailure(error) {
 
 // ============ SEARCH ============
 function searchRequest(query) {
-  return { type: types.SEARCH_REQUEST, payload: { query } };
+  return {
+    type: types.SEARCH_REQUEST,
+    payload: { query },
+    meta: addAuthNeededMeta(ACCESS_TOKEN)
+  };
 }
 function searchSuccess(results) {
   return {

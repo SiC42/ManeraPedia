@@ -1,5 +1,5 @@
 import { authOperations } from "ducks/auth";
-import { changeActiveTab } from "ducks/tabs/operations";
+import { changeActiveTab, add } from "ducks/tabs/operations";
 import { NotLoggedInException } from "helpers/auth";
 import { ArticleNotFoundException } from "helpers/search";
 import { call, put, takeEvery } from "redux-saga/effects";
@@ -38,16 +38,23 @@ function* getArticle(action) {
       title: action.payload.title,
       Authorization: action.payload.Authorization
     });
-    yield put(searchOperations.getArticleSuccess(article));
+    yield put(searchOperations.getArticleSuccess());
+    yield put(add(article));
     if (action.payload.focus) {
       yield put(changeActiveTab(-1));
     }
   } catch (e) {
     if (e instanceof NotLoggedInException) {
       yield put(authOperations.loginNeeded(e));
+      yield put(searchOperations.getArticleFailure(e.message));
     }
     if (e instanceof ArticleNotFoundException) {
       yield put(searchOperations.searchRequest(action.payload.title));
+    } else {
+      yield put(searchOperations.getArticleFailure(e.message));
+    }
+  }
+}
     }
     yield put(searchOperations.getArticleFailure(e.message));
   }
