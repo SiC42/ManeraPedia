@@ -38,11 +38,7 @@ export default function useAutocomplete(props) {
 
   const handleEnter = event => {
     if (selectedItem === null) {
-      onEnterFunction(input, true);
-      event.target.blur();
-      setInput("");
-    } else if (selectedItem === suggestions.length) {
-      onEnterFunction(input, false);
+      onEnterFunction(input);
       event.target.blur();
       setInput("");
     } else {
@@ -139,6 +135,7 @@ export default function useAutocomplete(props) {
 
   return {
     input,
+    setInput,
     inputProps,
     Popper,
     selectedItem
