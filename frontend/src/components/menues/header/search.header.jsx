@@ -113,6 +113,7 @@ export default function Search() {
             key="searchContainsMenuItem"
             selected={selectedItem === suggestions.length}
             component="div"
+            value={input}
             onMouseDown={searchForArticles}
           >
             <i>containing... </i>
