@@ -82,9 +82,14 @@ export default function Search() {
     }
   );
 
+  const searchForArticles = event => {
     dispatch(
-      searchOperations.getArticleRequest({ title, tryExact, focus: true })
+      searchOperations.searchRequest({
+        title: event.target.getAttribute("value"),
+        focus: true
+      })
     );
+    setInput("");
   };
 
   const renderInput = () => {
@@ -108,6 +113,7 @@ export default function Search() {
             key="searchContainsMenuItem"
             selected={selectedItem === suggestions.length}
             component="div"
+            onMouseDown={searchForArticles}
           >
             <i>containing... </i>
             &nbsp;

@@ -1,10 +1,11 @@
-import { call, put, takeEvery } from "redux-saga/effects";
-import { NotLoggedInException } from "helpers/auth";
 import { authOperations } from "ducks/auth";
 import { changeActiveTab } from "ducks/tabs/operations";
+import { NotLoggedInException } from "helpers/auth";
+import { ArticleNotFoundException } from "helpers/search";
+import { call, put, takeEvery } from "redux-saga/effects";
 import * as searchOperations from "./operations";
-import * as types from "./types";
 import searchService from "./services";
+import * as types from "./types";
 
 function* autocompleteTitle(action) {
   try {
@@ -44,6 +45,9 @@ function* getArticle(action) {
   } catch (e) {
     if (e instanceof NotLoggedInException) {
       yield put(authOperations.loginNeeded(e));
+    }
+    if (e instanceof ArticleNotFoundException) {
+      yield put(searchOperations.searchRequest(action.payload.title));
     }
     yield put(searchOperations.getArticleFailure(e.message));
   }
