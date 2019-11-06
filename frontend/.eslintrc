@@ -29,7 +29,7 @@
   "rules": {
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    "react/jsx-props-no-spreading": "warn",
+    "react/jsx-props-no-spreading": "off", // it is useful for getting props from hooks
     "react/jsx-wrap-multilines": [
       "error",
       { "declaration": false, "assignment": false }
