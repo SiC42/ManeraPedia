@@ -71,7 +71,7 @@ function* search(action) {
       Authorization: action.payload.Authorization
     });
     results.type = "search/results";
-    results.title = `Search results for ${action.payload.query}`;
+    results.title = `Search results for '${action.payload.query}'`;
     yield put(searchOperations.searchSuccess());
     yield put(add(results));
   } catch (e) {
