@@ -57,8 +57,8 @@ export default function Wiki() {
           <Search
             key={`Search Results ${index}`}
             index={index}
+            title={tab.title}
             activeTabId={activeTabId}
-            title="Search Results"
             results={tab.results}
           />
         );
