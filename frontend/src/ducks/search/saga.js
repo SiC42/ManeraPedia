@@ -43,6 +43,9 @@ function* getArticle(action) {
     if (action.payload.focus) {
       yield put(changeActiveTab(-1));
     }
+    if (action.payload.location === "autocomplete") {
+      yield put(searchOperations.clearAutocomplete());
+    }
   } catch (e) {
     if (e instanceof NotLoggedInException) {
       yield put(authOperations.loginNeeded(e));
@@ -72,6 +75,7 @@ function* search(action) {
     });
     results.type = "search/results";
     results.title = `Search results for '${action.payload.query}'`;
+    results.id = results.title;
     yield put(searchOperations.searchSuccess());
     yield put(add(results));
   } catch (e) {

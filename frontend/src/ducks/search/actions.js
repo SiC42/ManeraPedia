@@ -16,11 +16,15 @@ function autocompleteFailure(error) {
   return { type: types.AUTOCOMPLETE_FAILURE, payload: error };
 }
 
+function clearAutocomplete() {
+  return { type: types.CLEAR_AUTOCOMPLETE };
+}
+
 // ============ GET_ARTICLE ============
-function getArticleRequest({ title, focus }) {
+function getArticleRequest({ title, focus, location }) {
   return {
     type: types.GET_ARTICLE_REQUEST,
-    payload: { title, focus },
+    payload: { title, focus, location },
     meta: addAuthNeededMeta(ACCESS_TOKEN)
   };
 }
@@ -55,6 +59,7 @@ export {
   autocompleteRequest,
   autocompleteFailure,
   autocompleteSuccess,
+  clearAutocomplete,
   getArticleRequest,
   getArticleSuccess,
   getArticleFailure,
