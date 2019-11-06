@@ -6,6 +6,8 @@ import { searchOperations } from "ducks/search/";
 import useAutocomplete from "hooks/useAutocomplete";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Popper as PopperComponent } from "@material-ui/core";
+import Paper from "@material-ui/core/Paper";
 
 const useStyles = makeStyles(theme => ({
   inputInput: {
@@ -62,68 +64,128 @@ export default function Search() {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const suggestions = useSelector(state =>
-    state.search.suggestions ? state.search.suggestions : []
-  );
-
   const fetchSuggestions = event => {
     dispatch(searchOperations.autocompleteRequest(event.target.value));
   };
 
   const fetchSelectedArticle = title => {
-    dispatch(searchOperations.getArticleRequest({ title, focus: true }));
+    dispatch(
+      searchOperations.getArticleRequestFromAutocomplete({ title, focus: true })
+    );
   };
 
-  const { input, setInput, inputProps, Popper, selectedItem } = useAutocomplete(
-    {
-      suggestions,
-      onEnterFunction: fetchSelectedArticle,
-      fetchSuggestionsFunction: fetchSuggestions
-    }
+  const suggestions = useSelector(state =>
+    state.search.suggestions ? state.search.suggestions : []
   );
 
-  const searchForArticles = event => {
+  const {
+    input,
+    inputProps,
+    menuItemProps,
+    popperProps,
+    selectedItem,
+    setInput
+  } = useAutocomplete({
+    fetchSuggestionsFunction: fetchSuggestions,
+    onEnterFunction: fetchSelectedArticle,
+    suggestions
+  });
+
+  const searchForArticles = () => {
     dispatch(
       searchOperations.searchRequest({
-        query: event.target.getAttribute("value"),
+        query: input,
         focus: true
       })
     );
+    dispatch(searchOperations.clearAutocomplete());
     setInput("");
   };
 
-  const renderInput = () => {
+  // Adds behavior to the last menu item that we add in this component
+  const handleEnter = event => {
+    if (event.key === "Enter" && selectedItem === suggestions.length) {
+      searchForArticles();
+      event.target.blur();
+      setInput("");
+    } else {
+      inputProps.onKeyDown(event);
+    }
+  };
+
+  function renderSuggestion(suggestionProps) {
+    const { suggestion, index } = suggestionProps;
+    const selected = selectedItem === index;
     return (
-      <div className={classes.search}>
-        <div className={classes.searchIcon}>
-          <SearchIcon />
-        </div>
-        <InputBase
-          // eslint-disable-next-line react/jsx-props-no-spreading
-          {...inputProps}
-          margin="none"
-          placeholder="Search…"
-          classes={{
-            root: classes.inputRoot,
-            input: classes.inputInput
-          }}
-        />
-        <Popper placement="bottom-end" className={classes.popper}>
-          <MenuItem
-            key="searchContainsMenuItem"
-            selected={selectedItem === suggestions.length}
-            component="div"
-            value={input}
-            onMouseDown={searchForArticles}
-          >
-            <i>containing... </i>
-            &nbsp;
-            {` ${input}`}
-          </MenuItem>
-        </Popper>
-      </div>
+      <MenuItem
+        {...menuItemProps}
+        key={suggestion.title}
+        selected={selected}
+        component="div"
+        value={suggestion.title}
+      >
+        {suggestion.title}
+      </MenuItem>
+    );
+  }
+
+  const LastMenuItem = () => {
+    return (
+      <MenuItem
+        key={`searchContainsMenuItem ${input}`}
+        selected={selectedItem === suggestions.length}
+        component="div"
+        onMouseDown={searchForArticles}
+        value={input}
+      >
+        <i>containing... </i>
+        &nbsp;
+        {` ${input}`}
+      </MenuItem>
     );
   };
 
-  return renderInput();
+  const renderMenuItems = () => {
+    return (
+      <>
+        {suggestions.length > 0 &&
+          suggestions.map((suggestion, index) =>
+            renderSuggestion({
+              suggestion,
+              index
+            })
+          )}
+        <LastMenuItem />
+      </>
+    );
+  };
+
+  return (
+    <div className={classes.search}>
+      <div className={classes.searchIcon}>
+        <SearchIcon />
+      </div>
+      <InputBase
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...inputProps}
+        onKeyDown={handleEnter}
+        margin="none"
+        placeholder="Search…"
+        classes={{
+          root: classes.inputRoot,
+          input: classes.inputInput
+        }}
+      />
+      <PopperComponent
+        placement="bottom-end"
+        className={classes.popper}
+        {...popperProps}
+      >
+        <Paper square>
+          {console.log(renderMenuItems(suggestions)) ||
+            renderMenuItems(suggestions)}
+        </Paper>
+      </PopperComponent>
+    </div>
+  );
 }

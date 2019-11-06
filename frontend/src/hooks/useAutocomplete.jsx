@@ -1,8 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState } from "react";
-import MenuItem from "@material-ui/core/MenuItem";
-import { Popper as PopperComponent } from "@material-ui/core";
-import Paper from "@material-ui/core/Paper";
+import { useState } from "react";
 
 export default function useAutocomplete(props) {
   const { suggestions, onEnterFunction, fetchSuggestionsFunction } = props;
@@ -50,7 +47,6 @@ export default function useAutocomplete(props) {
 
   const handleClick = event => {
     onEnterFunction(event.target.getAttribute("value"));
-    setInput("");
   };
 
   const handleInputKeyPress = event => {
@@ -78,7 +74,7 @@ export default function useAutocomplete(props) {
 
   const inputProps = {
     inputRef,
-    onBlur: e => {
+    onBlur: () => {
       setInputFocused(false);
     },
     onChange: onInputChange,
@@ -87,57 +83,22 @@ export default function useAutocomplete(props) {
     value: input
   };
 
-  function renderSuggestion(suggestionProps) {
-    const { suggestion, index, itemProps } = suggestionProps;
-    const selected = selectedItem === index;
-    return (
-      <MenuItem
-        {...itemProps}
-        key={suggestion.title}
-        selected={selected}
-        component="div"
-        onMouseDown={handleClick}
-        value={suggestion.title}
-      >
-        {suggestion.title}
-      </MenuItem>
-    );
-  }
-  const renderMenuItems = () => {
-    return (
-      <>
-        {suggestions.map((suggestion, index) =>
-          renderSuggestion({
-            suggestion,
-            index,
-            selectedItem
-          })
-        )}
-      </>
-    );
+  const popperProps = {
+    anchorEl,
+    open: suggestions.length > 0 && inputFocused
   };
 
-  const Popper = popperProps => {
-    const { children, ...popperElementProps } = popperProps;
-    return (
-      <PopperComponent
-        {...popperElementProps}
-        anchorEl={anchorEl}
-        open={suggestions.length > 0 && inputFocused}
-      >
-        <Paper square>
-          {renderMenuItems(suggestions)}
-          {children}
-        </Paper>
-      </PopperComponent>
-    );
+  const menuItemProps = {
+    onMouseDown: handleClick
   };
 
   return {
+    anchorEl,
     input,
-    setInput,
     inputProps,
-    Popper,
-    selectedItem
+    menuItemProps,
+    popperProps,
+    selectedItem,
+    setInput
   };
 }
