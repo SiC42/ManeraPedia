@@ -181,10 +181,7 @@ export default function Search() {
         className={classes.popper}
         {...popperProps}
       >
-        <Paper square>
-          {console.log(renderMenuItems(suggestions)) ||
-            renderMenuItems(suggestions)}
-        </Paper>
+        <Paper square>{renderMenuItems(suggestions)}</Paper>
       </PopperComponent>
     </div>
   );
