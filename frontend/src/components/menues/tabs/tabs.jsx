@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
     height: "100%",
     justifyContent: "space-between",
     placeContent: "end space-between",
-    paddingRight: 0
+    paddingRight: 0,
     minWidth: "100%",
     width: "100%"
   },
