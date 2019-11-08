@@ -1,13 +1,15 @@
 import CloseIcon from "@material-ui/icons/Close";
 import { makeStyles } from "@material-ui/core/styles";
 import React from "react";
+import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   articleSummary: {
-    textOverflow: "ellipsis",
-    overflow: "hidden",
-    whiteSpace: "nowrap",
-    height: "auto"
+    textTransform: "none",
+    height: "auto",
+    minWidth: 100,
+    flexGrow: 1,
+    textAlign: "left"
   },
   close: {
     height: "100%",
@@ -24,9 +26,7 @@ const useStyles = makeStyles(theme => ({
   listItem: {
     display: "inherit",
     width: "inherit",
-    // flexShrink: 1,
-    overflow: "hidden",
-    borderRight: "line"
+    overflow: "hidden"
   }
 }));
 
@@ -36,9 +36,9 @@ export default function TabContent(props) {
 
   return (
     <div id="tab" className={classes.listItem}>
-      <div id="content" className={classes.articleSummary}>
+      <Typography variant="body2" className={classes.articleSummary} noWrap>
         {title}
-      </div>
+      </Typography>
       <div className={classes.close} id="closeTab">
         <CloseIcon id="closeTab" />
       </div>

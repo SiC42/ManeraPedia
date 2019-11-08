@@ -13,11 +13,12 @@ const useStyles = makeStyles(theme => ({
   itemWrapper: {
     display: "flex",
     alignItems: "stretch",
-    width: "100%",
     height: "100%",
     justifyContent: "space-between",
     placeContent: "end space-between",
     paddingRight: 0
+    minWidth: "100%",
+    width: "100%"
   },
   tabs: {
     borderRight: `1px solid ${theme.palette.divider}`
