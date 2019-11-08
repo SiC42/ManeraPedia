@@ -20,13 +20,20 @@ export default function Search(props) {
       hidden={index !== activeTabId}
       className={classes.root}
     >
-      <Typography variant="h5" component="h3">
+      <Typography variant="h4" component="h1">
         {title}
       </Typography>
-      {results.map((result, index) => (
+      {results.map(result => (
         <>
-          <Typography component="p">{result.title}</Typography>
-          <Divider />
+          <Typography variant="h5" component="h2">
+            {result.title}
+          </Typography>
+          <Typography component="p" color="textSecondary">
+            {result.tags}
+          </Typography>
+          <Typography component="p" className={classes.body} noWrap>
+            {result.text}
+          </Typography>
         </>
       ))}
     </Paper>
