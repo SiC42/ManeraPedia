@@ -20,7 +20,7 @@ export default function Content(props) {
       hidden={index !== activeTabId}
       className={classes.root}
     >
-      <Typography variant="h5" component="h3">
+      <Typography variant="h4" component="h1">
         {title}
       </Typography>
       <Typography component="p">{text}</Typography>
