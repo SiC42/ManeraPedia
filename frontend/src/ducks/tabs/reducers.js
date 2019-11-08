@@ -1,4 +1,3 @@
-import { searchTypes } from "ducks/search";
 import * as types from "./types";
 
 const initialState = {
