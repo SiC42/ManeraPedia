@@ -57,8 +57,7 @@ export default function Wiki() {
             key={tab.id}
             index={index}
             activeTabId={activeTabId}
-            title={tab.title}
-            text={tab.text}
+            {...tab}
           />
         );
       }
@@ -78,8 +77,7 @@ export default function Wiki() {
           key={`Error ${index}`}
           index={index}
           activeTabId={activeTabId}
-          title="Woops"
-          text={`Something went wrong. We are sorry. We couldn't recognize type ${tab.type}`}
+          {...tab}
         />
       );
     });
