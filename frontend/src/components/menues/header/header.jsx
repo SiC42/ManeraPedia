@@ -43,7 +43,7 @@ const tab = () => {
     tags: ["Journal", "[[Gruppe 1]]"],
     text:
       "* Sara, Helena und Kayne begraben Shank, sie wissen nicht wohin es als nächstes geht\n* Hassan stößt zufällig zu ihnen und legt Sara und Helena Taro Karten\n* Die Gruppe beschließt zu Rasten und sich danach auf den Weg zu den Orks zu machen\n* Hektor trifft auf die Gruppe, aber wird gerade von soldaten verfolgt\n* die helden schaffen es die Soldaten zu überwältigen\n*  Hektor und die gruppe lernen sich kennen, sie beschließen Gemeinsam zu den Zwergen zu reisen, weil ihre ziele überlappen\n* Bei der Rast auf dem Weg hat Helena einen Alptraum/Vision über die Verbrennung ihres Bruders\n* Kurz darauf erscheint eine seltsame gestalt und ein schwarzer Panther",
-    title: `!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!22.01.2019 - Ein neuer Gefährte${tabCount}`,
+    title: `22.01.2019 - Ein neuer Gefährte für den weiten weiten Weg ${tabCount}`,
     type: "text/vnd.tiddlywiki"
   };
 };
