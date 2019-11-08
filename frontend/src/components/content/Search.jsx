@@ -34,6 +34,7 @@ export default function Search(props) {
           <Typography component="p" className={classes.body} noWrap>
             {result.text}
           </Typography>
+          <Divider />
         </>
       ))}
     </Paper>
