@@ -4,11 +4,11 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Tab from "@material-ui/core/Tab";
 import MaterialTabs from "@material-ui/core/Tabs";
 import { tabOperations } from "ducks/tabs";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TabContent from "./tab";
 
-const maxDrawerWidth = 450;
+export const drawerWidth = 350;
 const useStyles = makeStyles(theme => ({
   itemWrapper: {
     display: "flex",
@@ -23,20 +23,20 @@ const useStyles = makeStyles(theme => ({
     borderRight: `1px solid ${theme.palette.divider}`
   },
   drawer: {
-    [theme.breakpoints.up("sm")]: {
-      width: maxDrawerWidth,
+    [theme.breakpoints.up("md")]: {
+      width: drawerWidth,
       flexShrink: 0
     }
   },
   menuButton: {
     marginRight: theme.spacing(2),
-    [theme.breakpoints.up("sm")]: {
+    [theme.breakpoints.up("md")]: {
       display: "none"
     }
   },
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
-    maxWidth: maxDrawerWidth
+    width: drawerWidth
   }
 }));
 
@@ -88,7 +88,7 @@ export default function Tabs(props) {
 
   return (
     <nav className={classes.drawer} aria-label="mailbox folders">
-      <Hidden smUp implementation="css">
+      <Hidden mdUp implementation="css">
         <Drawer
           container={container}
           variant="temporary"
@@ -106,7 +106,7 @@ export default function Tabs(props) {
           {getDrawer()}
         </Drawer>
       </Hidden>
-      <Hidden xsDown implementation="css">
+      <Hidden smDown implementation="css">
         <Drawer
           classes={{
             paper: classes.drawerPaper
