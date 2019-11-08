@@ -1,1 +1,1 @@
-export { default } from "./tabs";
+export { default, drawerWidth } from "./tabs";

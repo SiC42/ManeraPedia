@@ -6,20 +6,30 @@ import { useDispatch, useSelector } from "react-redux";
 import Content, { Search } from "../content";
 import Header from "../menues/header";
 import Snackbar from "../menues/snackbar";
-import Tabs from "../menues/tabs";
+import Tabs, { drawerWidth } from "../menues/tabs";
 
 const useStyles = makeStyles(theme => ({
   root: {
     height: "100vh",
+    width: "100vw",
     flexGrow: 1,
     backgroundColor: theme.palette.grey[200],
     display: "flex"
   },
   content: {
-    flexGrow: 1,
-    padding: theme.spacing(3)
+    paddingTop: theme.spacing(2),
+    [theme.breakpoints.down("sm")]: {
+      width: "100vw"
+    },
+    [theme.breakpoints.up("md")]: {
+      width: `calc(100vw - ${drawerWidth}px)`
+    },
+    justifyContent: "center"
   },
-  toolbar: theme.mixins.toolbar
+  toolbar: {
+    width: "100%",
+    ...theme.mixins.toolbar
+  }
 }));
 
 export default function Wiki() {
@@ -77,7 +87,9 @@ export default function Wiki() {
   return (
     <div className={classes.root}>
       <Header toggleDrawer={toggleDrawer} />
-      <Tabs toggleDrawer={toggleDrawer} drawerOpen={drawerOpen} />
+      {tabs.length > 0 && (
+        <Tabs toggleDrawer={toggleDrawer} drawerOpen={drawerOpen} />
+      )}
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <Container maxWidth="md">{buildTabContent()}</Container>
