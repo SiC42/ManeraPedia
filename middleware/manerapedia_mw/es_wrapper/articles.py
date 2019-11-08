@@ -64,7 +64,19 @@ def search(query, access_groups):
     s = Search(using=client, index=wiki_index_name)
     s = s.filter(access_filter(access_groups))
     q = Q("bool", must=Q("match", body=query))
-    s = s.query(q)
+    functions = []
+    functions.append({
+        "filter": {"fuzzy": {"title": "*{}*".format(query)}},
+        "weight": "10"
+    })
+    functions.append({
+        "filter": {"fuzzy": {"tags": "*{}*".format(query)}},
+        "weight": "5"
+    })
+    query_with_functions = Q("function_score", query=q, max_boost=42, score_mode="max",
+                             boost_mode="multiply", functions=functions)
+    s = s.query(query_with_functions)
+    print(s.to_dict())
     res = s.execute()
     results = res.to_dict()["hits"]["hits"]
     for result in results:
