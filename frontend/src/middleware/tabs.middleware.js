@@ -8,7 +8,6 @@ export default ({ dispatch, getState }) => next => action => {
     }
   }
   if (action.type === tabTypes.REMOVE_TAB) {
-    const state = getState();
     console.log(action);
     console.log(state.tabs.list.length - 1);
     if (action.payload === state.tabs.list.length - 1) {
