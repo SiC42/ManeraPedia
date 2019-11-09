@@ -1,8 +1,8 @@
-import * as authOperations from "./operations";
+import * as authActions from "./actions";
 import reducer from "./reducers";
 import authSaga from "./saga";
 import * as authTypes from "./types";
 
-export { authOperations, authTypes, authSaga };
+export { authActions, authTypes, authSaga };
 
 export default reducer;

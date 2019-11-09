@@ -3,7 +3,7 @@ import Hidden from "@material-ui/core/Hidden";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Tab from "@material-ui/core/Tab";
 import MaterialTabs from "@material-ui/core/Tabs";
-import { tabOperations } from "ducks/tabs";
+import { tabActions } from "ducks/tabs";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TabContent from "./tab";
@@ -55,11 +55,11 @@ export default function Tabs(props) {
   const changeActiveTab = (event, newActiveTab) => {
     if (event.target.id === "closeTab") {
       if (activeTabId >= tabs.length) {
-        dispatch(tabOperations.changeActiveTab(activeTabId - 1));
+        dispatch(tabActions.changeActiveTab(activeTabId - 1));
       }
-      dispatch(tabOperations.remove(newActiveTab));
+      dispatch(tabActions.remove(newActiveTab));
     } else {
-      dispatch(tabOperations.changeActiveTab(newActiveTab));
+      dispatch(tabActions.changeActiveTab(newActiveTab));
     }
   };
 

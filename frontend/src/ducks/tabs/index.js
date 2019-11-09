@@ -1,7 +1,7 @@
-import * as tabOperations from "./operations";
+import * as tabActions from "./actions";
 import reducer from "./reducers";
 import * as tabTypes from "./types";
 
-export { tabOperations, tabTypes };
+export { tabActions, tabTypes };
 
 export default reducer;

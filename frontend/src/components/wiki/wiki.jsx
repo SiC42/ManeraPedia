@@ -1,6 +1,6 @@
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
-import { authOperations } from "ducks/auth";
+import { authActions } from "ducks/auth";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Content, { Search } from "../content";
@@ -47,7 +47,7 @@ export default function Wiki() {
   const open = useSelector(state => state.auth && state.auth.loginError);
   const message = useSelector(state => state.auth && state.auth.message);
   const clearError = () => {
-    dispatch(authOperations.clearLoginError());
+    dispatch(authActions.clearLoginError());
   };
   const buildTabContent = () =>
     tabs.map((tab, index) => {

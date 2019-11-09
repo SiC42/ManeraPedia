@@ -9,7 +9,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import { authOperations } from "ducks/auth";
+import { authActions } from "ducks/auth";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Snackbar from "./snackbar";
@@ -67,10 +67,10 @@ export default function LoginDialog(props) {
     if (e) {
       if (e.key === "Enter") {
         e.preventDefault();
-        dispatch(authOperations.loginRequest(username, password));
+        dispatch(authActions.loginRequest(username, password));
       }
     } else {
-      dispatch(authOperations.loginRequest(username, password));
+      dispatch(authActions.loginRequest(username, password));
     }
   };
 

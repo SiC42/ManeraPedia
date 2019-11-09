@@ -5,7 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import { Chip, Link } from "@material-ui/core";
 import ReactMarkdown from "react-markdown";
 import { useDispatch } from "react-redux";
-import { searchOperations } from "ducks/search/";
+import { searchActions } from "ducks/search/";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,7 +24,7 @@ export default function Content(props) {
 
   const fetchSelectedArticle = _title => {
     dispatch(
-      searchOperations.getArticleRequestFromAutocomplete({
+      searchActions.getArticleRequestFromAutocomplete({
         title: _title,
         focus: true
       })

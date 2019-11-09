@@ -2,7 +2,7 @@ import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import { authOperations } from "ducks/auth";
+import { authActions } from "ducks/auth";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
@@ -31,7 +31,7 @@ export default function LoginHeader(props) {
 
   const dispatch = useDispatch();
   const handleLogout = () => {
-    dispatch(authOperations.logout());
+    dispatch(authActions.logout());
     handleClose();
   };
   const handleMenu = event => {

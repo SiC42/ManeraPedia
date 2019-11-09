@@ -1,4 +1,4 @@
-import { authOperations, authTypes } from "ducks/auth";
+import { authActions, authTypes } from "ducks/auth";
 import {
   ACCESS_TOKEN,
   authNeeded,
@@ -54,7 +54,7 @@ export default ({ dispatch, getState }) => next => action => {
     }
     if (tokenExpired(state)) {
       buffer.push(action);
-      dispatch(authOperations.refreshToken());
+      dispatch(authActions.refreshToken());
     } else {
       return next(getActionWithAuthHeader(action, state.auth.access_token));
     }

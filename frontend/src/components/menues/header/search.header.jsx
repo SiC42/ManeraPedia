@@ -2,7 +2,7 @@ import InputBase from "@material-ui/core/InputBase";
 import MenuItem from "@material-ui/core/MenuItem";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
-import { searchOperations } from "ducks/search/";
+import { searchActions } from "ducks/search/";
 import useAutocomplete from "hooks/useAutocomplete";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -65,12 +65,12 @@ export default function Search() {
   const dispatch = useDispatch();
 
   const fetchSuggestions = event => {
-    dispatch(searchOperations.autocompleteRequest(event.target.value));
+    dispatch(searchActions.autocompleteRequest(event.target.value));
   };
 
   const fetchSelectedArticle = title => {
     dispatch(
-      searchOperations.getArticleRequestFromAutocomplete({ title, focus: true })
+      searchActions.getArticleRequestFromAutocomplete({ title, focus: true })
     );
   };
 
@@ -93,12 +93,12 @@ export default function Search() {
 
   const searchForArticles = () => {
     dispatch(
-      searchOperations.searchRequest({
+      searchActions.searchRequest({
         query: input,
         focus: true
       })
     );
-    dispatch(searchOperations.clearAutocomplete());
+    dispatch(searchActions.clearAutocomplete());
     setInput("");
   };
 
