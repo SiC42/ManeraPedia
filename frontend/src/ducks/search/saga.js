@@ -2,7 +2,7 @@ import { authActions } from "ducks/auth";
 import { changeActiveTab, add } from "ducks/tabs/actions";
 import { NotLoggedInException } from "helpers/auth";
 import { ArticleNotFoundException } from "helpers/search";
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 import * as searchActions from "./actions";
 import searchService from "./services";
 import * as types from "./types";
@@ -87,7 +87,7 @@ function* search(action) {
 }
 
 export default function* searchSaga() {
-  yield takeEvery(types.AUTOCOMPLETE_REQUEST, autocompleteTitle);
+  yield takeLatest(types.AUTOCOMPLETE_REQUEST, autocompleteTitle);
   yield takeEvery(types.GET_ARTICLE_REQUEST, getArticle);
   yield takeEvery(types.SEARCH_REQUEST, search);
 }
