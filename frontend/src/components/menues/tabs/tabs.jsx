@@ -54,9 +54,6 @@ export default function Tabs(props) {
   const dispatch = useDispatch();
   const changeActiveTab = (event, newActiveTab) => {
     if (event.target.id === "closeTab") {
-      if (activeTabId >= tabs.length) {
-        dispatch(tabActions.changeActiveTab(activeTabId - 1));
-      }
       dispatch(tabActions.remove(newActiveTab));
     } else {
       dispatch(tabActions.changeActiveTab(newActiveTab));
