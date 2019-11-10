@@ -70,7 +70,11 @@ export default function Search() {
 
   const fetchSelectedArticle = title => {
     dispatch(
-      searchActions.getArticleRequestFromAutocomplete({ title, focus: true })
+      searchActions.getArticleRequest({
+        title,
+        focus: true,
+        location: "autosuggest"
+      })
     );
   };
 
