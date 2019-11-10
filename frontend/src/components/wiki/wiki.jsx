@@ -1,7 +1,8 @@
+import React, { useEffect } from "react";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import { authActions } from "ducks/auth";
-import React from "react";
+import { tabActions } from "ducks/tabs";
 import { useDispatch, useSelector } from "react-redux";
 import Content, { Search } from "../content";
 import Header from "../menues/header";
@@ -31,15 +32,30 @@ const useStyles = makeStyles(theme => ({
     ...theme.mixins.toolbar
   }
 }));
+const defaultTab = {
+  created: "2019-01-31T11:50:58",
+  creator: "sascha",
+  id: `Tevv7W0BbIDzQhiPeGZx-1`,
+  modified: "2019-01-31T11:59:51",
+  modifier: "SiC",
+  tags: ["Journal", "[[Gruppe 1]]"],
+  text:
+    "\n# Überschrift\n## Überschrift 2\n\n# Nummernliste\n\n* Liste\n** Liste in Liste\n| This is a Table | Is it?| Is it not?|\n| --- | --- | --- |\n| Some Data |<|\n\n**Bold** _italic_ ~~strikethrough~~ underlined\n\n[Links]\n\n[Linktext](Links to this article)\n\n[Actual Link text](www.actual-link.de)\n\nwww.actual-second-link.de\n\n{{References}}\n",
+  title: `22.01.2019 - Ein neuer Gefährte für den weiten weiten Weg -1`,
+  type: "text/vnd.tiddlywiki"
+};
 
 export default function Wiki() {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(tabActions.add(defaultTab));
+  }, []);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const tabs = useSelector(state => state.tabs.list);
   const activeTabId = useSelector(state =>
     state.tabs.activeTabId ? state.tabs.activeTabId : 0
   );
-  const dispatch = useDispatch();
 
   function toggleDrawer() {
     setDrawerOpen(!drawerOpen);
