@@ -8,12 +8,13 @@ export default ({ dispatch, getState }) => next => action => {
     }
   }
   if (action.type === tabTypes.REMOVE_TAB) {
-    console.log(action);
-    console.log(state.tabs.list.length - 1);
-    if (action.payload === state.tabs.list.length - 1) {
-      console.log(action);
+    if (
+      state.tabs.activeTabId === state.tabs.list.length - 1 &&
+      state.tabs.list.length > 1
+    ) {
       dispatch(tabActions.changeActiveTab(state.tabs.list.length - 2));
-      return next(action);
+      dispatch(tabActions.removeDelayed(action.payload));
+      return undefined;
     }
   }
   return next(action);
