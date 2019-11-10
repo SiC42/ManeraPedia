@@ -1,32 +1,108 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { Chip, IconButton, Grid, Link, TextField } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
+import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import { Chip, Link } from "@material-ui/core";
-import ReactMarkdown from "react-markdown";
-import { useDispatch } from "react-redux";
+import EditIcon from "@material-ui/icons/Edit";
+import CloseIcon from "@material-ui/icons/Close";
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import DeleteIcon from "@material-ui/icons/Delete";
+import CancelIcon from "@material-ui/icons/Cancel";
+import CheckIcon from "@material-ui/icons/Check";
 import { searchActions } from "ducks/search/";
+import { tabActions } from "ducks/tabs";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import Markdown from "./Markdown";
 
 const useStyles = makeStyles(theme => ({
+  icons: {
+    float: "right"
+  },
+  margin: {
+    margin: theme.spacing(0.2)
+  },
   root: {
     padding: theme.spacing(3, 2),
     "& > *": {
-      margin: theme.spacing(0.5) // spacing for the chips
+      margin: theme.spacing(0.5) // spacing for the tags
     }
+  },
+  title: {
+    flexShrink: 1
+  },
+  titlebar: {
+    display: "block"
   }
 }));
 
 export default function Content(props) {
-  const { activeTabId, index, modified, modifier, tags, text, title } = props;
+  const {
+    activeTabId,
+    edit: _edit,
+    index,
+    modified,
+    modifier,
+    tags,
+    text: _text,
+    title
+  } = props;
   const classes = useStyles();
-
   const dispatch = useDispatch();
+  const [text, setText] = useState(_text);
+  const [edit, setEdit] = useState(_edit);
+
+  const renderArticleButtons = () => {
+    if (edit) {
+      return (
+        <>
+          <IconButton size="small" aria-label="add" className={classes.margin}>
+            <DeleteIcon />
+          </IconButton>
+          <IconButton
+            size="small"
+            aria-label="add"
+            className={classes.margin}
+            onClick={() => setEdit(false)}
+          >
+            <CancelIcon />
+          </IconButton>
+          <IconButton size="small" aria-label="add" className={classes.margin}>
+            <CheckIcon />
+          </IconButton>
+        </>
+      );
+    }
+    return (
+      <>
+        <IconButton size="small" aria-label="add" className={classes.margin}>
+          <KeyboardArrowDownIcon />
+        </IconButton>
+        <IconButton
+          size="small"
+          aria-label="add"
+          className={classes.margin}
+          onClick={() => setEdit(true)}
+        >
+          <EditIcon />
+        </IconButton>
+        <IconButton
+          size="small"
+          aria-label="add"
+          className={classes.margin}
+          onClick={() => dispatch(tabActions.remove(index))}
+        >
+          <CloseIcon />
+        </IconButton>
+      </>
+    );
+  };
 
   const fetchSelectedArticle = _title => {
     dispatch(
-      searchActions.getArticleRequestFromAutocomplete({
+      searchActions.getArticleRequest({
         title: _title,
-        focus: true
+        focus: true,
+        location: "autosuggest"
       })
     );
   };
@@ -34,6 +110,10 @@ export default function Content(props) {
   const openNewTab = article => event => {
     event.preventDefault();
     fetchSelectedArticle(article);
+  };
+
+  const changeInput = event => {
+    setText(event.target.value);
   };
 
   const renderLinkForAction = linkProps => {
@@ -56,25 +136,45 @@ export default function Content(props) {
   };
 
   return (
-    <Paper
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      hidden={index !== activeTabId}
-      className={classes.root}
-    >
-      <Typography variant="h4" component="h1">
-        {title}
-      </Typography>
+    <Paper className={classes.root} hidden={index !== activeTabId}>
+      <div className={classes.titlebar}>
+        <span className={classes.icons}>{renderArticleButtons()}</span>
+        <Typography className={classes.title} variant="h4" component="h1">
+          {title}
+        </Typography>
+      </div>
       <Typography variant="caption" display="block" gutterBottom>
         {`${modifier} - ${new Date(modified).toTimeString()}`}
       </Typography>
       {tags.map(tag => (
         <Chip size="small" label={tag} key={tag} />
       ))}
-      <ReactMarkdown
-        source={text}
-        renderers={{ linkReference: renderLinkForAction }}
-      />
+      <Grid
+        container
+        spacing={0}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        hidden={index !== activeTabId}
+      >
+        {edit && (
+          <Grid item xs={6}>
+            <TextField
+              id="outlined-multiline-static"
+              label="Multiline"
+              multiline
+              fullWidth
+              defaultValue={text}
+              className={classes.textField}
+              margin="normal"
+              variant="outlined"
+              onChange={changeInput}
+            />
+          </Grid>
+        )}
+        <Grid item xs={edit ? 6 : 12}>
+          <Markdown markdown={text} />
+        </Grid>
+      </Grid>
     </Paper>
   );
 }
@@ -82,5 +182,6 @@ export default function Content(props) {
 Content.defaultProps = {
   tags: [],
   modifier: "",
-  modified: ""
+  modified: "",
+  edit: false
 };
