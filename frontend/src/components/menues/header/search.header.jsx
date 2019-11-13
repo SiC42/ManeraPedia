@@ -170,7 +170,6 @@ export default function Search() {
         <SearchIcon />
       </div>
       <InputBase
-        // eslint-disable-next-line react/jsx-props-no-spreading
         {...inputProps}
         onKeyDown={handleEnter}
         margin="none"
