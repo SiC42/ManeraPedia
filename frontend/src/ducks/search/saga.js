@@ -1,5 +1,5 @@
 import { authActions } from "ducks/auth";
-import { changeActiveTab, add } from "ducks/tabs/actions";
+import { changeActiveTab, add, addLoad, change } from "ducks/tabs/actions";
 import { NotLoggedInException } from "helpers/auth";
 import { ArticleNotFoundException } from "helpers/search";
 import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
@@ -31,6 +31,13 @@ function* autocompleteTitle(action) {
 
 function* getArticle(action) {
   try {
+    const id = `_${Math.random()
+      .toString(36)
+      .substr(2, 9)}`;
+    yield put(addLoad(id, action.payload.title));
+    if (action.payload.focus) {
+      yield put(changeActiveTab(-1));
+    }
     if (!action.payload.Authorization) {
       throw new NotLoggedInException();
     }
@@ -39,10 +46,7 @@ function* getArticle(action) {
       Authorization: action.payload.Authorization
     });
     yield put(searchActions.getArticleSuccess());
-    yield put(add(article));
-    if (action.payload.focus) {
-      yield put(changeActiveTab(-1));
-    }
+    yield put(change(id, article));
     if (action.payload.location === "autocomplete") {
       yield put(searchActions.clearAutocomplete());
     }

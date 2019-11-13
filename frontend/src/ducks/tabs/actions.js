@@ -1,7 +1,19 @@
 import * as types from "./types";
 
-function add(tab, focus) {
-  return { type: types.ADD_TAB, payload: { tab, focus } };
+function add(tab, props = {}) {
+  const { focus, id } = props;
+  return { type: types.ADD_TAB, payload: { tab, focus, id } };
+}
+
+function addLoad(id, title) {
+  return {
+    type: types.ADD_TAB,
+    payload: { tab: { type: "search/loading", id, title } }
+  };
+}
+
+function change(id, tab) {
+  return { type: types.CHANGE_TAB, payload: { tab, id } };
 }
 
 function changeActiveTab(index) {
@@ -16,4 +28,4 @@ function removeDelayed(index) {
   return { type: types.REMOVE_TAB_DELAYED, payload: index };
 }
 
-export { add, changeActiveTab, remove, removeDelayed };
+export { add, addLoad, change, changeActiveTab, remove, removeDelayed };
