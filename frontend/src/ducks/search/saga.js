@@ -47,7 +47,7 @@ function* getArticle(action) {
     });
     yield put(searchActions.getArticleSuccess());
     yield put(change(id, article));
-    if (action.payload.location === "autocomplete") {
+    if (action.payload.location === "autosuggest") {
       yield put(searchActions.clearAutocomplete());
     }
   } catch (e) {
@@ -64,6 +64,30 @@ function* getArticle(action) {
       );
     } else {
       yield put(searchActions.getArticleFailure(e.message));
+    }
+  }
+}
+
+function* getReference(action) {
+  try {
+    if (!action.payload.Authorization) {
+      throw new NotLoggedInException();
+    }
+    const article = yield call(searchService.getArticle, {
+      title: action.payload.title,
+      Authorization: action.payload.Authorization
+    });
+    yield put(searchActions.getReferenceSuccess(article));
+  } catch (e) {
+    if (e instanceof NotLoggedInException) {
+      yield put(authActions.loginNeeded(e));
+      yield put(
+        searchActions.getReferenceFailure(action.payload.title, e.message)
+      );
+    } else {
+      yield put(
+        searchActions.getReferenceFailure(action.payload.title, e.message)
+      );
     }
   }
 }
@@ -94,4 +118,5 @@ export default function* searchSaga() {
   yield takeLatest(types.AUTOCOMPLETE_REQUEST, autocompleteTitle);
   yield takeEvery(types.GET_ARTICLE_REQUEST, getArticle);
   yield takeEvery(types.SEARCH_REQUEST, search);
+  yield takeLatest(types.GET_REFERENCE_REQUEST, getReference);
 }

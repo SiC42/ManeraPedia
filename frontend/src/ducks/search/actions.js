@@ -38,6 +38,29 @@ function getArticleFailure(error) {
   return { type: types.GET_ARTICLE_FAILURE, payload: error };
 }
 
+// ============ GET_REFERENCE ============
+function getReferenceRequest(title) {
+  console.log("test");
+  return {
+    type: types.GET_REFERENCE_REQUEST,
+    payload: { title },
+    meta: addAuthNeededMeta(ACCESS_TOKEN)
+  };
+}
+
+function getReferenceSuccess(article) {
+  return {
+    type: types.GET_REFERENCE_SUCCESS,
+    payload: { article, date: Date.now() }
+  };
+}
+function getReferenceFailure(title, error) {
+  return {
+    type: types.GET_REFERENCE_FAILURE,
+    payload: { title, date: Date.now(), error }
+  };
+}
+
 // ============ SEARCH ============
 function searchRequest({ query, focus }) {
   return {
@@ -63,6 +86,9 @@ export {
   getArticleRequest,
   getArticleSuccess,
   getArticleFailure,
+  getReferenceRequest,
+  getReferenceSuccess,
+  getReferenceFailure,
   searchRequest,
   searchSuccess,
   searchFailure
