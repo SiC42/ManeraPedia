@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { authActions } from "ducks/auth";
 import { tabActions } from "ducks/tabs";
 import { useDispatch, useSelector } from "react-redux";
-import Content, { Search } from "../content";
+import Content, { Search, LoadingPage } from "../content";
 import Header from "../menues/header";
 import Snackbar from "../menues/snackbar";
 import Tabs, { drawerWidth } from "../menues/tabs";
@@ -88,6 +88,9 @@ export default function Wiki() {
             results={tab.results}
           />
         );
+      }
+      if (tab.type === "search/loading") {
+        return <LoadingPage key={tab.id} title={tab.title} />;
       }
       return (
         <Content
