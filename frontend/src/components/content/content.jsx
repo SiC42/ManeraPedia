@@ -138,7 +138,7 @@ export default function Content(props) {
           </Grid>
         )}
         <Grid item xs={edit ? 6 : 12}>
-          <Markdown markdown={text} />
+          <Markdown markdown={text} inEditMode={edit} />
         </Grid>
       </Grid>
     </Paper>
