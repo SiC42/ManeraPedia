@@ -13,6 +13,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     height: "100vh",
     width: "100vw",
+    maxWidth: "100%",
     flexGrow: 1,
     backgroundColor: theme.palette.grey[200],
     display: "flex"
