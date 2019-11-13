@@ -1,23 +1,29 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 import React from "react";
 import ReactMarkdown from "react-markdown";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { searchActions } from "ducks/search/";
 import { Link } from "@material-ui/core";
 import { wikiLinkPlugin, wikiRefPlugin } from "helpers/markdown";
 
 export default function Markdown(markdownProps) {
-  const { markdown } = markdownProps;
+  const { markdown, inEditMode } = markdownProps;
 
   const dispatch = useDispatch();
+  const refs = useSelector(state => state.search.references);
 
-  const fetchSelectedArticle = _title => {
+  const fetchSelectedArticle = title => {
     dispatch(
       searchActions.getArticleRequest({
-        title: _title,
+        title,
         focus: true,
         location: "autosuggest"
       })
     );
+  };
+
+  const fetchReference = title => {
+    dispatch(searchActions.getReferenceRequest(title));
   };
 
   const openNewTab = article => event => {
@@ -35,6 +41,28 @@ export default function Markdown(markdownProps) {
     );
   };
 
+  const renderWikiRef = linkProps => {
+    const { value } = linkProps;
+    if (inEditMode) {
+      return (
+        <em>
+          <strong>{value}</strong> will be rendered ones this is saved...
+        </em>
+      );
+    }
+    if (refs[value]) {
+      return refs[value].article ? (
+        <div>
+          <MarkDown source={refs[value].article.text} />
+        </div>
+      ) : (
+        ""
+      );
+    }
+    fetchReference(value);
+    return "";
+  };
+
   const renderLink = linkProps => {
     const { href, children } = linkProps;
     return (
@@ -44,15 +72,17 @@ export default function Markdown(markdownProps) {
     );
   };
 
-  return (
+  const MarkDown = props => (
     <ReactMarkdown
-      source={markdown}
+      source={props.source}
       plugins={[wikiLinkPlugin, wikiRefPlugin]}
       renderers={{
         link: renderLink,
-        wikiRef: props => JSON.stringify(props),
+        wikiRef: renderWikiRef,
         wikiLink: renderWikiLink
       }}
     />
   );
+
+  return <MarkDown source={markdown} />;
 }
