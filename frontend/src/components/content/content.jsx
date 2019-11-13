@@ -1,4 +1,4 @@
-import { Chip, IconButton, Grid, Link, TextField } from "@material-ui/core";
+import { Chip, IconButton, Grid, TextField } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -8,7 +8,7 @@ import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import DeleteIcon from "@material-ui/icons/Delete";
 import CancelIcon from "@material-ui/icons/Cancel";
 import CheckIcon from "@material-ui/icons/Check";
-import { searchActions } from "ducks/search/";
+
 import { tabActions } from "ducks/tabs";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -97,42 +97,8 @@ export default function Content(props) {
     );
   };
 
-  const fetchSelectedArticle = _title => {
-    dispatch(
-      searchActions.getArticleRequest({
-        title: _title,
-        focus: true,
-        location: "autosuggest"
-      })
-    );
-  };
-
-  const openNewTab = article => event => {
-    event.preventDefault();
-    fetchSelectedArticle(article);
-  };
-
   const changeInput = event => {
     setText(event.target.value);
-  };
-
-  const renderLinkForAction = linkProps => {
-    const { href, children } = linkProps;
-    if (href === "") {
-      const article = children[0].props.value;
-      return (
-        // eslint-disable-next-line jsx-a11y/anchor-is-valid
-        <Link href="#" value={article} onClick={openNewTab(article)}>
-          {article}
-        </Link>
-      );
-    }
-    console.log(linkProps);
-    return (
-      <a href={href} target="_blank" rel="noreferrer noopener">
-        hello word
-      </a>
-    );
   };
 
   return (
@@ -160,7 +126,7 @@ export default function Content(props) {
           <Grid item xs={6}>
             <TextField
               id="outlined-multiline-static"
-              label="Multiline"
+              label="Edit"
               multiline
               fullWidth
               defaultValue={text}
