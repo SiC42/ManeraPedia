@@ -40,7 +40,7 @@ const defaultTab = {
   modifier: "SiC",
   tags: ["Journal", "[[Gruppe 1]]"],
   text:
-    "\n# Überschrift\n## Überschrift 2\n\n# Nummernliste\n\n* Liste\n** Liste in Liste\n| This is a Table | Is it?| Is it not?|\n| --- | --- | --- |\n| Some Data |<|\n\n**Bold** _italic_ ~~strikethrough~~ underlined\n\n[Links]\n\n[Linktext](Links to this article)\n\n[Actual Link text](www.actual-link.de)\n\nwww.actual-second-link.de\n\n{{References}}\n",
+    "\n# Überschrift\n## Überschrift 2\n\n1. Nummernliste\n* Liste\n* Liste in Liste\n\n| This is a Table | Is it?| Is it not?|\n| --- | --- | --- |\n| Some Data |<|\n\n**Bold** _italic_ ~~strikethrough~~ underlined\n\n[[Links]]\n\n[[Links next to]] [[Each other]]\n\n[[Linktext|Links to this article]]\n\n[Actual Link text](https://www.actual-link.de)\n\nwww.actual-second-link.de\n\n{{References}}\n\nLong sentences so we know that we hve all the space in the world and it renders just like we want to. Some more text for big screen. Is this enough alread? :O",
   title: `22.01.2019 - Ein neuer Gefährte für den weiten weiten Weg -1`,
   type: "text/vnd.tiddlywiki"
 };
