@@ -4,7 +4,6 @@ export default props => {
   const { LINK_REGEX, START_SYMBOL } = props;
 
   function inlineTokenizer(eat, value) {
-    console.log("value");
     const match = LINK_REGEX.exec(value);
 
     if (match) {
