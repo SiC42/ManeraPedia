@@ -11,7 +11,7 @@ import CheckIcon from "@material-ui/icons/Check";
 
 import { tabActions } from "ducks/tabs";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Markdown from "./Markdown";
 
 const useStyles = makeStyles(theme => ({
@@ -28,7 +28,9 @@ const useStyles = makeStyles(theme => ({
     }
   },
   title: {
-    flexShrink: 1
+    flexShrink: 1,
+    fontSize: theme.typography.h4.fontSize,
+    height: "auto"
   },
   titlebar: {
     display: "block"
@@ -40,31 +42,38 @@ export default function Content(props) {
     activeTabId,
     edit: _edit,
     index,
-    modified,
-    modifier,
+    modified: _modified,
+    modifier: _modifier,
     tags: _tags,
     text: _text,
-    title
+    title: _title
   } = props;
   const classes = useStyles();
   const dispatch = useDispatch();
+  const [title, setTitle] = useState(_title);
   const [text, setText] = useState(_text);
   const [edit, setEdit] = useState(_edit);
-  const [cache, setCache] = useState({ text: "", tags: {} });
   const [tags, setTags] = useState(_tags);
+  const [modified, setModified] = useState(_modified);
+  const [modifier, setModifier] = useState(_modifier);
+  const [cache, setCache] = useState({ text: "", tags: {}, title: "" });
+  const username = useSelector(state => state.auth.info.username);
 
   const cancel = () => {
     setEdit(false);
     setText(cache.text);
     setTags(cache.tags);
+    setTitle(cache.title);
   };
 
   const save = () => {
     setEdit(false);
+    setModified(Date.now());
+    setModifier(username);
   };
 
   const startEdit = () => {
-    setCache({ text, tags });
+    setCache({ text, tags, title });
     setEdit(true);
   };
 
@@ -119,21 +128,48 @@ export default function Content(props) {
     );
   };
 
-  const changeInput = event => {
+  const changeText = event => {
     setText(event.target.value);
+  };
+
+  const changeTitle = event => {
+    setTitle(event.target.value);
+  };
+
+  const renderTitle = () => {
+    if (!edit) {
+      return (
+        <Typography className={classes.title} variant="h4" component="h1">
+          {title}
+        </Typography>
+      );
+    }
+    return (
+      <TextField
+        id="outlined-basic"
+        InputProps={{ className: classes.title }}
+        component="h1"
+        multiline
+        defaultValue={title}
+        fullWidth
+        variant="outlined"
+        onKeyPress={event => event.key === "Enter" && event.preventDefault()}
+        onChange={changeTitle}
+      />
+    );
   };
 
   return (
     <Paper className={classes.root} hidden={index !== activeTabId}>
       <div className={classes.titlebar}>
         <span className={classes.icons}>{renderArticleButtons()}</span>
-        <Typography className={classes.title} variant="h4" component="h1">
-          {title}
-        </Typography>
+        {renderTitle() /* This has to be function or else it will lose focus in edit-mode */}
       </div>
-      <Typography variant="caption" display="block" gutterBottom>
-        {`${modifier} - ${new Date(modified).toTimeString()}`}
-      </Typography>
+      {!edit && (
+        <Typography variant="caption" display="block" gutterBottom>
+          {`${modifier} - ${new Date(modified).toTimeString()}`}
+        </Typography>
+      )}
       {tags.map((tag, i) => (
         <Chip
           size="small"
@@ -170,7 +206,7 @@ export default function Content(props) {
               className={classes.textField}
               margin="normal"
               variant="outlined"
-              onChange={changeInput}
+              onChange={changeText}
             />
           </Grid>
         )}
