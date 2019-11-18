@@ -42,7 +42,7 @@ export default function Content(props) {
     index,
     modified,
     modifier,
-    tags,
+    tags: _tags,
     text: _text,
     title
   } = props;
@@ -50,11 +50,13 @@ export default function Content(props) {
   const dispatch = useDispatch();
   const [text, setText] = useState(_text);
   const [edit, setEdit] = useState(_edit);
-  const [cache, setCache] = useState("");
+  const [cache, setCache] = useState({ text: "", tags: {} });
+  const [tags, setTags] = useState(_tags);
 
   const cancel = () => {
     setEdit(false);
-    setText(cache);
+    setText(cache.text);
+    setTags(cache.tags);
   };
 
   const save = () => {
@@ -62,7 +64,7 @@ export default function Content(props) {
   };
 
   const startEdit = () => {
-    setCache(text);
+    setCache({ text, tags });
     setEdit(true);
   };
 
@@ -132,9 +134,24 @@ export default function Content(props) {
       <Typography variant="caption" display="block" gutterBottom>
         {`${modifier} - ${new Date(modified).toTimeString()}`}
       </Typography>
-      {tags.map(tag => (
-        <Chip size="small" label={tag} key={tag} />
+      {tags.map((tag, i) => (
+        <Chip
+          size="small"
+          clickable={!edit}
+          label={tag}
+          key={tag}
+          onDelete={
+            edit
+              ? () => {
+                  setTags(tags.filter((_, j) => j !== i));
+                }
+              : undefined
+          }
+        />
       ))}
+      {edit && (
+        <Chip size="small" color="primary" clickable label="+" key="Plus" />
+      )}
       <Grid
         container
         spacing={0}
