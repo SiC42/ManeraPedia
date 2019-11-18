@@ -50,10 +50,14 @@ export default function Editor(props) {
   const tagInputRef = useRef(null);
 
   const commitTagName = input => {
-    setTags([...tags, tagName]);
-    setTagName("");
-    // eslint-disable-next-line no-param-reassign
-    input.value = "";
+    if (tagName !== "") {
+      setTagName("");
+      // eslint-disable-next-line no-param-reassign
+      input.value = "";
+      if (!tags.includes(tagName)) {
+        setTags([...tags, tagName]);
+      }
+    }
   };
 
   const handleEnter = event => {
