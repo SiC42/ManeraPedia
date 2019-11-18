@@ -50,10 +50,11 @@ export default function Markdown(markdownProps) {
         </em>
       );
     }
+    console.log(refs);
     if (refs[value]) {
       return refs[value].article ? (
         <div>
-          <MarkDown source={refs[value].article.text} />
+          <MarkDownRender source={refs[value].article.text} />
         </div>
       ) : (
         ""
@@ -72,7 +73,7 @@ export default function Markdown(markdownProps) {
     );
   };
 
-  const MarkDown = props => (
+  const MarkDownRender = props => (
     <ReactMarkdown
       source={props.source}
       plugins={[wikiLinkPlugin, wikiRefPlugin]}
@@ -84,5 +85,5 @@ export default function Markdown(markdownProps) {
     />
   );
 
-  return <MarkDown source={markdown} />;
+  return <MarkDownRender source={markdown} />;
 }
