@@ -46,7 +46,8 @@ export default function Markdown(markdownProps) {
     if (inEditMode) {
       return (
         <em>
-          <strong>{value}</strong> will be rendered ones this is saved...
+          {"<"}
+          <strong>{value}</strong> will be rendered ones this is saved...{">"}
         </em>
       );
     }
@@ -56,7 +57,11 @@ export default function Markdown(markdownProps) {
           <MarkDownRender source={refs[value].article.text} />
         </div>
       ) : (
-        ""
+        <em>
+          {"<There is no article named "}
+          <strong>{value}</strong>
+          {".>"}
+        </em>
       );
     }
     fetchReference(value);
