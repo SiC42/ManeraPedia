@@ -50,6 +50,21 @@ export default function Content(props) {
   const dispatch = useDispatch();
   const [text, setText] = useState(_text);
   const [edit, setEdit] = useState(_edit);
+  const [cache, setCache] = useState("");
+
+  const cancel = () => {
+    setEdit(false);
+    setText(cache);
+  };
+
+  const save = () => {
+    setEdit(false);
+  };
+
+  const startEdit = () => {
+    setCache(text);
+    setEdit(true);
+  };
 
   const renderArticleButtons = () => {
     if (edit) {
@@ -62,11 +77,16 @@ export default function Content(props) {
             size="small"
             aria-label="add"
             className={classes.margin}
-            onClick={() => setEdit(false)}
+            onClick={cancel}
           >
             <CancelIcon />
           </IconButton>
-          <IconButton size="small" aria-label="add" className={classes.margin}>
+          <IconButton
+            size="small"
+            aria-label="add"
+            className={classes.margin}
+            onClick={save}
+          >
             <CheckIcon />
           </IconButton>
         </>
@@ -81,7 +101,7 @@ export default function Content(props) {
           size="small"
           aria-label="add"
           className={classes.margin}
-          onClick={() => setEdit(true)}
+          onClick={startEdit}
         >
           <EditIcon />
         </IconButton>
