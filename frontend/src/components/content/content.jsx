@@ -29,8 +29,8 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     flexShrink: 1,
-    fontSize: theme.typography.h4.fontSize,
-    height: "auto"
+    height: "auto",
+    ...theme.typography.h4
   },
   titlebar: {
     display: "block"
@@ -52,33 +52,56 @@ export default function Content(props) {
   const dispatch = useDispatch();
   const [title, setTitle] = useState(_title);
   const [text, setText] = useState(_text);
-  const [edit, setEdit] = useState(_edit);
+  const [inEditMode, setInEditMode] = useState(_edit);
   const [tags, setTags] = useState(_tags);
   const [modified, setModified] = useState(_modified);
   const [modifier, setModifier] = useState(_modifier);
   const [cache, setCache] = useState({ text: "", tags: {}, title: "" });
   const username = useSelector(state => state.auth.info.username);
 
-  const cancel = () => {
-    setEdit(false);
+  const cancelEdit = () => {
+    setInEditMode(false);
     setText(cache.text);
     setTags(cache.tags);
     setTitle(cache.title);
   };
 
-  const save = () => {
-    setEdit(false);
+  const saveArticle = () => {
+    setInEditMode(false);
     setModified(Date.now());
     setModifier(username);
   };
 
   const startEdit = () => {
     setCache({ text, tags, title });
-    setEdit(true);
+    setInEditMode(true);
   };
 
-  const renderArticleButtons = () => {
-    if (edit) {
+  const renderTitle = () => {
+    if (!inEditMode) {
+      return (
+        <Typography className={classes.title} variant="h4" component="h1">
+          {title}
+        </Typography>
+      );
+    }
+    return (
+      <TextField
+        id="outlined-basic"
+        InputProps={{ className: classes.title }}
+        component="h1"
+        multiline
+        defaultValue={title}
+        fullWidth
+        variant="outlined"
+        onKeyPress={event => event.key === "Enter" && event.preventDefault()}
+        onChange={event => setTitle(event.target.value)}
+      />
+    );
+  };
+
+  const ArticleButtons = () => {
+    if (inEditMode) {
       return (
         <>
           <IconButton size="small" aria-label="add" className={classes.margin}>
@@ -88,7 +111,7 @@ export default function Content(props) {
             size="small"
             aria-label="add"
             className={classes.margin}
-            onClick={cancel}
+            onClick={cancelEdit}
           >
             <CancelIcon />
           </IconButton>
@@ -96,7 +119,7 @@ export default function Content(props) {
             size="small"
             aria-label="add"
             className={classes.margin}
-            onClick={save}
+            onClick={saveArticle}
           >
             <CheckIcon />
           </IconButton>
@@ -128,56 +151,16 @@ export default function Content(props) {
     );
   };
 
-  const changeText = event => {
-    setText(event.target.value);
-  };
-
-  const changeTitle = event => {
-    setTitle(event.target.value);
-  };
-
-  const renderTitle = () => {
-    if (!edit) {
-      return (
-        <Typography className={classes.title} variant="h4" component="h1">
-          {title}
-        </Typography>
-      );
-    }
-    return (
-      <TextField
-        id="outlined-basic"
-        InputProps={{ className: classes.title }}
-        component="h1"
-        multiline
-        defaultValue={title}
-        fullWidth
-        variant="outlined"
-        onKeyPress={event => event.key === "Enter" && event.preventDefault()}
-        onChange={changeTitle}
-      />
-    );
-  };
-
-  return (
-    <Paper className={classes.root} hidden={index !== activeTabId}>
-      <div className={classes.titlebar}>
-        <span className={classes.icons}>{renderArticleButtons()}</span>
-        {renderTitle() /* This has to be function or else it will lose focus in edit-mode */}
-      </div>
-      {!edit && (
-        <Typography variant="caption" display="block" gutterBottom>
-          {`${modifier} - ${new Date(modified).toTimeString()}`}
-        </Typography>
-      )}
+  const Chips = () => (
+    <>
       {tags.map((tag, i) => (
         <Chip
           size="small"
-          clickable={!edit}
+          clickable={!inEditMode}
           label={tag}
           key={tag}
           onDelete={
-            edit
+            inEditMode
               ? () => {
                   setTags(tags.filter((_, j) => j !== i));
                 }
@@ -185,9 +168,43 @@ export default function Content(props) {
           }
         />
       ))}
-      {edit && (
+      {inEditMode && (
         <Chip size="small" color="primary" clickable label="+" key="Plus" />
       )}
+    </>
+  );
+
+  const Editor = () =>
+    inEditMode && (
+      <Grid item xs={6}>
+        <TextField
+          id="outlined-multiline-static"
+          label="Edit"
+          multiline
+          fullWidth
+          defaultValue={text}
+          className={classes.textField}
+          margin="normal"
+          variant="outlined"
+          onChange={event => setText(event.target.value)}
+        />
+      </Grid>
+    );
+
+  return (
+    <Paper className={classes.root} hidden={index !== activeTabId}>
+      <div className={classes.titlebar}>
+        <span className={classes.icons}>
+          <ArticleButtons />
+        </span>
+        {renderTitle() /* This has to be function or else it will lose focus in edit-mode */}
+      </div>
+      {!inEditMode && (
+        <Typography variant="caption" display="block" gutterBottom>
+          {`${modifier} - ${new Date(modified).toTimeString()}`}
+        </Typography>
+      )}
+      <Chips />
       <Grid
         container
         spacing={0}
@@ -195,23 +212,9 @@ export default function Content(props) {
         aria-labelledby={`simple-tab-${index}`}
         hidden={index !== activeTabId}
       >
-        {edit && (
-          <Grid item xs={6}>
-            <TextField
-              id="outlined-multiline-static"
-              label="Edit"
-              multiline
-              fullWidth
-              defaultValue={text}
-              className={classes.textField}
-              margin="normal"
-              variant="outlined"
-              onChange={changeText}
-            />
-          </Grid>
-        )}
-        <Grid item xs={edit ? 6 : 12}>
-          <Markdown markdown={text} inEditMode={edit} />
+        <Editor />
+        <Grid item xs={inEditMode ? 6 : 12}>
+          <Markdown markdown={text} inEditMode={inEditMode} />
         </Grid>
       </Grid>
     </Paper>
