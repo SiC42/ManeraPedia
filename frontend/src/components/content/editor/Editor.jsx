@@ -9,7 +9,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import DeleteIcon from "@material-ui/icons/Delete";
 import CancelIcon from "@material-ui/icons/Cancel";
 import CheckIcon from "@material-ui/icons/Check";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import AddIcon from "@material-ui/icons/Add";
+
 import Markdown from "../Markdown";
 
 const useStyles = makeStyles(theme => ({
@@ -45,14 +47,19 @@ export default function Editor(props) {
   } = props;
   const classes = useStyles();
   const [tagName, setTagName] = useState("");
+  const tagInputRef = useRef(null);
+
+  const commitTagName = input => {
+    setTags([...tags, tagName]);
+    setTagName("");
+    // eslint-disable-next-line no-param-reassign
+    input.value = "";
+  };
 
   const handleEnter = event => {
     if (event.key === "Enter") {
       event.preventDefault();
-      setTags([...tags, tagName]);
-      setTagName("");
-      // eslint-disable-next-line no-param-reassign
-      event.target.value = "";
+      commitTagName(event.target);
     }
   };
 
@@ -94,6 +101,9 @@ export default function Editor(props) {
       ))}
       <Chip
         size="small"
+        key="NewTag"
+        onDelete={() => commitTagName(tagInputRef.current)}
+        deleteIcon={<AddIcon />}
         label={
           <InputBase
             key="tag-name-input"
@@ -101,9 +111,9 @@ export default function Editor(props) {
             className={classes.tagInput}
             onChange={event => setTagName(event.target.value)}
             onKeyPress={handleEnter}
+            inputRef={tagInputRef}
           />
         }
-        key="NewTag"
       />
     </>
   );
