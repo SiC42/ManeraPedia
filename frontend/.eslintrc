@@ -15,9 +15,6 @@
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly"
   },
-  "settings": {
-    "import/resolver": "webpack"
-  },
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
