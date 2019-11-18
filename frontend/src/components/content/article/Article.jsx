@@ -18,12 +18,6 @@ const useStyles = makeStyles(theme => ({
   margin: {
     margin: theme.spacing(0.2)
   },
-  root: {
-    padding: theme.spacing(3, 2),
-    "& > *": {
-      margin: theme.spacing(0.5) // spacing for the tags
-    }
-  },
   title: {
     flexShrink: 1,
     height: "auto",
