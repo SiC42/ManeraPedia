@@ -53,9 +53,8 @@ export default function Markdown(markdownProps) {
     }
     if (refs[value]) {
       return refs[value].article ? (
-        <div>
-          <MarkDownRender source={refs[value].article.text} />
-        </div>
+        // eslint-disable-next-line no-use-before-define
+        <div>{renderMarkdown(refs[value].article.text)}</div>
       ) : (
         <em>
           {"<There is no article named "}
@@ -77,9 +76,9 @@ export default function Markdown(markdownProps) {
     );
   };
 
-  const MarkDownRender = props => (
+  const renderMarkdown = source => (
     <ReactMarkdown
-      source={props.source}
+      source={source}
       plugins={[wikiLinkPlugin, wikiRefPlugin]}
       renderers={{
         link: renderLink,
@@ -89,5 +88,5 @@ export default function Markdown(markdownProps) {
     />
   );
 
-  return <MarkDownRender source={markdown} />;
+  return renderMarkdown(markdown);
 }
