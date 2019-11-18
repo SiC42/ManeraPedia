@@ -5,6 +5,7 @@ export default function search(state = INITAL_STATE, action) {
   switch (action.type) {
     case types.AUTOCOMPLETE_SUCCESS:
       return {
+        ...state,
         suggestions: action.payload.suggestions
       };
     case types.AUTOCOMPLETE_FAILURE:
@@ -20,7 +21,7 @@ export default function search(state = INITAL_STATE, action) {
     case types.GET_REFERENCE_FAILURE: {
       const { title, date } = action.payload;
       const references = { ...state.references };
-      references[title] = { article: { text: "" }, date };
+      references[title] = { date };
       return { ...state, references };
     }
     default:
