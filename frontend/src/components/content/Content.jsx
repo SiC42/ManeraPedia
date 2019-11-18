@@ -33,7 +33,7 @@ export default function Content(props) {
   const [tags, setTags] = useState(_tags);
   const [modified, setModified] = useState(_modified);
   const [modifier, setModifier] = useState(_modifier);
-  const [cache, setCache] = useState({ text: "", tags: {}, title: "" });
+  const [cache, setCache] = useState({ text: "", tags: [], title: "" });
   const username = useSelector(state => state.auth.info.username);
 
   const cancelEdit = () => {
