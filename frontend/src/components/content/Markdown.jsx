@@ -50,7 +50,6 @@ export default function Markdown(markdownProps) {
         </em>
       );
     }
-    console.log(refs);
     if (refs[value]) {
       return refs[value].article ? (
         <div>

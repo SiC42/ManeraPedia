@@ -40,7 +40,6 @@ function getArticleFailure(error) {
 
 // ============ GET_REFERENCE ============
 function getReferenceRequest(title) {
-  console.log("test");
   return {
     type: types.GET_REFERENCE_REQUEST,
     payload: { title },
