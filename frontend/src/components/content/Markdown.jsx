@@ -7,7 +7,7 @@ import { Link } from "@material-ui/core";
 import { wikiLinkPlugin, wikiRefPlugin } from "helpers/markdown";
 
 export default function Markdown(markdownProps) {
-  const { markdown, inEditMode } = markdownProps;
+  const { source, inEditMode, noRequests } = markdownProps;
 
   const dispatch = useDispatch();
   const refs = useSelector(state => state.search.references);
@@ -63,7 +63,9 @@ export default function Markdown(markdownProps) {
         </em>
       );
     }
-    fetchReference(value);
+    if (!noRequests) {
+      fetchReference(value);
+    }
     return "";
   };
 
@@ -76,9 +78,9 @@ export default function Markdown(markdownProps) {
     );
   };
 
-  const renderMarkdown = source => (
+  const renderMarkdown = text => (
     <ReactMarkdown
-      source={source}
+      source={text}
       plugins={[wikiLinkPlugin, wikiRefPlugin]}
       renderers={{
         link: renderLink,
@@ -88,5 +90,5 @@ export default function Markdown(markdownProps) {
     />
   );
 
-  return renderMarkdown(markdown);
+  return renderMarkdown(source);
 }
