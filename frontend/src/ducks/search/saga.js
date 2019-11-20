@@ -51,9 +51,9 @@ function* getArticle(action) {
       yield put(searchActions.clearAutocomplete());
     }
   } catch (e) {
+    yield put(searchActions.getArticleFailure(e.message));
     if (e instanceof NotLoggedInException) {
       yield put(authActions.loginNeeded(e));
-      yield put(searchActions.getArticleFailure(e.message));
     }
     if (e instanceof ArticleNotFoundException) {
       yield put(
@@ -62,8 +62,6 @@ function* getArticle(action) {
           focus: false
         })
       );
-    } else {
-      yield put(searchActions.getArticleFailure(e.message));
     }
   }
 }
