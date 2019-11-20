@@ -85,7 +85,7 @@ export default function useAutocomplete(props) {
 
   const popperProps = {
     anchorEl,
-    open: suggestions.length > 0 && inputFocused
+    open: inputFocused && input !== ""
   };
 
   const menuItemProps = {
