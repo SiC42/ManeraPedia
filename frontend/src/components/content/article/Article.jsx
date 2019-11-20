@@ -87,7 +87,7 @@ export default function Article(props) {
         aria-labelledby={`simple-tab-${index}`}
       >
         <Grid item xs={12}>
-          <Markdown markdown={text} />
+          <Markdown source={text} />
         </Grid>
       </Grid>
     </>
