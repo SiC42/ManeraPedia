@@ -117,7 +117,7 @@ export default function Search() {
     }
   };
 
-  function renderSuggestion(suggestionProps) {
+  function Suggestions(suggestionProps) {
     const { suggestion, index } = suggestionProps;
     const selected = selectedItem === index;
     return (
@@ -153,12 +153,9 @@ export default function Search() {
     return (
       <>
         {suggestions.length > 0 &&
-          suggestions.map((suggestion, index) =>
-            renderSuggestion({
-              suggestion,
-              index
-            })
-          )}
+          suggestions.map((suggestion, index) => (
+            <Suggestions suggestion={suggestion} index={index} />
+          ))}
         <LastMenuItem />
       </>
     );
