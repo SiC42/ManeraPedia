@@ -1,7 +1,12 @@
 import * as types from "./types";
 
 const user = JSON.parse(localStorage.getItem("user"));
-const initialState = user ? { loggedIn: true, ...user } : {};
+const initialState = user
+  ? { loggedIn: true, ...user }
+  : {
+      loggedIn: false,
+      info: { username: null }
+    };
 
 export default function auth(state = initialState, action) {
   switch (action.type) {
