@@ -3,12 +3,22 @@ import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
+import { Chip, Collapse } from "@material-ui/core";
+import Markdown from "./Markdown";
 
 const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(3, 2)
   }
 }));
+
+const renderChips = tags => (
+  <>
+    {tags.map((tag, i) => (
+      <Chip size="small" label={tag} key={tag} />
+    ))}
+  </>
+);
 
 export default function Search(props) {
   const { activeTabId, index, results, title } = props;
@@ -28,12 +38,10 @@ export default function Search(props) {
           <Typography variant="h5" component="h2">
             {result.title}
           </Typography>
-          <Typography component="p" color="textSecondary">
-            {result.tags}
-          </Typography>
-          <Typography component="p" className={classes.body} noWrap>
-            {result.text}
-          </Typography>
+          {renderChips(result.tags)}
+          <Collapse collapsedHeight="40px">
+            <Markdown source={result.text.slice(0, 500)} noRequests />
+          </Collapse>
           <Divider />
         </>
       ))}
