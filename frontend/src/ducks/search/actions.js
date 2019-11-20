@@ -61,11 +61,11 @@ function getReferenceFailure(title, error) {
 }
 
 // ============ SEARCH ============
-function searchRequest({ query, focus }) {
+function searchRequest({ query, focus, tab }) {
   return {
     type: types.SEARCH_REQUEST,
-    payload: { query, focus },
-    meta: addAuthNeededMeta(ACCESS_TOKEN)
+    payload: { query },
+    meta: { ...addAuthNeededMeta(ACCESS_TOKEN), tab, focus }
   };
 }
 function searchSuccess() {
