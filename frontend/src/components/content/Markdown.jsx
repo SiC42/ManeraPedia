@@ -57,9 +57,9 @@ export default function Markdown(markdownProps) {
         <div>{renderMarkdown(refs[value].article.text)}</div>
       ) : (
         <em>
-          {"<There is no article named "}
+          {"<Article "}
           <strong>{value}</strong>
-          {".>"}
+          {" couldn't be fetched.>"}
         </em>
       );
     }
