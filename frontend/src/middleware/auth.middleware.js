@@ -10,9 +10,13 @@ import jwtDecode from "jwt-decode";
 
 function tokenExpired(state) {
   // decode jwt so that we know if and when it expires
-  const tokenExpiration = jwtDecode(state.auth.access_token).exp;
-  const nowInSeconds = Math.floor(Date.now() / 1000);
-  return tokenExpiration && tokenExpiration - nowInSeconds < 10;
+  try {
+    const tokenExpiration = jwtDecode(state.auth.access_token).exp;
+    const nowInSeconds = Math.floor(Date.now() / 1000);
+    return tokenExpiration && tokenExpiration - nowInSeconds < 10;
+  } catch (e) {
+    return false;
+  }
 }
 
 function getActionWithAuthHeader(action, token) {
