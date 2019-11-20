@@ -1,10 +1,10 @@
 /* eslint-disable react/jsx-one-expression-per-line */
+import { Link } from "@material-ui/core";
+import { searchActions } from "ducks/search/";
+import { wikiLinkPlugin, wikiRefPlugin } from "helpers/markdown";
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import { useDispatch, useSelector } from "react-redux";
-import { searchActions } from "ducks/search/";
-import { Link } from "@material-ui/core";
-import { wikiLinkPlugin, wikiRefPlugin } from "helpers/markdown";
 
 export default function Markdown(markdownProps) {
   const { source, inEditMode, noRequests } = markdownProps;
@@ -34,7 +34,6 @@ export default function Markdown(markdownProps) {
   const renderWikiLink = linkProps => {
     const { href, value, alias } = linkProps;
     return (
-      // eslint-disable-next-line jsx-a11y/anchor-is-valid
       <Link href={href} value={value} onClick={openNewTab(value)}>
         {alias}
       </Link>
