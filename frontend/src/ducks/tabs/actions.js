@@ -12,8 +12,8 @@ function addLoad(id, title) {
   };
 }
 
-function change(id, tab) {
-  return { type: types.CHANGE_TAB, payload: { tab, id } };
+function changeTabContent(id, tab) {
+  return { type: types.CHANGE_TAB_CONTENT, payload: { tab, id } };
 }
 
 function changeActiveTab(index) {
@@ -28,4 +28,11 @@ function removeDelayed(index) {
   return { type: types.REMOVE_TAB_DELAYED, payload: index };
 }
 
-export { add, addLoad, change, changeActiveTab, remove, removeDelayed };
+export {
+  add,
+  addLoad,
+  changeTabContent,
+  changeActiveTab,
+  remove,
+  removeDelayed
+};

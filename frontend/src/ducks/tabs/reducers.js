@@ -8,7 +8,7 @@ export default function tabs(state = initialState, action) {
   switch (action.type) {
     case types.ADD_TAB:
       return { ...state, list: [...state.list, action.payload.tab] };
-    case types.CHANGE_TAB: {
+    case types.CHANGE_TAB_CONTENT: {
       const list = state.list.map(tab =>
         tab.id === action.payload.id ? action.payload.tab : tab
       );

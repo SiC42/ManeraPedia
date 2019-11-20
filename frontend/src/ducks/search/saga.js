@@ -1,5 +1,5 @@
 import { authActions } from "ducks/auth";
-import { changeActiveTab, add, addLoad, change } from "ducks/tabs/actions";
+import { changeActiveTab, addLoad, changeTabContent } from "ducks/tabs/actions";
 import { NotLoggedInException } from "helpers/auth";
 import { ArticleNotFoundException } from "helpers/search";
 import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
@@ -56,7 +56,7 @@ function* getArticle(action) {
       Authorization: action.payload.Authorization
     });
     yield put(searchActions.getArticleSuccess());
-    yield put(change(id, article));
+    yield put(changeTabContent(id, article));
     if (action.payload.location === "autosuggest") {
       yield put(searchActions.clearAutocomplete());
     }
@@ -104,9 +104,12 @@ function* searchRequest(action) {
   let id;
   try {
     if (!action.meta.tab) {
-      id = addTab(action.payload.title);
+      id = yield addTab(action.payload.title);
     } else {
       id = action.meta.tab;
+    }
+    if (action.meta.focus) {
+      yield put(changeActiveTab(-1));
     }
     if (!action.payload.Authorization) {
       throw new NotLoggedInException();
@@ -119,7 +122,7 @@ function* searchRequest(action) {
     results.title = `Search results for '${action.payload.query}'`;
     results.id = results.title;
     yield put(searchActions.searchSuccess());
-    yield put(change(id, results));
+    yield put(changeTabContent(id, results));
   } catch (e) {
     if (e instanceof NotLoggedInException) {
       yield put(authActions.loginNeeded(e));
