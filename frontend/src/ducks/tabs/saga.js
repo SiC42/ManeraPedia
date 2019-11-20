@@ -3,7 +3,7 @@ import * as tabActions from "./actions";
 import * as types from "./types";
 
 function* delayRemoveTab(action) {
-  yield delay(300);
+  yield delay(500);
   yield put(tabActions.remove(action.payload));
 }
 
