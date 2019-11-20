@@ -15,17 +15,21 @@ export default function useAutocomplete(props) {
 
   const handleArrowKeyPress = direction => {
     if (direction === "ArrowDown") {
-      if (suggestions.length > 0) {
-        if (selectedItem === null || selectedItem + 1 > suggestions.length) {
+      if (input !== "") {
+        if (selectedItem === null) {
           setSelectedItem(0);
+        } else if (selectedItem + 1 > suggestions.length) {
+          setSelectedItem(null);
         } else {
           setSelectedItem(selectedItem + 1);
         }
       }
     } else if (direction === "ArrowUp") {
-      if (suggestions.length > 0) {
-        if (selectedItem === null || selectedItem - 1 < 0) {
+      if (input !== "") {
+        if (selectedItem === null) {
           setSelectedItem(suggestions.length);
+        } else if (selectedItem - 1 < 0) {
+          setSelectedItem(null);
         } else {
           setSelectedItem(selectedItem - 1);
         }
