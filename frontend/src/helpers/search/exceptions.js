@@ -1,6 +1,6 @@
 export default class ArticleNotFoundException extends Error {
-  constructor(...params) {
-    super(...params);
+  constructor(params) {
+    super(params);
 
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, ArticleNotFoundException);
