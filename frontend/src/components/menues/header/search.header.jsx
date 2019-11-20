@@ -117,13 +117,12 @@ export default function Search() {
     }
   };
 
-  function Suggestions(suggestionProps) {
+  function Suggestion(suggestionProps) {
     const { suggestion, index } = suggestionProps;
     const selected = selectedItem === index;
     return (
       <MenuItem
         {...menuItemProps}
-        key={suggestion.title}
         selected={selected}
         component="div"
         value={suggestion.title}
@@ -154,7 +153,11 @@ export default function Search() {
       <>
         {suggestions.length > 0 &&
           suggestions.map((suggestion, index) => (
-            <Suggestions suggestion={suggestion} index={index} />
+            <Suggestion
+              key={suggestion.title}
+              suggestion={suggestion}
+              index={index}
+            />
           ))}
         <LastMenuItem />
       </>
