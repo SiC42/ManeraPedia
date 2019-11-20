@@ -29,12 +29,22 @@ function* autocompleteTitle(action) {
   }
 }
 
+function* addTab(title) {
+  const id = `_${Math.random()
+    .toString(36)
+    .substr(2, 9)}`;
+  yield put(addLoad(id, title));
+  return id;
+}
+
 function* getArticle(action) {
+  let id;
   try {
-    const id = `_${Math.random()
-      .toString(36)
-      .substr(2, 9)}`;
-    yield put(addLoad(id, action.payload.title));
+    if (!action.meta.tab) {
+      id = yield addTab(action.payload.title);
+    } else {
+      id = action.meta.tab;
+    }
     if (action.payload.focus) {
       yield put(changeActiveTab(-1));
     }
@@ -59,7 +69,7 @@ function* getArticle(action) {
       yield put(
         searchActions.searchRequest({
           query: action.payload.title,
-          focus: false
+          tab: id
         })
       );
     }
@@ -90,8 +100,14 @@ function* getReference(action) {
   }
 }
 
-function* search(action) {
+function* searchRequest(action) {
+  let id;
   try {
+    if (!action.meta.tab) {
+      id = addTab(action.payload.title);
+    } else {
+      id = action.meta.tab;
+    }
     if (!action.payload.Authorization) {
       throw new NotLoggedInException();
     }
@@ -103,7 +119,7 @@ function* search(action) {
     results.title = `Search results for '${action.payload.query}'`;
     results.id = results.title;
     yield put(searchActions.searchSuccess());
-    yield put(add(results));
+    yield put(change(id, results));
   } catch (e) {
     if (e instanceof NotLoggedInException) {
       yield put(authActions.loginNeeded(e));
@@ -115,6 +131,6 @@ function* search(action) {
 export default function* searchSaga() {
   yield takeLatest(types.AUTOCOMPLETE_REQUEST, autocompleteTitle);
   yield takeEvery(types.GET_ARTICLE_REQUEST, getArticle);
-  yield takeEvery(types.SEARCH_REQUEST, search);
+  yield takeEvery(types.SEARCH_REQUEST, searchRequest);
   yield takeLatest(types.GET_REFERENCE_REQUEST, getReference);
 }
