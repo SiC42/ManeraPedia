@@ -7,7 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import { searchActions } from "ducks/search/";
 import React from "react";
 import { useDispatch } from "react-redux";
-import Markdown from "./Markdown";
+import Markdown from "./markdown";
 
 const useStyles = makeStyles(theme => ({
   root: {

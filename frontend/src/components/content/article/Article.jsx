@@ -8,7 +8,7 @@ import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import { tabsActions } from "ducks/tabs";
 import React from "react";
 import { useDispatch } from "react-redux";
-import Markdown from "../Markdown";
+import Markdown from "../markdown";
 
 const useStyles = makeStyles(theme => ({
   icons: {

@@ -5,6 +5,7 @@ import { wikiLinkPlugin, wikiRefPlugin } from "helpers/markdown";
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import { useDispatch, useSelector } from "react-redux";
+import * as tableRender from "./table";
 
 export default function Markdown(markdownProps) {
   const { source, inEditMode, noRequests } = markdownProps;
@@ -84,7 +85,12 @@ export default function Markdown(markdownProps) {
       renderers={{
         link: renderLink,
         wikiRef: renderWikiRef,
-        wikiLink: renderWikiLink
+        wikiLink: renderWikiLink,
+        table: tableRender.table,
+        tableHead: tableRender.head,
+        tableBody: tableRender.body,
+        tableRow: tableRender.row,
+        tableCell: tableRender.cell
       }}
     />
   );

@@ -12,7 +12,7 @@ import CheckIcon from "@material-ui/icons/Check";
 import React, { useState, useRef } from "react";
 import AddIcon from "@material-ui/icons/Add";
 
-import Markdown from "../Markdown";
+import Markdown from "../markdown";
 
 const useStyles = makeStyles(theme => ({
   icons: {
@@ -157,7 +157,7 @@ export default function Editor(props) {
         </Grid>
 
         <Grid item xs={6}>
-          <Markdown markdown={text} />
+          <Markdown source={text} />
         </Grid>
       </Grid>
     </>
