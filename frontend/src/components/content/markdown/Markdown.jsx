@@ -3,11 +3,12 @@ import { Link } from "@material-ui/core";
 import { wikiLinkPlugin, wikiRefPlugin } from "helpers/markdown";
 import React from "react";
 import ReactMarkdown from "react-markdown";
-import * as tableRender from "./table";
+import useTableRenderer from "./table";
 import useWikiRenderer from "./wiki";
 
 export default function Markdown(markdownProps) {
   const { source, inEditMode, noRequests } = markdownProps;
+  const tableRenderer = useTableRenderer();
   const wikiRenderer = useWikiRenderer({
     inEditMode,
     noRequests,

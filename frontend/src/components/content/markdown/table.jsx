@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Table,
   TableBody,
@@ -6,29 +5,40 @@ import {
   TableHead,
   TableRow
 } from "@material-ui/core";
+import React from "react";
 
-export const table = tableProps => {
-  const { children } = tableProps;
-  return <Table>{children}</Table>;
-};
+export default function useTableRenderer() {
+  const table = tableProps => {
+    const { children } = tableProps;
+    return <Table>{children}</Table>;
+  };
 
-export const head = tableProps => {
-  const { children } = tableProps;
-  return <TableHead>{children}</TableHead>;
-};
+  const head = tableProps => {
+    const { children } = tableProps;
+    return <TableHead>{children}</TableHead>;
+  };
 
-export const body = tableProps => {
-  const { children } = tableProps;
-  return <TableBody>{children}</TableBody>;
-};
+  const body = tableProps => {
+    const { children } = tableProps;
+    return <TableBody>{children}</TableBody>;
+  };
 
-export const row = tableProps => {
-  const { children } = tableProps;
-  return <TableRow>{children}</TableRow>;
-};
+  const row = tableProps => {
+    const { children } = tableProps;
+    return <TableRow>{children}</TableRow>;
+  };
 
-export function cell(cellProps) {
-  const { align, children } = cellProps;
-  const alignStyle = align || "inherit";
-  return <TableCell align={alignStyle}>{children}</TableCell>;
+  const cell = cellProps => {
+    const { align, children } = cellProps;
+    const alignStyle = align || "inherit";
+    return <TableCell align={alignStyle}>{children}</TableCell>;
+  };
+
+  return {
+    table,
+    tableHead: head,
+    tableBody: body,
+    tableRow: row,
+    tableCell: cell
+  };
 }
