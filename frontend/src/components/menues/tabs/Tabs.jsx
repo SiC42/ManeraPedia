@@ -6,7 +6,7 @@ import MaterialTabs from "@material-ui/core/Tabs";
 import { tabsActions } from "ducks/tabs";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import TabContent from "./tab";
+import TabContent from "./TabContent";
 
 export const drawerWidth = 350;
 const useStyles = makeStyles(theme => ({
