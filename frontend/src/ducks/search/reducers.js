@@ -21,7 +21,7 @@ export default function search(state = INITAL_STATE, action) {
     case types.GET_REFERENCE_FAILURE: {
       const { title, date } = action.payload;
       const references = { ...state.references };
-      references[title] = { date };
+      references[title] = { article: null, date };
       return { ...state, references };
     }
     default:
