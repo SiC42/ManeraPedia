@@ -5,7 +5,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import CloseIcon from "@material-ui/icons/Close";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 
-import { tabActions } from "ducks/tabs";
+import { tabsActions } from "ducks/tabs";
 import React from "react";
 import { useDispatch } from "react-redux";
 import Markdown from "../Markdown";
@@ -50,7 +50,7 @@ export default function Article(props) {
           size="small"
           aria-label="add"
           className={classes.margin}
-          onClick={() => dispatch(tabActions.remove(index))}
+          onClick={() => dispatch(tabsActions.remove(index))}
         >
           <CloseIcon />
         </IconButton>

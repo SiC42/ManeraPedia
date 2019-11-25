@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import MenuIcon from "@material-ui/icons/Menu";
-import { tabActions } from "ducks/tabs";
+import { tabsActions } from "ducks/tabs";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import LoginDialog from "../login_dialog";
@@ -65,7 +65,7 @@ export default function Header(props) {
   const dispatch = useDispatch();
 
   const addArticle = () => {
-    dispatch(tabActions.add(tab()));
+    dispatch(tabsActions.add(tab()));
   };
   return (
     <>

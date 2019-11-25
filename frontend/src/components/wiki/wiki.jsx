@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import { authActions } from "ducks/auth";
-import { tabActions } from "ducks/tabs";
+import { tabsActions } from "ducks/tabs";
 import { useDispatch, useSelector } from "react-redux";
 import Content, { Search, LoadingPage } from "../content";
 import Header from "../menues/header";
@@ -50,7 +50,7 @@ export default function Wiki() {
   const classes = useStyles();
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(tabActions.add(defaultTab));
+    dispatch(tabsActions.add(defaultTab));
   }, []);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const tabs = useSelector(state => state.tabs.list);

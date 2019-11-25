@@ -1,7 +1,7 @@
 import { all } from "redux-saga/effects";
 import auth, { authSaga } from "./auth";
 import search, { searchSaga } from "./search";
-import tabs, { tabSaga } from "./tabs";
+import tabs, { tabsSaga } from "./tabs";
 
 const reducers = {
   auth,
@@ -10,7 +10,7 @@ const reducers = {
 };
 
 export function* rootSaga() {
-  yield all([authSaga(), searchSaga(), tabSaga()]);
+  yield all([authSaga(), searchSaga(), tabsSaga()]);
 }
 
 export default reducers;

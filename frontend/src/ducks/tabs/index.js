@@ -1,8 +1,8 @@
-import * as tabActions from "./actions";
+import * as tabsActions from "./actions";
 import reducer from "./reducers";
-import * as tabTypes from "./types";
-import tabSaga from "./saga";
+import * as tabsTypes from "./types";
+import tabsSaga from "./saga";
 
-export { tabActions, tabSaga, tabTypes };
+export { tabsActions, tabsSaga, tabsTypes };
 
 export default reducer;
